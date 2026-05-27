@@ -54,6 +54,29 @@ const SURVEY_QUESTIONS = [
   }
 ];
 
+const JOBS_LIST = [
+  { id: 1, title: "Đại sứ thương hiệu", desc: "Gương mặt đại diện thương hiệu luxury", weights: { pageant: 0.4, runway: 0.2, kol: 0.4 } },
+  { id: 2, title: "KOLs/Influencer quảng cáo", desc: "Sáng tạo nội dung video ngắn", weights: { pageant: 0.1, runway: 0.1, kol: 0.8 } },
+  { id: 3, title: "KOC Livestream bán hàng", desc: "Thực hiện livestream bán hàng trực tiếp", weights: { pageant: 0.05, runway: 0.05, kol: 0.9 } },
+  { id: 4, title: "Gương mặt trang bìa", desc: "Chụp ảnh bìa tạp chí, lookbook, ảnh PR", weights: { pageant: 0.3, runway: 0.5, kol: 0.2 } },
+  { id: 5, title: "Người mẫu sàn diễn (Runway)", desc: "Trình diễn các bộ sưu tập thời trang cao cấp", weights: { pageant: 0.1, runway: 0.8, kol: 0.1 } },
+  { id: 6, title: "Người mẫu quảng cáo", desc: "Diễn xuất trong các TVC quảng cáo", weights: { pageant: 0.2, runway: 0.3, kol: 0.5 } },
+  { id: 7, title: "Diễn viên MV ca nhạc", desc: "Đóng vai nữ chính/nam chính MV ca nhạc", weights: { pageant: 0.2, runway: 0.2, kol: 0.6 } },
+  { id: 8, title: "KOL sự kiện / Khách mời VIP", desc: "Tham dự thảm đỏ và sự kiện thương hiệu", weights: { pageant: 0.6, runway: 0.2, kol: 0.2 } },
+  { id: 9, title: "Người dẫn chương trình (MC)", desc: "Dẫn dắt các sự kiện và chương trình giải trí", weights: { pageant: 0.7, runway: 0.1, kol: 0.2 } },
+  { id: 10, title: "VIP Promotion Girl (PG)", desc: "Lễ tân đón tiếp khách tại sự kiện lớn", weights: { pageant: 0.4, runway: 0.3, kol: 0.3 } },
+  { id: 11, title: "Huấn luyện viên Catwalk", desc: "Đào tạo kỹ thuật đi catwalk cho học viên", weights: { pageant: 0.1, runway: 0.8, kol: 0.1 } },
+  { id: 12, title: "CEO thương hiệu riêng", desc: "Kinh doanh nhãn hàng thời trang, mỹ phẩm", weights: { pageant: 0.5, runway: 0.2, kol: 0.3 } },
+  { id: 13, title: "Giám khảo cuộc thi sắc đẹp", desc: "Chấm điểm các cuộc thi hoa hậu, hoa khôi", weights: { pageant: 0.7, runway: 0.2, kol: 0.1 } },
+  { id: 14, title: "Giám đốc hình ảnh / Stylist", desc: "Cố vấn định hình phong cách và trang phục", weights: { pageant: 0.1, runway: 0.6, kol: 0.3 } },
+  { id: 15, title: "Sứ giả chiến dịch cộng đồng", desc: "Lan tỏa các giá trị nhân văn và dự án từ thiện", weights: { pageant: 0.8, runway: 0.1, kol: 0.1 } },
+  { id: 16, title: "Vlogger du lịch & trải nghiệm", desc: "Quảng bá điểm đến, khách sạn, resort cao cấp", weights: { pageant: 0.2, runway: 0.1, kol: 0.7 } },
+  { id: 17, title: "Người mẫu ảnh nghệ thuật", desc: "Hợp tác chụp ảnh thời trang Fine-art", weights: { pageant: 0.2, runway: 0.6, kol: 0.2 } },
+  { id: 18, title: "Nhà sáng tạo nội dung tri thức", desc: "Chia sẻ kỹ năng mềm, kiến thức làm đẹp", weights: { pageant: 0.4, runway: 0.1, kol: 0.5 } },
+  { id: 19, title: "Đại sứ Game / Esports", desc: "Hình ảnh đại diện cho các dự án game lớn", weights: { pageant: 0.1, runway: 0.1, kol: 0.8 } },
+  { id: 20, title: "Người mẫu ảo / Metaverse", desc: "Scan 3D hình ảnh số để làm mẫu ảo", weights: { pageant: 0.1, runway: 0.6, kol: 0.3 } }
+];
+
 export default function OnboardingForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -240,89 +263,155 @@ export default function OnboardingForm() {
   };
 
   if (isSubmitted) {
+    const calculatedJobs = JOBS_LIST.map((job) => {
+      const matchScore = Math.round(
+        results.pageant * job.weights.pageant +
+        results.runway * job.weights.runway +
+        results.kol * job.weights.kol
+      );
+      return { ...job, matchScore };
+    }).sort((a, b) => b.matchScore - a.matchScore);
+
     return (
-      <div className="flex flex-col items-center justify-center p-6 text-center animate-in fade-in slide-in-from-bottom-6 duration-500">
-        <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-yellow-600 shadow-[0_0_20px_rgba(251,191,36,0.4)]">
-          <CheckCircle2 className="h-10 w-10 text-slate-950" />
-        </div>
-
-        <h2 className="mb-2 font-display text-2xl font-bold tracking-tight text-white md:text-3xl">
-          Định Hướng Hoàn Tất!
-        </h2>
-        <p className="mx-auto mb-8 max-w-md text-sm text-slate-400">
-          AI đã phân tích dữ liệu của bạn và gán định hướng sự nghiệp phù hợp nhất.
-        </p>
-
-        {/* Dynamic Interactive SVG Radar Chart */}
-        <div className="relative mx-auto mb-8 h-64 w-64 rounded-2xl border border-white/5 bg-slate-950/40 p-4 shadow-xl backdrop-blur-xl">
-          <svg viewBox="0 0 200 200" className="h-full w-full">
-            {/* Grid Circles */}
-            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-            <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-            <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-            <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-
-            {/* Axis Lines */}
-            <line x1="100" y1="20" x2="100" y2="180" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-            <line x1="31" y1="140" x2="169" y2="60" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-            <line x1="31" y1="60" x2="169" y2="140" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-
-            {/* Score Polygon Area */}
-            <polygon
-              points={calculateRadarPath()}
-              fill="rgba(251,191,36,0.18)"
-              stroke="url(#goldGradient)"
-              strokeWidth="2.5"
-              className="animate-in zoom-in-50 duration-700"
-            />
-
-            {/* Dynamic Label Markers */}
-            <text x="100" y="14" fill="#fbbf24" fontSize="8" fontWeight="bold" textAnchor="middle">
-              PAGEANT ({results.pageant}%)
-            </text>
-            <text x="22" y="152" fill="#a855f7" fontSize="8" fontWeight="bold" textAnchor="middle">
-              SÀN DIỄN ({results.runway}%)
-            </text>
-            <text x="178" y="152" fill="#06b6d4" fontSize="8" fontWeight="bold" textAnchor="middle">
-              KOL ({results.kol}%)
-            </text>
-
-            <defs>
-              <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#fef08a" />
-                <stop offset="50%" stopColor="#f59e0b" />
-                <stop offset="100%" stopColor="#b45309" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        <div className="mb-6 rounded-xl border border-white/5 bg-slate-900/40 p-5 text-left max-w-md backdrop-blur-md">
-          <div className="mb-3 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-400" />
-            <span className="font-display font-semibold text-white">Kết quả phân tích:</span>
-          </div>
-          <p className="mb-4 text-xs text-slate-300">
-            Hồ sơ của bạn phù hợp nhất với nhóm: <b className="text-amber-400 font-bold">{results.mainCategory}</b>.
-          </p>
-          <div className="flex gap-4">
-            <div className="flex-1 rounded-lg bg-white/5 p-3 text-center">
-              <span className="block text-[10px] text-slate-400 uppercase font-semibold">Tự Động Phân Hạng</span>
-              <span className="text-xl font-bold text-amber-400">Tier {results.tier}</span>
+      <div className="w-full max-w-5xl mx-auto glass-panel p-6 md:p-8 rounded-3xl shadow-2xl animate-in fade-in slide-in-from-bottom-6 duration-500 border border-white/10 text-left relative overflow-hidden">
+        <div className="absolute top-0 right-0 -z-10 h-72 w-72 rounded-full bg-amber-500/3 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -z-10 h-72 w-72 rounded-full bg-purple-600/3 blur-3xl pointer-events-none" />
+        
+        <div className="flex flex-col md:flex-row gap-8 items-stretch">
+          
+          {/* LEFT SIDE: Radar Chart & Main Stats */}
+          <div className="md:w-2/5 flex flex-col items-center justify-between border-r border-white/5 pr-0 md:pr-8">
+            <div className="text-center w-full">
+              <div className="relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-yellow-600 shadow-[0_0_20px_rgba(251,191,36,0.3)]">
+                <CheckCircle2 className="h-8 w-8 text-slate-950" />
+              </div>
+              <h2 className="mb-2 font-display text-xl font-extrabold tracking-tight text-white uppercase">
+                Khảo Sát Hoàn Tất
+              </h2>
+              <p className="text-xs text-slate-400">
+                AI đã phân tích dữ liệu & đánh giá chỉ số năng lực của bạn.
+              </p>
             </div>
-            <div className="flex-1 rounded-lg bg-white/5 p-3 text-center">
-              <span className="block text-[10px] text-slate-400 uppercase font-semibold">Điểm Hoàn Thiện</span>
-              <span className="text-xl font-bold text-white">{results.profileScore}/100</span>
+
+            {/* Dynamic Interactive SVG Radar Chart */}
+            <div className="relative my-6 h-52 w-52 rounded-2xl border border-white/5 bg-slate-950/40 p-4 shadow-inner">
+              <svg viewBox="0 0 200 200" className="h-full w-full">
+                <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                <circle cx="100" cy="100" r="30" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                
+                <line x1="100" y1="30" x2="100" y2="170" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+                <line x1="39" y1="135" x2="161" y2="65" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+                <line x1="39" y1="65" x2="161" y2="135" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+
+                <polygon
+                  points={calculateRadarPath()}
+                  fill="rgba(251,191,36,0.18)"
+                  stroke="url(#goldGradient)"
+                  strokeWidth="2.5"
+                  className="animate-in zoom-in-50 duration-700"
+                />
+
+                <text x="100" y="20" fill="#fbbf24" fontSize="9" fontWeight="bold" textAnchor="middle">PAGEANT</text>
+                <text x="30" y="152" fill="#a855f7" fontSize="9" fontWeight="bold" textAnchor="middle">SÀN DIỄN</text>
+                <text x="170" y="152" fill="#06b6d4" fontSize="9" fontWeight="bold" textAnchor="middle">KOL</text>
+
+                <defs>
+                  <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#fef08a" />
+                    <stop offset="50%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#b45309" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            <div className="w-full space-y-4">
+              <div className="rounded-2xl glass-panel-light p-4">
+                <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-bold">Định hướng cốt lõi</span>
+                <span className="block text-xs font-bold text-amber-400 mt-1">{results.mainCategory}</span>
+              </div>
+              
+              <div className="flex gap-3">
+                <div className="flex-1 rounded-xl bg-white/2 p-3 text-center border border-white/5">
+                  <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-bold">Tier Ban Đầu</span>
+                  <span className="text-base font-extrabold text-amber-400 mt-1 block">Tier {results.tier}</span>
+                </div>
+                <div className="flex-1 rounded-xl bg-white/2 p-3 text-center border border-white/5">
+                  <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-bold">Điểm Hoàn Thiện</span>
+                  <span className="text-base font-extrabold text-white mt-1 block">{results.profileScore}/100</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => router.push("/talent/dashboard")}
+                className="flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 font-display text-xs font-bold text-slate-950 shadow-lg hover:shadow-xl hover:brightness-105 active:scale-98 transition-all cursor-pointer"
+              >
+                Truy Cập Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
             </div>
           </div>
-        </div>
 
-        <button
-          onClick={() => router.push("/talent/dashboard")}
-          className="flex h-12 w-full max-w-xs items-center justify-center rounded-xl bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 font-display font-semibold text-slate-950 shadow-lg hover:shadow-xl active:scale-98 transition-all"
-        >
-          Truy Cập Dashboard <ArrowRight className="ml-2 h-4 w-4" />
-        </button>
+          {/* RIGHT SIDE: 20 Suitable Jobs (Danh mục 20 công việc phù hợp) */}
+          <div className="flex-1 space-y-4 flex flex-col">
+            <div>
+              <h3 className="font-display font-extrabold text-sm text-white uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="h-4.5 w-4.5 text-amber-400" />
+                Danh mục định hướng việc làm phù hợp (AI Recommended Roles)
+              </h3>
+              <p className="text-[11px] text-slate-400 mt-1">
+                Dưới đây là xếp hạng 20 công việc trong ngành thời trang & giải trí dựa trên mức độ phù hợp với năng lực của bạn:
+              </p>
+            </div>
+
+            {/* Scrollable list of 20 jobs */}
+            <div className="flex-1 overflow-y-auto max-h-[460px] pr-2 space-y-2">
+              {calculatedJobs.map((job, idx) => {
+                const isHigh = job.matchScore >= 80;
+                const isMid = job.matchScore >= 50 && job.matchScore < 80;
+
+                return (
+                  <div
+                    key={job.id}
+                    className="flex items-center gap-4 rounded-xl border border-white/5 bg-slate-900/10 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                  >
+                    {/* Position badge */}
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[10px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
+                      {idx + 1}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors duration-300 truncate">
+                          {job.title}
+                        </h4>
+                        <span className={cn(
+                          "font-display text-xs font-extrabold",
+                          isHigh ? "text-amber-400" : isMid ? "text-purple-400" : "text-slate-500"
+                        )}>
+                          {job.matchScore}% Match
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 truncate mt-0.5">{job.desc}</p>
+                      
+                      {/* Matching meter bar */}
+                      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-2">
+                        <div
+                          className={cn(
+                            "h-full rounded-full transition-all duration-500",
+                            isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-600"
+                          )}
+                          style={{ width: `${job.matchScore}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+        </div>
       </div>
     );
   }

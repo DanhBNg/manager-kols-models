@@ -5,6 +5,29 @@ import { useRouter } from "next/navigation";
 import { Shield, Sparkles, MapPin, Eye, Star, Share2, Award, Calendar, DollarSign, BookOpen, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const JOBS_LIST = [
+  { id: 1, title: "Đại sứ thương hiệu", desc: "Gương mặt đại diện thương hiệu luxury", weights: { pageant: 0.4, runway: 0.2, kol: 0.4 } },
+  { id: 2, title: "KOLs/Influencer quảng cáo", desc: "Sáng tạo nội dung video ngắn", weights: { pageant: 0.1, runway: 0.1, kol: 0.8 } },
+  { id: 3, title: "KOC Livestream bán hàng", desc: "Thực hiện livestream bán hàng trực tiếp", weights: { pageant: 0.05, runway: 0.05, kol: 0.9 } },
+  { id: 4, title: "Gương mặt trang bìa", desc: "Chụp ảnh bìa tạp chí, lookbook, ảnh PR", weights: { pageant: 0.3, runway: 0.5, kol: 0.2 } },
+  { id: 5, title: "Người mẫu sàn diễn (Runway)", desc: "Trình diễn các bộ sưu tập thời trang cao cấp", weights: { pageant: 0.1, runway: 0.8, kol: 0.1 } },
+  { id: 6, title: "Người mẫu quảng cáo", desc: "Diễn xuất trong các TVC quảng cáo", weights: { pageant: 0.2, runway: 0.3, kol: 0.5 } },
+  { id: 7, title: "Diễn viên MV ca nhạc", desc: "Đóng vai nữ chính/nam chính MV ca nhạc", weights: { pageant: 0.2, runway: 0.2, kol: 0.6 } },
+  { id: 8, title: "KOL sự kiện / Khách mời VIP", desc: "Tham dự thảm đỏ và sự kiện thương hiệu", weights: { pageant: 0.6, runway: 0.2, kol: 0.2 } },
+  { id: 9, title: "Người dẫn chương trình (MC)", desc: "Dẫn dắt các sự kiện và chương trình giải trí", weights: { pageant: 0.7, runway: 0.1, kol: 0.2 } },
+  { id: 10, title: "VIP Promotion Girl (PG)", desc: "Lễ tân đón tiếp khách tại sự kiện lớn", weights: { pageant: 0.4, runway: 0.3, kol: 0.3 } },
+  { id: 11, title: "Huấn luyện viên Catwalk", desc: "Đào tạo kỹ thuật đi catwalk cho học viên", weights: { pageant: 0.1, runway: 0.8, kol: 0.1 } },
+  { id: 12, title: "CEO thương hiệu riêng", desc: "Kinh doanh nhãn hàng thời trang, mỹ phẩm", weights: { pageant: 0.5, runway: 0.2, kol: 0.3 } },
+  { id: 13, title: "Giám khảo cuộc thi sắc đẹp", desc: "Chấm điểm các cuộc thi hoa hậu, hoa khôi", weights: { pageant: 0.7, runway: 0.2, kol: 0.1 } },
+  { id: 14, title: "Giám đốc hình ảnh / Stylist", desc: "Cố vấn định hình phong cách và trang phục", weights: { pageant: 0.1, runway: 0.6, kol: 0.3 } },
+  { id: 15, title: "Sứ giả chiến dịch cộng đồng", desc: "Lan tỏa các giá trị nhân văn và dự án từ thiện", weights: { pageant: 0.8, runway: 0.1, kol: 0.1 } },
+  { id: 16, title: "Vlogger du lịch & trải nghiệm", desc: "Quảng bá điểm đến, khách sạn, resort cao cấp", weights: { pageant: 0.2, runway: 0.1, kol: 0.7 } },
+  { id: 17, title: "Người mẫu ảnh nghệ thuật", desc: "Hợp tác chụp ảnh thời trang Fine-art", weights: { pageant: 0.2, runway: 0.6, kol: 0.2 } },
+  { id: 18, title: "Nhà sáng tạo nội dung tri thức", desc: "Chia sẻ kỹ năng mềm, kiến thức làm đẹp", weights: { pageant: 0.4, runway: 0.1, kol: 0.5 } },
+  { id: 19, title: "Đại sứ Game / Esports", desc: "Hình ảnh đại diện cho các dự án game lớn", weights: { pageant: 0.1, runway: 0.1, kol: 0.8 } },
+  { id: 20, title: "Người mẫu ảo / Metaverse", desc: "Scan 3D hình ảnh số để làm mẫu ảo", weights: { pageant: 0.1, runway: 0.6, kol: 0.3 } }
+];
+
 export default function PortfolioPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
@@ -314,6 +337,68 @@ export default function PortfolioPage() {
               </div>
             </div>
 
+          </div>
+
+          {/* AI Recommended Roles (20 jobs) */}
+          <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 space-y-4">
+            <div className="flex items-center gap-2 border-b border-white/5 pb-2.5">
+              <Sparkles className="h-4.5 w-4.5 text-amber-400 animate-pulse" />
+              <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider">
+                Xếp Hạng 20 Định Hướng Việc Làm AI (AI Competency Matching)
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2">
+              {(() => {
+                const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
+                const calculatedJobs = JOBS_LIST.map((job) => {
+                  const matchScore = Math.round(
+                    scores.pageant * job.weights.pageant +
+                    scores.runway * job.weights.runway +
+                    scores.kol * job.weights.kol
+                  );
+                  return { ...job, matchScore };
+                }).sort((a, b) => b.matchScore - a.matchScore);
+
+                return calculatedJobs.map((job, idx) => {
+                  const isHigh = job.matchScore >= 80;
+                  const isMid = job.matchScore >= 50 && job.matchScore < 80;
+
+                  return (
+                    <div
+                      key={job.id}
+                      className="flex items-center gap-3 rounded-xl border border-white/5 bg-slate-900/10 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                    >
+                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[9px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
+                        {idx + 1}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center">
+                          <h4 className="text-xs font-bold text-white truncate group-hover:text-amber-400 transition-colors">
+                            {job.title}
+                          </h4>
+                          <span className={cn(
+                            "font-display text-[10px] font-extrabold",
+                            isHigh ? "text-amber-400" : isMid ? "text-purple-400" : "text-slate-500"
+                          )}>
+                            {job.matchScore}% Match
+                          </span>
+                        </div>
+                        <p className="text-[9px] text-slate-500 truncate mt-0.5">{job.desc}</p>
+                        <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-1.5">
+                          <div
+                            className={cn(
+                              "h-full rounded-full transition-all duration-500",
+                              isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-600"
+                            )}
+                            style={{ width: `${job.matchScore}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
           </div>
 
         </div>
