@@ -80,16 +80,16 @@ export default function JobsPage() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex gap-1.5 overflow-x-auto pb-1.5 scrollbar-none">
         {tags.map((tag) => (
           <button
             key={tag}
             onClick={() => setSelectedTag(tag)}
             className={cn(
-              "rounded-lg px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all duration-200",
+              "rounded-xl px-4 py-2 text-xs font-bold whitespace-nowrap transition-all duration-300 cursor-pointer border",
               selectedTag === tag
-                ? "bg-amber-400 text-slate-950 shadow-[0_2px_8px_rgba(251,191,36,0.2)]"
-                : "bg-slate-900/40 border border-white/5 text-slate-400 hover:text-white"
+                ? "bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 border-amber-400/30 text-slate-950 shadow-[0_4px_12px_rgba(245,158,11,0.25)]"
+                : "glass-panel-light border-white/5 text-slate-400 hover:text-white hover:bg-white/5"
             )}
           >
             {tag === "Runway" ? "Người mẫu sàn diễn" : tag}
@@ -105,43 +105,43 @@ export default function JobsPage() {
           return (
             <div
               key={camp.id}
-              className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-950/40 p-5 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-white/20"
+              className="relative overflow-hidden rounded-2xl glass-panel p-5 shadow-xl luxury-card-hover border-glow-gold hover:border-amber-400/20"
             >
               {/* Card Header */}
               <div className="flex justify-between items-start">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="rounded bg-white/5 px-2 py-0.5 text-[9px] text-slate-400 uppercase font-semibold">
+                <div className="space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="rounded bg-white/5 border border-white/5 px-2 py-0.5 text-[8px] text-slate-300 uppercase tracking-wider font-semibold">
                       {camp.type === "Runway" ? "Người mẫu sàn diễn" : camp.type}
                     </span>
                     {camp.escrowed && (
-                      <span className="flex items-center gap-0.5 rounded bg-emerald-500/10 px-2 py-0.5 text-[9px] text-emerald-400 font-semibold border border-emerald-500/20">
+                      <span className="flex items-center gap-0.5 rounded bg-emerald-500/10 px-2 py-0.5 text-[8px] text-emerald-400 font-bold border border-emerald-500/10 uppercase tracking-wider">
                         <ShieldCheck className="h-3 w-3" /> Đã ký quỹ
                       </span>
                     )}
                   </div>
-                  <h3 className="font-display font-bold text-sm text-white mt-1.5">{camp.title}</h3>
-                  <p className="text-[10px] text-slate-400">{camp.brand}</p>
+                  <h3 className="font-display font-extrabold text-sm text-white mt-1.5 group-hover:text-amber-400 transition-colors duration-300">{camp.title}</h3>
+                  <p className="text-[10px] text-slate-500 font-semibold">{camp.brand}</p>
                 </div>
 
                 <div className="text-right">
-                  <span className="font-display font-extrabold text-sm text-amber-400">{camp.matchScore}%</span>
-                  <span className="block text-[8px] text-slate-500 uppercase font-semibold">Match</span>
+                  <span className="font-display font-extrabold text-sm text-gradient-gold">{camp.matchScore}%</span>
+                  <span className="block text-[8px] text-slate-500 uppercase tracking-wider font-bold">AI Match</span>
                 </div>
               </div>
 
               {/* Brief */}
-              <p className="text-xs text-slate-400 leading-relaxed mt-3">{camp.brief}</p>
+              <p className="text-xs text-slate-400 leading-relaxed mt-3.5 font-medium">{camp.brief}</p>
 
               {/* Specifications row */}
               <div className="mt-4 border-t border-white/5 pt-3 grid grid-cols-2 gap-2 text-[10px] text-slate-400">
                 <div className="flex items-center gap-1.5">
                   <DollarSign className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-                  <span>Cát-xê: <b className="text-white font-semibold">{camp.budget}</b></span>
+                  <span>Cát-xê: <b className="text-white font-bold">{camp.budget}</b></span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <MapPin className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-                  <span className="truncate">{camp.location}</span>
+                  <span className="truncate font-semibold">{camp.location}</span>
                 </div>
               </div>
 
@@ -150,10 +150,10 @@ export default function JobsPage() {
                 onClick={() => handleApply(camp.id)}
                 disabled={isApplied}
                 className={cn(
-                  "mt-4 flex h-10 w-full items-center justify-center rounded-xl font-display text-xs font-semibold transition-all duration-300",
+                  "mt-4 flex h-10 w-full items-center justify-center rounded-xl font-display text-xs font-bold transition-all duration-300 cursor-pointer",
                   isApplied
                     ? "bg-emerald-500/15 border border-emerald-500/30 text-emerald-400"
-                    : "bg-white/5 border border-white/10 text-white hover:bg-white/10 active:scale-[0.98]"
+                    : "bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 text-slate-950 shadow-md hover:shadow-lg hover:brightness-105 active:scale-[0.98]"
                 )}
               >
                 {isApplied ? (

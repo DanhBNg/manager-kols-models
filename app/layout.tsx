@@ -72,29 +72,29 @@ export default function RootLayout({
           <div className="flex h-screen w-screen overflow-hidden">
             
             {/* Ambient background glows */}
-            <div className="absolute top-[-10%] right-[-10%] -z-10 h-[500px] w-[500px] rounded-full bg-amber-500/3 blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] left-[-10%] -z-10 h-[600px] w-[600px] rounded-full bg-purple-600/3 blur-[140px] pointer-events-none" />
+            <div className="absolute top-[-10%] right-[-10%] -z-10 h-[600px] w-[600px] rounded-full bg-amber-500/5 blur-[150px] pointer-events-none" />
+            <div className="absolute bottom-[-10%] left-[-10%] -z-10 h-[700px] w-[700px] rounded-full bg-purple-600/5 blur-[160px] pointer-events-none" />
 
             {/* DESKTOP SIDEBAR (Visible only on md screens and up, hidden on root gateway) */}
             {!isGateway && currentMenuItems.length > 0 && (
-              <aside className="hidden md:flex w-72 shrink-0 flex-col border-r border-white/5 bg-[#070913] p-6">
+              <aside className="hidden md:flex w-72 shrink-0 flex-col border-r border-white/5 bg-[#050711] p-6 relative">
                 {/* Logo Section */}
                 <div className="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/10 border border-amber-500/20 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-b from-[#141830] to-[#0a0c1a] border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
                     <span className="text-xl">👑</span>
                   </div>
                   <div>
-                    <h1 className="font-display font-extrabold text-sm tracking-wide text-white uppercase">
-                      BEAUTY<span className="bg-gradient-to-r from-amber-200 to-yellow-600 bg-clip-text text-transparent">TALENT</span>
+                    <h1 className="font-display font-black text-sm tracking-widest text-white uppercase">
+                      BEAUTY<span className="text-gradient-gold">TALENT</span>
                     </h1>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mt-0.5">
+                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block mt-1">
                       {portalName}
                     </span>
                   </div>
                 </div>
 
                 {/* Sidebar Navigation Links */}
-                <nav className="flex-1 space-y-1.5 overflow-y-auto pr-1">
+                <nav className="flex-1 space-y-2 overflow-y-auto pr-1">
                   {currentMenuItems.map((item) => {
                     const isActive = pathname === item.href || (item.href.split("/").length > 3 && pathname.startsWith(item.href));
                     const Icon = item.icon;
@@ -104,13 +104,16 @@ export default function RootLayout({
                         key={item.label}
                         href={item.href}
                         className={cn(
-                          "flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all duration-200 group",
+                          "flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 group relative",
                           isActive
-                            ? "bg-gradient-to-r from-amber-400 to-yellow-600 text-slate-950 shadow-lg shadow-amber-500/10"
-                            : "text-slate-400 hover:bg-white/3 hover:text-white"
+                            ? "bg-gradient-to-r from-amber-400/10 to-yellow-600/5 text-amber-300 border border-amber-500/20 shadow-[0_4px_12px_rgba(245,158,11,0.05)]"
+                            : "text-slate-400 hover:bg-white/2 hover:text-slate-100 border border-transparent"
                         )}
                       >
-                        <Icon className={cn("h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-110", isActive ? "text-slate-950" : "text-slate-400 group-hover:text-white")} />
+                        {isActive && (
+                          <div className="absolute left-0 top-1/3 bottom-1/3 w-0.5 rounded bg-amber-400" />
+                        )}
+                        <Icon className={cn("h-4.5 w-4.5 transition-transform duration-300 group-hover:scale-110", isActive ? "text-amber-400" : "text-slate-400 group-hover:text-slate-100")} />
                         <span>{item.label}</span>
                       </Link>
                     );
@@ -121,7 +124,7 @@ export default function RootLayout({
                 <div className="border-t border-white/5 pt-4 mt-auto">
                   <button 
                     onClick={() => router.push("/")}
-                    className="flex w-full items-center justify-between rounded-xl border border-white/5 bg-slate-900/30 px-4 py-3 text-xs font-semibold text-slate-400 hover:border-amber-400/40 hover:text-white transition-all"
+                    className="flex w-full items-center justify-between rounded-xl border border-white/5 bg-slate-950/40 px-4 py-3 text-[11px] font-bold text-slate-400 hover:border-amber-400/40 hover:text-white hover:bg-slate-900/20 transition-all cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
                       <LogOut className="h-4 w-4" /> Đổi Cổng Portal

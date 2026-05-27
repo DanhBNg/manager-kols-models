@@ -86,54 +86,60 @@ export default function DashboardPage() {
           
           {/* Dashboard Title Header */}
           <div className="hidden md:block">
-            <h1 className="font-display text-2xl font-extrabold text-white tracking-tight">Chào quay lại, {profile.name}!</h1>
-            <p className="text-xs text-slate-400 mt-1">Dưới đây là thông số hồ sơ số và cơ hội việc làm của bạn hôm nay.</p>
+            <h1 className="font-display text-2xl font-black text-white tracking-tight uppercase">
+              Chào quay lại, <span className="text-gradient-gold">{profile.name}</span>!
+            </h1>
+            <p className="text-xs text-slate-400 mt-1.5 font-medium">Dưới đây là thông số hồ sơ số và cơ hội việc làm dành riêng cho bạn hôm nay.</p>
           </div>
 
           {/* Quick Stats Grid - 4 columns on desktop */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-white/5 bg-slate-900/10 p-4 hover:border-white/10 transition-colors backdrop-blur-md">
-              <div className="mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-amber-400/10 text-amber-400">
+            <div className="rounded-2xl glass-panel-light p-4 hover:bg-white/5 transition-all duration-300 relative group overflow-hidden border border-white/5">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/10">
                 <Briefcase className="h-4.5 w-4.5" />
               </div>
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Job Phù Hợp</span>
-              <h3 className="font-display text-base font-bold text-white mt-1">5 Chiến dịch</h3>
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-bold">Job Phù Hợp</span>
+              <h3 className="font-display text-sm font-extrabold text-white mt-1">5 Chiến dịch</h3>
             </div>
 
-            <div className="rounded-xl border border-white/5 bg-slate-900/10 p-4 hover:border-white/10 transition-colors backdrop-blur-md">
-              <div className="mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400">
+            <div className="rounded-2xl glass-panel-light p-4 hover:bg-white/5 transition-all duration-300 relative group overflow-hidden border border-white/5">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/10">
                 <Calendar className="h-4.5 w-4.5" />
               </div>
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Lịch Trình</span>
-              <h3 className="font-display text-base font-bold text-white mt-1">3 Shows</h3>
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-bold">Lịch Trình</span>
+              <h3 className="font-display text-sm font-extrabold text-white mt-1">3 Shows</h3>
             </div>
 
-            <div className="rounded-xl border border-white/5 bg-slate-900/10 p-4 hover:border-white/10 transition-colors backdrop-blur-md">
-              <div className="mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+            <div className="rounded-2xl glass-panel-light p-4 hover:bg-white/5 transition-all duration-300 relative group overflow-hidden border border-white/5">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/10">
                 <DollarSign className="h-4.5 w-4.5" />
               </div>
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Thu nhập</span>
-              <h3 className="font-display text-base font-bold text-white mt-1">12.5M đ</h3>
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-bold">Thu nhập</span>
+              <h3 className="font-display text-sm font-extrabold text-white mt-1">12.5M đ</h3>
             </div>
 
-            <div className="rounded-xl border border-white/5 bg-slate-900/10 p-4 hover:border-white/10 transition-colors backdrop-blur-md">
-              <div className="mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+            <div className="rounded-2xl glass-panel-light p-4 hover:bg-white/5 transition-all duration-300 relative group overflow-hidden border border-white/5">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">
                 <Award className="h-4.5 w-4.5" />
               </div>
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Độ tin cậy</span>
-              <h3 className="font-display text-base font-bold text-white mt-1">98%</h3>
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-bold">Độ tin cậy</span>
+              <h3 className="font-display text-sm font-extrabold text-white mt-1">98%</h3>
             </div>
           </div>
 
           {/* Matched Jobs Grid - 2 columns on desktop */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-display font-bold text-sm text-white flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-amber-400" /> Chiến Dịch Khuyên Dùng
+              <h3 className="font-display font-extrabold text-xs text-white uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="h-4.5 w-4.5 text-amber-400 fill-amber-400/20" /> Chiến Dịch Khuyên Dùng
               </h3>
               <button 
                 onClick={() => router.push("/talent/jobs")} 
-                className="text-[10px] font-bold text-amber-400 uppercase tracking-wider hover:text-amber-300"
+                className="text-[9px] font-bold text-amber-400 uppercase tracking-widest hover:text-amber-300 transition-colors"
               >
                 Xem tất cả
               </button>
@@ -144,25 +150,27 @@ export default function DashboardPage() {
                 <div
                   key={job.id}
                   onClick={() => router.push("/talent/jobs")}
-                  className="group rounded-2xl border border-white/5 bg-slate-900/10 p-4 hover:border-white/10 hover:bg-slate-900/20 active:scale-[0.99] transition-all duration-200 cursor-pointer space-y-3"
+                  className="group rounded-2xl glass-panel p-5 luxury-card-hover cursor-pointer space-y-3.5 hover:border-amber-400/20 relative overflow-hidden"
                 >
+                  <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-r from-transparent via-amber-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="flex justify-between items-start">
-                    <span className="rounded bg-white/5 px-2 py-0.5 text-[8px] text-slate-400 uppercase font-semibold">
+                    <span className="rounded bg-white/5 border border-white/5 px-2.5 py-0.5 text-[8px] text-slate-300 uppercase tracking-wider font-semibold">
                       {job.tag === "Runway" ? "Người mẫu sàn diễn" : job.tag}
                     </span>
                     <div className="text-right">
-                      <span className="font-display font-extrabold text-sm text-amber-400">{job.matchScore}%</span>
-                      <span className="block text-[8px] text-slate-500 uppercase font-semibold">Match</span>
+                      <span className="font-display font-extrabold text-sm text-gradient-gold">{job.matchScore}%</span>
+                      <span className="block text-[8px] text-slate-500 uppercase tracking-wider font-bold">AI Match</span>
                     </div>
                   </div>
 
                   <div>
-                    <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors">{job.title}</h4>
-                    <p className="text-[10px] text-slate-500 mt-0.5">{job.brand}</p>
+                    <h4 className="text-xs font-bold text-white group-hover:text-amber-400 transition-colors duration-300">{job.title}</h4>
+                    <p className="text-[10px] text-slate-500 mt-1 font-semibold">{job.brand}</p>
                   </div>
 
-                  <div className="border-t border-white/5 pt-2 text-[10px] text-slate-400">
-                    Cát-xê đề xuất: <b className="text-white">{job.budget}</b>
+                  <div className="border-t border-white/5 pt-3 text-[10px] text-slate-400 flex justify-between items-center">
+                    <span>Cát-xê đề xuất:</span>
+                    <b className="text-white font-bold">{job.budget}</b>
                   </div>
                 </div>
               ))}
@@ -171,22 +179,22 @@ export default function DashboardPage() {
 
           {/* Services Section */}
           <div className="space-y-4">
-            <h3 className="font-display font-bold text-sm text-white">📸 Dịch Vụ Hỗ Trợ Độc Quyền</h3>
+            <h3 className="font-display font-extrabold text-xs text-white uppercase tracking-wider">📸 Dịch Vụ Hỗ Trợ Độc Quyền</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div className="rounded-xl border border-white/5 bg-slate-900/5 p-4 text-center hover:border-white/10 transition-all">
-                <span className="text-2xl">📷</span>
-                <h4 className="text-xs font-semibold text-white mt-1.5">Photographer Pro</h4>
-                <p className="text-[9px] text-slate-500 mt-1">Giảm 10% gói chụp portfolio</p>
+              <div className="rounded-2xl glass-panel-light p-4 text-center hover:bg-white/5 transition-all duration-300 border border-white/5 group">
+                <span className="text-2xl group-hover:scale-110 transition-transform block">📷</span>
+                <h4 className="text-xs font-bold text-white mt-2">Photographer Pro</h4>
+                <p className="text-[9px] text-slate-500 mt-1 font-medium">Giảm 10% gói chụp portfolio</p>
               </div>
-              <div className="rounded-xl border border-white/5 bg-slate-900/5 p-4 text-center hover:border-white/10 transition-all">
-                <span className="text-2xl">💄</span>
-                <h4 className="text-xs font-semibold text-white mt-1.5">Stylist & Makeup</h4>
-                <p className="text-[9px] text-slate-500 mt-1">Trang điểm lookbook chuyên nghiệp</p>
+              <div className="rounded-2xl glass-panel-light p-4 text-center hover:bg-white/5 transition-all duration-300 border border-white/5 group">
+                <span className="text-2xl group-hover:scale-110 transition-transform block">💄</span>
+                <h4 className="text-xs font-bold text-white mt-2">Stylist & Makeup</h4>
+                <p className="text-[9px] text-slate-500 mt-1 font-medium">Trang điểm lookbook chuyên nghiệp</p>
               </div>
-              <div className="rounded-xl border border-white/5 bg-slate-900/5 p-4 text-center hover:border-white/10 transition-all col-span-2 sm:col-span-1">
-                <span className="text-2xl">🎓</span>
-                <h4 className="text-xs font-semibold text-white mt-1.5">Catwalk Academy</h4>
-                <p className="text-[9px] text-slate-500 mt-1">Khóa đào tạo kỹ năng catwalk VIP</p>
+              <div className="rounded-2xl glass-panel-light p-4 text-center hover:bg-white/5 transition-all duration-300 border border-white/5 group col-span-2 sm:col-span-1">
+                <span className="text-2xl group-hover:scale-110 transition-transform block">🎓</span>
+                <h4 className="text-xs font-bold text-white mt-2">Catwalk Academy</h4>
+                <p className="text-[9px] text-slate-500 mt-1 font-medium">Khóa đào tạo kỹ năng catwalk VIP</p>
               </div>
             </div>
           </div>
@@ -197,11 +205,11 @@ export default function DashboardPage() {
         <div className="space-y-6">
           
           {/* Profile Card */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#070913]/60 p-5 shadow-xl backdrop-blur-xl">
-            <div className="absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-amber-400/5 blur-2xl" />
+          <div className="relative overflow-hidden rounded-2xl glass-panel p-6 shadow-2xl border-glow-gold">
+            <div className="absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-amber-400/5 blur-3xl" />
             
-            <div className="flex flex-col items-center text-center pb-4 border-b border-white/5">
-              <div className="relative h-20 w-20 rounded-full border-2 border-amber-400 p-0.5 shadow-md mb-3">
+            <div className="flex flex-col items-center text-center pb-5 border-b border-white/5">
+              <div className="relative h-20 w-20 rounded-full border border-amber-400/30 p-1 shadow-[0_0_15px_rgba(245,158,11,0.15)] mb-4">
                 <img
                   src={profile.avatar}
                   alt={profile.name}
@@ -209,10 +217,10 @@ export default function DashboardPage() {
                 />
               </div>
               
-              <div className="flex items-center gap-1.5 justify-center">
-                <h2 className="font-display text-base font-bold text-white">{profile.name}</h2>
+              <div className="flex items-center gap-2 justify-center">
+                <h2 className="font-display text-sm font-black text-white uppercase tracking-wider">{profile.name}</h2>
                 <span className={cn(
-                  "inline-block rounded-md border px-1.5 py-0.2 font-display text-[8px] font-extrabold uppercase tracking-wide",
+                  "inline-block rounded border px-1.5 py-0.2 font-display text-[7px] font-extrabold uppercase tracking-widest",
                   profile.tier === "S" && "border-amber-400 bg-amber-400/10 text-amber-400",
                   profile.tier === "A" && "border-slate-300 bg-slate-400/10 text-slate-200",
                   profile.tier === "B" && "border-purple-400 bg-purple-500/10 text-purple-300",
@@ -222,26 +230,26 @@ export default function DashboardPage() {
                 </span>
               </div>
               
-              <p className="text-xs text-slate-400 mt-1">{profile.mainCategory || "Chưa hoàn thiện khảo sát"}</p>
-              <p className="text-[10px] text-slate-500 mt-1">{profile.location} • {(profile.followersCount / 1000).toFixed(0)}k followers</p>
+              <p className="text-[10px] text-amber-400 font-semibold mt-1.5">{profile.mainCategory || "Chưa hoàn thiện khảo sát"}</p>
+              <p className="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-wider">{profile.location} • {(profile.followersCount / 1000).toFixed(0)}k followers</p>
             </div>
 
             {/* Profile completeness */}
-            <div className="mt-4 space-y-2">
-              <div className="flex justify-between items-center text-xs text-slate-400">
-                <span className="font-semibold">Độ hoàn thiện hồ sơ</span>
+            <div className="mt-5 space-y-2.5">
+              <div className="flex justify-between items-center text-[10px] text-slate-400">
+                <span className="font-bold uppercase tracking-wider">Độ hoàn thiện hồ sơ</span>
                 <span className="font-bold text-amber-400">{profile.profileScore || 0}%</span>
               </div>
               <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-amber-200 to-amber-500 transition-all duration-500"
+                  className="h-full rounded-full bg-gradient-to-r from-amber-200 to-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)] transition-all duration-500"
                   style={{ width: `${profile.profileScore || 0}%` }}
                 />
               </div>
               {profile.profileScore < 90 && (
                 <button
                   onClick={() => router.push("/talent/onboarding")}
-                  className="flex items-center text-[10px] font-bold text-amber-400 uppercase tracking-wider hover:text-amber-300 mt-2"
+                  className="flex items-center text-[9px] font-bold text-amber-400 uppercase tracking-widest hover:text-amber-300 mt-3 transition-colors cursor-pointer"
                 >
                   Hoàn thiện hồ sơ ngay <ChevronRight className="ml-1 h-3 w-3" />
                 </button>
@@ -250,14 +258,14 @@ export default function DashboardPage() {
           </div>
 
           {/* AI Recommendation Alert card */}
-          <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 space-y-3">
+          <div className="rounded-2xl glass-panel p-5 space-y-3.5 border-glow-purple bg-gradient-to-br from-[#0e0a24]/30 to-transparent">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4.5 w-4.5 text-amber-400" />
-              <h4 className="font-display font-semibold text-xs text-white uppercase tracking-wider">Trợ Lý Định Hướng AI</h4>
+              <Sparkles className="h-4.5 w-4.5 text-purple-400" />
+              <h4 className="font-display font-extrabold text-[10px] text-white uppercase tracking-wider">Trợ Lý Định Hướng AI</h4>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-[11px] text-slate-300 leading-relaxed font-medium">
               Hệ thống ghi nhận bạn có lợi thế hình ảnh rất lớn trên Instagram. 
-              Hãy liên kết tài khoản TikTok để AI quét lượng tương tác và nâng cấp thứ hạng của bạn lên <b>Tier S</b> (Celeb VIP).
+              Hãy liên kết tài khoản TikTok để AI quét lượng tương tác và nâng cấp thứ hạng của bạn lên <b className="text-purple-400">Tier S</b> (Celeb VIP).
             </p>
           </div>
 
