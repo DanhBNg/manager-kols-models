@@ -7,7 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import BottomNavigation from "@/components/BottomNavigation";
 import { 
   Home, User, Briefcase, Crown, MessageSquare, Calendar, Wallet, Settings, 
-  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight, Bell, Search 
+  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight, Bell, Search,
+  Building2, Megaphone, BarChart3, FileWarning, RadioTower, Activity
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import "./globals.css";
@@ -34,36 +35,45 @@ export default function RootLayout({
 
   // Sidebar Menu Items based on portal
   const talentMenuItems = [
-    { label: "Dashboard", icon: Home, href: "/talent/dashboard" },
-    { label: "Khảo sát", icon: Sparkles, href: "/talent/onboarding" },
-    { label: "Portfolio", icon: User, href: "/talent/portfolio" },
-    { label: "Jobs Marketplace", icon: Briefcase, href: "/talent/jobs" },
-    { label: "Quỹ Vương Miện", icon: Crown, href: "/talent/crown" },
-    { label: "Lịch Trình", icon: Calendar, href: "/talent/calendar" },
-    { label: "Tin Nhắn", icon: MessageSquare, href: "/talent/messages" },
-    { label: "Thu Nhập", icon: Wallet, href: "/talent/wallet" },
-    { label: "Cài Đặt", icon: Settings, href: "/talent/settings" },
+    { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
+    { label: "Nhập hồ sơ", icon: Sparkles, href: "/talent/onboarding" },
+    { label: "Hồ sơ năng lực", icon: User, href: "/talent/portfolio" },
+    { label: "Việc phù hợp", icon: Briefcase, href: "/talent/jobs" },
+    { label: "Quỹ vương miện", icon: Crown, href: "/talent/crown" },
+    { label: "Lịch trình", icon: Calendar, href: "/talent/calendar" },
+    { label: "Tin nhắn", icon: MessageSquare, href: "/talent/messages" },
+    { label: "Thu nhập", icon: Wallet, href: "/talent/wallet" },
+    { label: "Cài đặt", icon: Settings, href: "/talent/settings" },
   ];
 
   const brandMenuItems = [
-    { label: "Dashboard", icon: LayoutDashboard, href: "/brand/dashboard" },
-    { label: "Campaigns", icon: Briefcase, href: "/brand/campaigns" },
-    { label: "Discover Talents", icon: Sparkles, href: "/brand/discover" },
-    { label: "Escrow & Bookings", icon: Shield, href: "/brand/bookings" },
-    { label: "Messages", icon: MessageSquare, href: "/brand/messages" },
-    { label: "Settings", icon: Settings, href: "/brand/settings" },
+    { label: "Tổng quan", icon: LayoutDashboard, href: "/brand/dashboard" },
+    { label: "Chiến dịch", icon: Briefcase, href: "/brand/campaigns" },
+    { label: "Tìm tài năng", icon: Sparkles, href: "/brand/discover" },
+    { label: "Ký quỹ & Booking", icon: Shield, href: "/brand/bookings" },
+    { label: "Tin nhắn", icon: MessageSquare, href: "/brand/messages" },
+    { label: "Cài đặt", icon: Settings, href: "/brand/settings" },
   ];
 
   const adminMenuItems = [
-    { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
-    { label: "Duyệt Hồ Sơ", icon: User, href: "/admin/users" },
-    { label: "Giao Dịch Escrow", icon: Shield, href: "/admin/transactions" },
-    { label: "Tranh Chấp", icon: Shield, href: "/admin/disputes" },
-    { label: "Settings", icon: Settings, href: "/admin/settings" },
+    { label: "Tổng quan", icon: LayoutDashboard, href: "/admin/dashboard" },
+    { label: "Tài năng", icon: User, href: "/admin/talents" },
+    { label: "Nhãn hàng", icon: Building2, href: "/admin/brands" },
+    { label: "Chiến dịch", icon: Megaphone, href: "/admin/campaigns" },
+    { label: "Công việc", icon: Briefcase, href: "/admin/jobs" },
+    { label: "Thanh toán & Ký quỹ", icon: Wallet, href: "/admin/payments-escrow" },
+    { label: "Cuộc thi", icon: Crown, href: "/admin/competitions" },
+    { label: "Phân tích", icon: BarChart3, href: "/admin/analytics" },
+    { label: "Kiểm duyệt", icon: Shield, href: "/admin/moderation" },
+    { label: "Quản trị nội dung", icon: FileWarning, href: "/admin/cms" },
+    { label: "Người dùng & Quyền", icon: User, href: "/admin/users-permissions" },
+    { label: "Thông báo", icon: RadioTower, href: "/admin/notifications" },
+    { label: "Cài đặt", icon: Settings, href: "/admin/settings" },
+    { label: "Nhật ký hệ thống", icon: Activity, href: "/admin/audit-logs" },
   ];
 
   const currentMenuItems = isTalent ? talentMenuItems : isBrand ? brandMenuItems : isAdmin ? adminMenuItems : [];
-  const portalName = isTalent ? "Talent App" : isBrand ? "Brand Portal" : isAdmin ? "Admin Portal" : "";
+  const portalName = isTalent ? "Cổng tài năng" : isBrand ? "Cổng nhãn hàng" : isAdmin ? "Cổng quản trị" : "";
 
   if (isAdmin) {
     return (
@@ -133,7 +143,7 @@ export default function RootLayout({
                     />
                     <div className="text-left">
                       <span className="block text-xs font-bold text-white">Quản trị viên</span>
-                      <span className="block text-[10px] text-slate-500">Developer Portal</span>
+                      <span className="block text-[10px] text-slate-500">Cổng vận hành</span>
                     </div>
                   </div>
                 </div>
@@ -181,7 +191,7 @@ export default function RootLayout({
                       className="flex w-full items-center justify-between rounded-xl border border-white/5 bg-slate-950/40 px-4 py-3 text-[11px] font-bold text-slate-400 hover:border-amber-400/40 hover:text-white hover:bg-slate-900/20 transition-all cursor-pointer"
                     >
                       <span className="flex items-center gap-2">
-                        <LogOut className="h-4 w-4" /> Đổi Cổng Portal
+                        <LogOut className="h-4 w-4" /> Đổi cổng truy cập
                       </span>
                       <ChevronRight className="h-3 w-3" />
                     </button>
