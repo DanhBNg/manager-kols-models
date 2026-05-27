@@ -7,7 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import BottomNavigation from "@/components/BottomNavigation";
 import { 
   Home, User, Briefcase, Crown, MessageSquare, Calendar, Wallet, Settings, 
-  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight, Bell, Search 
+  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight, Bell, Search,
+  Building2, Megaphone, BarChart3, FileWarning, RadioTower, Activity
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import "./globals.css";
@@ -56,10 +57,19 @@ export default function RootLayout({
 
   const adminMenuItems = [
     { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
-    { label: "Duyệt Hồ Sơ", icon: User, href: "/admin/users" },
-    { label: "Giao Dịch Escrow", icon: Shield, href: "/admin/transactions" },
-    { label: "Tranh Chấp", icon: Shield, href: "/admin/disputes" },
+    { label: "Talents", icon: User, href: "/admin/talents" },
+    { label: "Brands", icon: Building2, href: "/admin/brands" },
+    { label: "Campaigns", icon: Megaphone, href: "/admin/campaigns" },
+    { label: "Jobs", icon: Briefcase, href: "/admin/jobs" },
+    { label: "Payments & Escrow", icon: Wallet, href: "/admin/payments-escrow" },
+    { label: "Competitions", icon: Crown, href: "/admin/competitions" },
+    { label: "Analytics", icon: BarChart3, href: "/admin/analytics" },
+    { label: "Moderation", icon: Shield, href: "/admin/moderation" },
+    { label: "CMS", icon: FileWarning, href: "/admin/cms" },
+    { label: "Users & Permissions", icon: User, href: "/admin/users-permissions" },
+    { label: "Notifications", icon: RadioTower, href: "/admin/notifications" },
     { label: "Settings", icon: Settings, href: "/admin/settings" },
+    { label: "Audit Logs", icon: Activity, href: "/admin/audit-logs" },
   ];
 
   const currentMenuItems = isTalent ? talentMenuItems : isBrand ? brandMenuItems : isAdmin ? adminMenuItems : [];
