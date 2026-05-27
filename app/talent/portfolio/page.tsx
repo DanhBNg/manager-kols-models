@@ -2,7 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Shield, Sparkles, MapPin, Eye, Star, Share2, Award, Calendar, DollarSign, BookOpen, GraduationCap } from "lucide-react";
+import { 
+  Shield, Sparkles, MapPin, Eye, Star, Share2, 
+  Award, Calendar, DollarSign, BookOpen, GraduationCap,
+  Users, Check, ArrowUpRight, ShieldCheck, Heart, User
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const JOBS_LIST = [
@@ -106,45 +110,49 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-8 animate-in fade-in duration-300">
       
-      {/* Cover Banner Header */}
-      <div className="relative rounded-2xl border border-white/5 bg-[#070913] p-4">
+      {/* Cover Banner Header - Premium styling */}
+      <div className="relative rounded-2xl border border-[#151b2d] bg-[#08090f] p-5 shadow-xl">
         {/* Cover Background */}
-        <div className="h-36 md:h-48 w-full rounded-xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.06),transparent)]" />
+        <div className="h-36 md:h-48 w-full rounded-xl bg-gradient-to-r from-slate-950 via-[#0e111d] to-slate-950 relative overflow-hidden border border-white/5">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(244,196,48,0.06),transparent)]" />
+          <div className="absolute top-4 right-4 text-[9px] font-mono tracking-widest text-[#f4c430]/30 font-bold uppercase">
+            VNP BEAUTY SYSTEM PORTFOLIO
+          </div>
         </div>
 
         {/* Profile Info Row */}
-        <div className="relative px-6 pt-2 flex flex-col sm:flex-row gap-4 sm:items-end justify-between">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+        <div className="relative px-6 pt-3 flex flex-col sm:flex-row gap-5 sm:items-end justify-between">
+          <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-end">
             {/* Shift avatar upwards */}
-            <div className="relative -mt-12 sm:-mt-16 h-24 w-24 shrink-0 rounded-full border-4 border-[#070913] bg-slate-900 p-0.5 shadow-2xl">
+            <div className="relative -mt-14 sm:-mt-20 h-28 w-28 shrink-0 rounded-full border-4 border-[#08090f] bg-slate-900 p-0.5 shadow-2xl">
               <img
                 src={profile.avatar}
                 alt={profile.name}
                 className="h-full w-full rounded-full object-cover"
               />
+              <span className="absolute bottom-1 right-1 h-5 w-5 bg-emerald-500 border-4 border-[#08090f] rounded-full" />
             </div>
 
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <h2 className="font-display font-extrabold text-white text-lg md:text-xl">{profile.name}</h2>
-                <Shield className="h-5 w-5 text-amber-400 shrink-0" />
+            <div className="space-y-1.5 pb-1">
+              <div className="flex items-center gap-2.5">
+                <h2 className="font-display font-black text-white text-xl md:text-2xl uppercase tracking-wider">{profile.name}</h2>
+                <ShieldCheck className="h-6 w-6 text-amber-400 shrink-0" />
               </div>
-              <p className="text-xs text-slate-400 flex items-center gap-1">
-                <MapPin className="h-3.5 w-3.5 text-slate-500" /> {profile.location} • Quê quán: {profile.hometown || "Chưa cập nhật"}
+              <p className="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
+                <MapPin className="h-4 w-4 text-slate-500" /> {profile.location} • Quê quán: {profile.hometown || "Chưa cập nhật"}
               </p>
             </div>
           </div>
 
-          <div className="flex gap-2 pb-1">
-            <button className="flex h-10 px-4 items-center justify-center gap-1.5 rounded-xl bg-white/5 border border-white/5 text-slate-300 hover:text-white text-xs font-semibold">
+          <div className="flex gap-2 pb-1 relative z-10">
+            <button className="flex h-10 px-4 items-center justify-center gap-1.5 rounded-xl bg-white/5 border border-white/5 text-slate-300 hover:text-white hover:bg-white/10 text-xs font-semibold transition-all">
               <Share2 className="h-4 w-4" /> Chia sẻ hồ sơ
             </button>
             <span className={cn(
-              "flex h-10 items-center rounded-xl border px-4 font-display text-xs font-extrabold uppercase tracking-wide",
-              profile.tier === "S" && "border-amber-400 bg-amber-400/10 text-amber-400 shadow-md shadow-amber-500/10",
+              "flex h-10 items-center rounded-xl border px-5 font-display text-xs font-extrabold uppercase tracking-widest shadow-md",
+              profile.tier === "S" && "border-amber-400 bg-amber-400/10 text-amber-300 shadow-amber-500/10",
               profile.tier === "A" && "border-slate-300 bg-slate-400/10 text-slate-200",
               profile.tier === "B" && "border-purple-400 bg-purple-500/10 text-purple-300",
               profile.tier === "C" && "border-emerald-400 bg-emerald-500/10 text-emerald-300"
@@ -156,72 +164,76 @@ export default function PortfolioPage() {
       </div>
 
       {/* Main Grid: 2 columns on Desktop (1/3 and 2/3) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* LEFT COLUMN: Profile Bio & Measurements (1/3 width) */}
-        <div className="space-y-6">
+        <div className="space-y-8">
           
-          {/* Physical Measurements Card */}
-          <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 space-y-4">
-            <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider border-b border-white/5 pb-2.5">
-              Thông Số Nhân Trắc
+          {/* Physical Measurements Card - Silver border style */}
+          <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-5">
+            <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
+              <User className="h-4.5 w-4.5 text-slate-400" /> Thông Số Nhân Trắc
             </h3>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-xl bg-white/2 p-3 text-center border border-white/2">
-                <span className="block text-[9px] text-slate-500 font-bold uppercase">Chiều Cao</span>
-                <span className="text-sm font-extrabold text-white mt-0.5 block">{profile.height} cm</span>
+              <div className="rounded-xl bg-slate-950 p-3.5 text-center border border-white/2">
+                <span className="block text-[9px] text-slate-500 font-bold uppercase tracking-wider">Chiều Cao</span>
+                <span className="text-sm font-extrabold text-white mt-1 block">{profile.height} cm</span>
               </div>
-              <div className="rounded-xl bg-white/2 p-3 text-center border border-white/2">
-                <span className="block text-[9px] text-slate-500 font-bold uppercase">Cân Nặng</span>
-                <span className="text-sm font-extrabold text-white mt-0.5 block">{profile.weight} kg</span>
+              <div className="rounded-xl bg-slate-950 p-3.5 text-center border border-white/2">
+                <span className="block text-[9px] text-slate-500 font-bold uppercase tracking-wider">Cân Nặng</span>
+                <span className="text-sm font-extrabold text-white mt-1 block">{profile.weight} kg</span>
               </div>
             </div>
 
-            <div className="space-y-2 border-t border-white/5 pt-3">
-              <div className="flex justify-between items-center text-xs text-slate-300 py-1">
-                <span className="font-medium text-slate-400">Số đo Vòng 1</span>
-                <span className="font-bold text-white">{profile.bust} cm</span>
+            <div className="space-y-3.5 border-t border-[#151b2d] pt-4">
+              <div className="flex justify-between items-center text-xs text-slate-300">
+                <span className="font-medium text-slate-400">Số đo Vòng 1 (Ngực)</span>
+                <span className="font-bold text-white font-mono">{profile.bust} cm</span>
               </div>
-              <div className="flex justify-between items-center text-xs text-slate-300 py-1">
-                <span className="font-medium text-slate-400">Số đo Vòng 2</span>
-                <span className="font-bold text-white">{profile.waist} cm</span>
+              <div className="flex justify-between items-center text-xs text-slate-300">
+                <span className="font-medium text-slate-400">Số đo Vòng 2 (Eo)</span>
+                <span className="font-bold text-white font-mono">{profile.waist} cm</span>
               </div>
-              <div className="flex justify-between items-center text-xs text-slate-300 py-1">
-                <span className="font-medium text-slate-400">Số đo Vòng 3</span>
-                <span className="font-bold text-white">{profile.hips} cm</span>
+              <div className="flex justify-between items-center text-xs text-slate-300">
+                <span className="font-medium text-slate-400">Số đo Vòng 3 (Mông)</span>
+                <span className="font-bold text-white font-mono">{profile.hips} cm</span>
               </div>
-              <div className="flex justify-between items-center text-xs text-slate-300 py-1 border-t border-white/5 pt-2">
+              <div className="flex justify-between items-center text-xs text-slate-300 border-t border-[#151b2d] pt-3.5">
                 <span className="font-medium text-slate-400">Phẫu thuật thẩm mỹ</span>
-                <span className="font-bold text-white">{profile.plasticSurgery === "true" ? "Đã từng phẫu thuật" : "Chưa từng phẫu thuật"}</span>
+                <span className="font-bold text-white">{profile.plasticSurgery === "true" ? "Đã can thiệp" : "Tự nhiên 100%"}</span>
               </div>
-              <div className="flex justify-between items-center text-xs text-slate-300 py-1">
-                <span className="font-medium text-slate-400">Hôn nhân</span>
+              <div className="flex justify-between items-center text-xs text-slate-300">
+                <span className="font-medium text-slate-400">Tình trạng kết hôn</span>
                 <span className="font-bold text-white">{profile.maritalStatus}</span>
               </div>
             </div>
           </div>
 
           {/* Education & Languages */}
-          <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 space-y-4">
-            <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider border-b border-white/5 pb-2.5">
-              Học Vấn & Ngôn Ngữ
+          <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-5">
+            <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
+              <GraduationCap className="h-4.5 w-4.5 text-slate-400" /> Học Vấn & Ngôn Ngữ
             </h3>
             
-            <div className="space-y-3.5 text-xs text-slate-300">
+            <div className="space-y-4 text-xs text-slate-300">
               <div className="flex gap-3">
-                <GraduationCap className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400/10 text-amber-400">
+                  <GraduationCap className="h-4.5 w-4.5" />
+                </div>
                 <div>
-                  <span className="block font-bold text-white">Học vấn</span>
-                  <span className="block text-[10px] text-slate-400 mt-0.5">{profile.education}</span>
+                  <span className="block font-bold text-white">Học vấn hiện tại</span>
+                  <span className="block text-[10px] text-slate-400 mt-1">{profile.education}</span>
                 </div>
               </div>
               
-              <div className="flex gap-3 border-t border-white/5 pt-3">
-                <BookOpen className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+              <div className="flex gap-3 border-t border-[#151b2d] pt-4">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+                  <BookOpen className="h-4.5 w-4.5" />
+                </div>
                 <div>
-                  <span className="block font-bold text-white">Ngôn ngữ</span>
-                  <span className="block text-[10px] text-slate-400 mt-0.5">
+                  <span className="block font-bold text-white">Ngoại ngữ thành thạo</span>
+                  <span className="block text-[10px] text-slate-400 mt-1 leading-normal">
                     {Array.isArray(profile.languages) ? profile.languages.join(", ") : profile.languages}
                   </span>
                 </div>
@@ -232,47 +244,52 @@ export default function PortfolioPage() {
         </div>
 
         {/* RIGHT COLUMN: Rate card, Availability and radar chart (2/3 width) */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-8">
           
-          {/* Top statistics strip */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="rounded-xl border border-white/5 bg-slate-900/10 p-4">
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Tương Tác MXH</span>
-              <h4 className="text-base font-extrabold text-white mt-1">{(profile.engagementRate || 4.8)}% ER</h4>
-              <span className="text-[9px] text-slate-400 block mt-0.5">{(Number(profile.followersCount || 120000) / 1000).toFixed(0)}k Followers</span>
+          {/* Top statistics strip - Glowing stats like Admin */}
+          <div className="grid grid-cols-3 gap-5">
+            
+            {/* 1. MXH Interaction - Cyan */}
+            <div className="rounded-2xl bg-[#08090f] border border-[#143d4d] shadow-[0_0_15px_rgba(34,211,238,0.02)] p-5">
+              <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider block">Tương Tác MXH</span>
+              <h4 className="text-lg font-extrabold text-white mt-1.5">{(profile.engagementRate || 4.8)}% ER</h4>
+              <span className="text-[9px] text-cyan-400 block mt-1 font-semibold">{(Number(profile.followersCount || 120000) / 1000).toFixed(0)}k Followers</span>
             </div>
 
-            <div className="rounded-xl border border-white/5 bg-slate-900/10 p-4">
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Độ Tin Cậy</span>
-              <h4 className="text-base font-extrabold text-white mt-1">{(profile.reliability || 96)}%</h4>
-              <span className="text-[9px] text-slate-400 block mt-0.5">{(profile.reviewsCount || 18)} Shows thành công</span>
+            {/* 2. Reliability - Purple */}
+            <div className="rounded-2xl bg-[#08090f] border border-[#2f1c4f] shadow-[0_0_15px_rgba(168,85,247,0.02)] p-5">
+              <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider block">Độ Tin Cậy</span>
+              <h4 className="text-lg font-extrabold text-white mt-1.5">{(profile.reliability || 96)}%</h4>
+              <span className="text-[9px] text-[#a855f7] block mt-1 font-semibold">{(profile.reviewsCount || 18)} Shows thành công</span>
             </div>
 
-            <div className="rounded-xl border border-white/5 bg-slate-900/10 p-4">
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Đánh Giá TB</span>
-              <h4 className="text-base font-extrabold text-white mt-1 flex items-center gap-1">
-                {(profile.averageRating || 4.9).toFixed(1)} <Star className="h-4.5 w-4.5 text-amber-400 fill-amber-400" />
+            {/* 3. Average Rating - Gold */}
+            <div className="rounded-2xl bg-[#08090f] border border-[#3e3415] shadow-[0_0_15px_rgba(234,179,8,0.02)] p-5">
+              <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider block">Đánh Giá TB</span>
+              <h4 className="text-lg font-extrabold text-white mt-1.5 flex items-center gap-1">
+                {(profile.averageRating || 4.9).toFixed(1)} <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
               </h4>
-              <span className="text-[9px] text-slate-400 block mt-0.5">Xếp hạng 5 sao tuyệt đối</span>
+              <span className="text-[9px] text-amber-400 block mt-1 font-semibold">Xếp hạng 5 sao tuyệt đối</span>
             </div>
+
           </div>
 
-          {/* Rate card section */}
-          <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 space-y-3">
-            <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider border-b border-white/5 pb-2.5">
-              Bảng Giá Dịch Vụ (Rate Card)
+          {/* Rate card section - Gold theme (finance) */}
+          <div className="rounded-2xl border border-[#3e3415] bg-[#08090f] shadow-[0_0_15px_rgba(244,196,48,0.02)] p-6 space-y-4">
+            <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
+              <DollarSign className="h-4.5 w-4.5 text-amber-400" /> Bảng Giá Dịch Vụ Cố Định (Rate Card)
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3.5">
               {Object.entries(profile.rateCard || {
                 "Instagram Post": 3000000,
                 "TikTok Video": 5000000,
                 "Livestream 2h": 8000000,
                 "Catwalk Show": 15000000
               }).map(([key, value]: any) => (
-                <div key={key} className="flex justify-between py-2 text-xs text-slate-300 border-b border-white/2 md:border-b-0">
+                <div key={key} className="flex justify-between py-2 text-xs border-b border-[#151b2d] md:border-b-0">
                   <span className="font-semibold text-slate-400">{key}</span>
-                  <span className="font-extrabold text-amber-400">từ {value.toLocaleString()}đ</span>
+                  <span className="font-extrabold text-amber-400 font-mono">từ {value.toLocaleString()}đ</span>
                 </div>
               ))}
             </div>
@@ -282,12 +299,12 @@ export default function PortfolioPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Calendar Availability */}
-            <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 space-y-4">
-              <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider border-b border-white/5 pb-2.5">
-                Lịch Trình Nhận Show
+            <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-4">
+              <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
+                <Calendar className="h-4.5 w-4.5 text-slate-400" /> Lịch Trình Nhận Show Tháng 6
               </h3>
               
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-5 gap-2.5">
                 {["24/06", "25/06", "26/06", "27/06", "28/06"].map((date) => {
                   const day = date.split("/")[0];
                   const isAvailable = profile.availabilityCalendar?.some((d: string) => d.endsWith(day));
@@ -303,51 +320,52 @@ export default function PortfolioPage() {
                       )}
                     >
                       <span className="text-xs uppercase font-bold">{day}</span>
-                      <span className="text-[9px] font-semibold">{isAvailable ? "Rảnh" : "Bận"}</span>
+                      <span className="text-[9px] font-semibold mt-0.5">{isAvailable ? "Rảnh" : "Bận"}</span>
                     </div>
                   );
                 })}
               </div>
-              <p className="text-[10px] text-slate-500 leading-relaxed">
-                * Nhãn hàng có thể chọn ngày trống trên và ấn "Book" để gửi thỏa thuận đặt show diễn.
+              <p className="text-[9px] text-slate-500 leading-normal">
+                * Nhãn hàng có thể chọn ngày trống trên và ấn "Book" để gửi đề nghị ký quỹ.
               </p>
             </div>
 
             {/* AI Radar Chart */}
-            <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 flex gap-4 items-center justify-between">
+            <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 flex gap-4 items-center justify-between">
               <div className="space-y-2 flex-1">
-                <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider">
+                <h3 className="font-display font-black text-xs text-white uppercase tracking-wider">
                   Định Hướng AI
                 </h3>
                 <p className="text-[10px] leading-relaxed text-slate-400">
-                  Phù hợp nhất: <b className="text-amber-400 font-bold block mt-1">{profile.mainCategory}</b>
+                  Sự nghiệp phù hợp nhất:<br />
+                  <b className="text-amber-400 font-bold block mt-1.5 text-xs">{profile.mainCategory}</b>
                 </p>
               </div>
 
               {/* SVG Radar */}
-              <div className="h-28 w-28 shrink-0 rounded-xl border border-white/5 bg-slate-950 p-2 shadow-inner">
+              <div className="h-28 w-28 shrink-0 rounded-xl border border-[#151b2d] bg-slate-950 p-2 shadow-inner">
                 <svg viewBox="0 0 200 200" className="h-full w-full">
                   <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255,255,255,0.05)" />
                   <circle cx="100" cy="100" r="30" fill="none" stroke="rgba(255,255,255,0.05)" />
-                  <polygon points={calculateRadarPath()} fill="rgba(251,191,36,0.2)" stroke="#fbbf24" strokeWidth="2" />
-                  <text x="100" y="25" fill="#fbbf24" fontSize="10" fontWeight="bold" textAnchor="middle">P</text>
-                  <text x="35" y="145" fill="#a855f7" fontSize="10" fontWeight="bold" textAnchor="middle">R</text>
-                  <text x="165" y="145" fill="#06b6d4" fontSize="10" fontWeight="bold" textAnchor="middle">K</text>
+                  <polygon points={calculateRadarPath()} fill="rgba(244,196,48,0.2)" stroke="#f4c430" strokeWidth="2.5" />
+                  <text x="100" y="25" fill="#f4c430" fontSize="11" fontWeight="bold" textAnchor="middle">P</text>
+                  <text x="35" y="145" fill="#a855f7" fontSize="11" fontWeight="bold" textAnchor="middle">R</text>
+                  <text x="165" y="145" fill="#06b6d4" fontSize="11" fontWeight="bold" textAnchor="middle">K</text>
                 </svg>
               </div>
             </div>
 
           </div>
 
-          {/* AI Recommended Roles (20 jobs) */}
-          <div className="rounded-2xl border border-white/5 bg-[#070913]/30 p-5 space-y-4">
-            <div className="flex items-center gap-2 border-b border-white/5 pb-2.5">
-              <Sparkles className="h-4.5 w-4.5 text-amber-400 animate-pulse" />
-              <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider">
+          {/* AI Recommended Roles (20 jobs) - Purple border (AI) */}
+          <div className="rounded-2xl border border-[#2f1c4f] bg-[#08090f] shadow-[0_0_15px_rgba(168,85,247,0.02)] p-6 space-y-4">
+            <div className="flex items-center gap-2 border-b border-[#151b2d] pb-3">
+              <Sparkles className="h-5 w-5 text-purple-400 animate-pulse" />
+              <h3 className="font-display font-black text-xs text-white uppercase tracking-wider">
                 Xếp Hạng 20 Định Hướng Việc Làm AI (AI Competency Matching)
               </h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               {(() => {
                 const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
                 const calculatedJobs = JOBS_LIST.map((job) => {
@@ -366,9 +384,9 @@ export default function PortfolioPage() {
                   return (
                     <div
                       key={job.id}
-                      className="flex items-center gap-3 rounded-xl border border-white/5 bg-slate-900/10 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                      className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3.5 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
                     >
-                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[9px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
+                      <div className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[9px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
                         {idx + 1}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -383,12 +401,12 @@ export default function PortfolioPage() {
                             {job.matchScore}% Match
                           </span>
                         </div>
-                        <p className="text-[9px] text-slate-500 truncate mt-0.5">{job.desc}</p>
-                        <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-1.5">
+                        <p className="text-[9px] text-slate-500 truncate mt-1 font-medium">{job.desc}</p>
+                        <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden mt-2">
                           <div
                             className={cn(
                               "h-full rounded-full transition-all duration-500",
-                              isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-600"
+                              isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-700"
                             )}
                             style={{ width: `${job.matchScore}%` }}
                           />

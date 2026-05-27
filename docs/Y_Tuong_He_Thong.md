@@ -1,82 +1,157 @@
-  Hệ sinh thái vòng đời (Lifecycle Ecosystem) đồng hành cùng người đẹp từ con số 0 cho đến khi tỏa sáng và khai thác thương mại bền vững. 
-I. PHÂN TÍCH KIẾN TRÚC HỆ THỐNG THEO VÒNG ĐỜI (Lifecycle)
-Hệ thống  sẽ giải quyết bài toán cốt lõi: "Số hóa và tự động hóa quy trình quản trị, kết nối trong ngành công nghiệp sắc đẹp" qua 4 giai đoạn chính:
-1. Giai đoạn 1: Trước cuộc thi (Pre-Pageant / Incubation)
-Hệ thống Định hướng & Match-making: Chuyên gia hoặc Thuật toán AI phân tích chỉ số nhân trắc học, kỹ năng, gương mặt (với định hướng nhân tướng học/hình ảnh phù hợp) để gợi ý các cuộc thi phù hợp (Hoa hậu, Hoa khôi, Người mẫu Thương hiệu, Fitness...).
-Trung tâm dịch vụ phụ trợ (B2B Marketplace): Nơi các thí sinh kết nối với các đối tác chiến lược:
-Nhà thiết kế/Thương hiệu: Thuê/tài trợ trang phục dạ hội, áo dài.
-Makeup Artists/Stylists: Đặt lịch theo gói đồng hành suốt cuộc thi.
-Trung tâm Đào tạo: Đăng ký khóa học Catwalk, ứng xử, giải phóng hình thể.
-Kết nối Nhà tài trợ sớm (Early Brand Endorsement): Các nhãn hàng có thể tìm kiếm gương mặt tiềm năng từ vòng hồ sơ để tài trợ ngân sách đổi lại quyền quyền lợi truyền thông ngay từ đầu.
-2. Giai đoạn 2: Trong cuộc thi (In-Pageant / Acceleration)
-Quản trị hình ảnh & Truyền thông số: Tích hợp công cụ lên lịch bám sát timeline cuộc thi. Hỗ trợ thí sinh xây dựng nội dung trên TikTok, Facebook, Instagram tự động theo các tuyến bài (Content Matrix) có sẵn của app.
-Hệ thống Đánh giá Chất lượng (QC & Monitoring): (Áp dụng từ mô hình quản lý KOL chuyên nghiệp) Theo dõi chỉ số tăng trưởng tương tác (Followers, Engagement, Sentiment) của từng thí sinh theo thời gian thực để các nhãn hàng/nhà đầu tư theo dõi "phong độ".
-3. Giai đoạn 3: Sau cuộc thi (Post-Pageant / Monetization)
-Hệ thống Booking Tự động (Smart Booking Engine): * Nhãn hàng (Brands) hoặc Agency tạo chiến dịch (Campaign) -> Hệ thống tự động filter danh sách Người đẹp/Model đáp ứng tiêu chí (Chiều cao, độ tuổi, khu vực, phân khúc giá Catwalk/Event/KOL).
-Hợp đồng điện tử (Smart Contract) tự động khóa tiền cọc (Escrow) để bảo vệ quyền lợi cho cả hai bên, tránh tình trạng bùng show hoặc quỵt cát-xê.
-Quản lý Job ngắn hạn & dài hạn: Phân loại rõ ràng giữa job sự kiện (Event, Catwalk, PG) và job đại sứ thương hiệu (Ambassador, Retainer contract).
-4. Tính năng Đặc biệt: Crown Funding (Quỹ Vương Miện / Gọi vốn cộng đồng)
-Ủng hộ dự án Nhân ái/Tài năng: Trong các cuộc thi Hoa hậu, dự án Nhân ái chiếm điểm số rất lớn. Tính năng này cho phép Fan và Doanh nghiệp quyên góp tiền trực tiếp cho dự án xã hội của thí sinh (đảm bảo minh bạch qua sao kê/blockchain hoặc ví điện tử).
-Fan Voting & Gifting: Tích hợp cổng bình chọn (Vote) nhận quà ảo quy đổi ra giá trị thực, giúp thí sinh có thêm ngân sách chi trả cho trang phục, makeup trong cuộc thi.
-II. HỌC HỎI TỪ CÁC MÔ HÌNH QUỐC TẾ & TÀI LIỆU KỸ THUẬT
-Từ Backstage & StarNow:
-Cơ chế Subscription (Thu phí thành viên): Người đẹp/Model trả phí tháng/năm để có "Premium Profile" (được ưu tiên hiển thị đầu bảng tìm kiếm của Nhãn hàng, nhận tin tuyển dụng sớm).
-Portfolio điện tử chuẩn hóa: Hồ sơ không chỉ có ảnh, mà bắt buộc phải có: Chiều cao, cân nặng, số đo 3 vòng, Video Catwalk (Polaroid), Video giới thiệu bản thân, liên kết mạng xã hội và Lịch trống (Availability Calendar).
-Từ tài liệu Quản lý KOLs/Models (manager-kols-models):
-Three-Layer Data Strategy (Chiến lược dữ liệu 3 lớp): 1. Dữ liệu tự động (API): Cập nhật tự động lượt follow, tương tác thực tế từ TikTok/Instagram của người đẹp.
-2. Dữ liệu thủ công (Plugin/Admin nhập): Đánh giá từ chuyên gia về thái độ làm việc, kỹ năng catwalk, điểm uy tín (Reliability tracking).
-3. Dữ liệu báo giá (Rate Card): Khóa khoảng giá tối thiểu cho các dịch vụ (Post, Video, Livestream, Dự sự kiện).
-Chào anh, để đội ngũ kỹ thuật (Tech Leader, Developers, UI/UX Designers) có thể nắm bắt chính xác logic cốt lõi và triển khai hệ thống phần mềm mà không bị chệch hướng, tài liệu này cần được viết bằng ngôn ngữ chuẩn kỹ thuật: rõ ràng, phân tách module và tường minh về mặt dữ liệu (Data & Logic Flow).
-Dưới đây là bản Tài liệu Định hướng Phát triển Sản phẩm Tổng hợp (Product Requirement Document - PRD Shortform). Anh có thể gửi thẳng file này cho Tech Leader của dự án làm kim chỉ nam triển khai.
-TÀI LIỆU ĐỊNH HƯỚNG PHÁT TRIỂN SẢN PHẨM (PRODUCT SPECIFICATION)
-Dự án: Nền tảng Công nghệ Quản trị & Kết nối Tài năng Giải trí 4.0
+# Ý Tưởng Hệ Thống — VNP BeautyTalent
 
-MÔ ĐUN 1: KIẾN TRÚC PHÂN HẠNG TÀI NĂNG SỐ HÓA (TALENT TIERING ENGINE)
-Hệ thống Core Backend sẽ tự động chạy thuật toán quét dữ liệu đầu vào của Model/Người đẹp và chấm điểm tự động theo Hệ số 100 điểm, sau đó xếp vào 4 Tier (Hạng).
-1. Thuật toán chấm điểm 10 Tiêu chí (Mỗi tiêu chí tối đa 10 điểm)
-M1.1. Danh hiệu & Thành tích: Phân loại theo cấp cuộc thi (Quốc tế/Quốc gia = 9-10đ; Cấp Tỉnh/Ngành = 5-6đ; Tự do = 1-2đ).
-M1.2. Nhân trắc học & Hình thể: Tính điểm dựa trên dữ liệu chiều cao, cấu trúc số đo và tỷ lệ đối xứng gương mặt/khung xương.
-M1.3. Social Metrics: API tự động quét, đo lường tổng lượng Người theo dõi (Followers), lượt tiếp cận (Reach) và Tỷ lệ tương tác thực tế (Engagement Rate) trên các nền tảng TikTok, Instagram, Facebook.
-M1.4. Học vấn & Ngoại ngữ: Điểm số dựa trên trình độ bằng cấp và chứng chỉ ngoại ngữ thực tế (Ví dụ: IELTS $\ge 7.0$ / Song ngữ lưu loát = 10đ).
-M1.5. Portfolio & Kinh nghiệm: Bộ lưu trữ hồ sơ năng lực, thâm niên trong nghề và số lượng chiến dịch lớn từng hợp tác thành công.
-M1.6. Uy tín Vận hành & Thái độ: Hệ thống tự động tích lũy điểm dựa trên lịch sử làm việc thực tế trên app (Đúng giờ, không tự ý hủy show, lượt đánh giá sao từ Brand).
-M1.7. Kỹ năng Chuyên môn: Điểm số đánh giá năng lực thực tế về Catwalk, Pose dáng, Diễn xuất trước camera, Live-streaming chốt đơn hoặc Dẫn chương trình (MC).
-M1.8. Giá trị Thương mại (ROI): Thuật toán đo lường khả năng chuyển đổi doanh thu hoặc hiệu ứng Viral mà tài năng mang lại cho chiến dịch.
-M1.9. Thích ứng Công nghệ: Tần suất tương tác, cập nhật hồ sơ số và năng lực tự sáng tạo nội dung số (Content Creator) trên ứng dụng.
-M1.10. An toàn Hình ảnh (Brand Safety): Bộ lọc thuật toán tự động quét lịch sử số, đảm bảo hồ sơ "sạch", không scandal để bảo vệ tối đa cho các nhãn hàng tài trợ lớn.
-2. Logic phân Tier tự động của hệ thống (Tiering Logic)
-HẠNG S (Celeb / Super VIP) | [90 - 100 điểm]: Nhóm Hoa hậu Quốc gia, Ngôi sao hạng S.
-HẠNG A (High-end Professional) | [70 - 89 điểm]: Nhóm Á hậu, Hoa khôi lớn, Siêu mẫu Runway chuyên nghiệp, MC VIP.
-HẠNG B (Mid-range / Freelance) | [45 - 69 điểm]: Nhóm Mẫu ảnh Lookbook, Micro/Mid-tier KOLs, PG VIP sự kiện cao cấp.
-HẠNG C (Entry-level / Newbie) | [20 - 44 điểm]: Nhóm mẫu tự do mới vào nghề, diễn viên phụ, PG sự kiện đại trà.
-Lưu ý cho Kỹ thuật: Nếu tổng điểm dưới 20, tự động chuyển trạng thái tài khoản thành "Dự bị/Chờ cập nhật" (Potential Profile).
-MÔ ĐUN 2: KỊCH BẢN KẾT NỐI VÀ TỰ ĐỘNG HÓA THƯƠNG MẠI (MATCH-MAKING B2B)
-Hệ thống phải tối ưu hóa quy trình kết nối (Match-making) giữa nguồn cung (Model) và nguồn cầu (30 Doanh nghiệp mục tiêu thuộc 3 nhóm chiến lược: Local Brands, Event Agencies, Luxury Brands).
-1. Luồng trải nghiệm phía Doanh nghiệp (Brand Portal Flow)
-Bước 1: Brand đăng nhập hệ thống $\rightarrow$ Khởi tạo chiến dịch (Campaign) theo nhu cầu (Ví dụ: Chụp ảnh Lookbook thời trang, Event Khai trương xe sang, Phiên Mega Live bán mỹ phẩm).
-Bước 2: Brand thiết lập bộ lọc nâng cao (Filter System): Lọc theo Tier (S/A/B/C) $\rightarrow$ Lọc theo Tiêu chí chuyên sâu (Ví dụ: Cần Hạng B có tiêu chí số 7 về Livestream đạt từ 8 điểm trở lên).
-Bước 3: Hệ thống AI quét Data và trả về danh sách Hồ sơ (Verified Profiles) phù hợp tối ưu nhất tương ứng với 20 ngành nghề/công việc trong hệ thống giải trí $\rightarrow$ Brand bấm nút "Gửi lời mời kết nối" hoặc "Book ngay".
-2. Luồng trải nghiệm phía Tài năng (Talent Portal Flow)
-Thí sinh/Model nhận thông báo Job (Push Notification) khớp lệnh từ hệ thống $\rightarrow$ Xem kịch bản công việc, yêu cầu trang phục, thời gian, địa điểm và mức cát-xê minh bạch $\rightarrow$ Bấm "Chấp nhận" hoặc "Từ chối".
-MÔ ĐUN 3: TÍNH NĂNG CỐT LÕI & CƠ CHẾ BẢO VỆ (CORE FEATURES)
-1. Hệ thống Bảo vệ Dòng tiền Ký quỹ (Escrow Payment System)
-Logic vận hành: Khi hai bên khớp lệnh giao dịch thành công, ngân sách booking từ Doanh nghiệp sẽ tự động được khóa/ký quỹ (Escrow) trong hệ thống của sàn.
-Điều kiện giải ngân (Release Condition): Số tiền chỉ được tự động giải ngân cho Model sau khi hệ thống ghi nhận sự kiện hoàn thành công việc (Brand bấm xác nhận nghiệm thu hoặc hệ thống tự động nghiệm thu sau 24h nếu không có khiếu nại).
-Xử lý tranh chấp (Dispute Resolution): Nếu xảy ra sự cố hủy show hoặc không đúng cam kết, Admin hệ thống có quyền can thiệp dựa trên minh chứng hợp đồng điện tử để hoàn trả dòng tiền và tự động trừ điểm Uy tín (Tiêu chí số 6) của bên vi phạm.
-2. Giải pháp Quản trị Doanh nghiệp Tập trung (Enterprise Tools)
-Tích hợp QR & GPS Check-in: Dành cho các đơn vị chạy sự kiện (Event Agencies). Hệ thống quản lý lịch trình bằng cách bắt buộc nhân sự PG/Model quét mã QR tại hiện trường hoặc định vị vị trí thời gian thực để tự động chấm công.
-Giải pháp Tài chính 1 Hóa đơn: Backend xử lý gom toàn bộ giao dịch của chiến dịch (Ví dụ: Book 30 PG cho event) thành một hóa đơn tổng duy nhất xuất cho Doanh nghiệp, sàn tự động phân rã dòng tiền chi trả cho từng cá nhân để tối ưu chứng từ thuế cho khối Agency.
-3. Hệ thống CMS Giải đấu & Cổng Bình chọn (Voting Engine)
-Công cụ dành cho BTC Cuộc thi Sắc đẹp: Cung cấp giao diện quản trị (Dashboard) số hóa toàn bộ hồ sơ nhân trắc học của thí sinh, loại bỏ thủ tục giấy tờ.
-Cổng bình chọn số: Tích hợp ví điện tử thời gian thực để người hâm mộ vote cho thí sinh, tự động đồng bộ điểm số lên bảng xếp hạng và thiết lập cơ chế chia sẻ doanh thu (Revenue Sharing) tự động giữa Sàn và Ban tổ chức.
-MÔ ĐUN 4: ĐỊNH HƯỚNG GIAO DIỆN (UI/UX DESIGN SPECIFICATIONS)
-Phong cách thiết kế: Luxury Tech / Futuristic Minimalist (Công nghệ hiện đại kết hợp Xa xỉ).
-Bảng màu chủ đạo (Color Palette):
-Nền tảng (Background): Màu tối sâu (Deep Dark Blue / Matte Black) để tăng chiều sâu và tạo cảm giác cao cấp.
-Màu nhận diện phân hạng: Hạng S dùng viền Vàng Kim phát sáng (Gold Neon Aura); Hạng A dùng viền Bạc ánh kim (Silver Metallic); Hạng B dùng sắc Tím/Xanh Neon thời thượng; Hạng C dùng Xanh Mint tối giản.
-Yêu cầu thiết kế scannable: Toàn bộ chỉ số, điểm số hệ 100 của model phải được hiển thị dưới dạng Đồ thị mạng nhện (Radar Chart) hoặc thanh đo tiến trình (Progress Bar) để các Giám đốc Marketing của brand có thể đọc vị toàn bộ thế mạnh của tài năng chỉ trong vòng 5 giây.
+> **Hệ sinh thái vòng đời (Lifecycle Ecosystem)** đồng hành cùng người đẹp từ con số 0 cho đến khi tỏa sáng và khai thác thương mại bền vững.
 
-Trả lời câu hỏi của Tùng về 30 câu hỏi đầu vào 
+---
+
+## I. PHÂN TÍCH KIẾN TRÚC HỆ THỐNG THEO VÒNG ĐỜI (Lifecycle)
+
+Hệ thống sẽ giải quyết bài toán cốt lõi: *"Số hóa và tự động hóa quy trình quản trị, kết nối trong ngành công nghiệp sắc đẹp"* qua **4 giai đoạn chính**:
+
+### 1. Giai đoạn 1: Trước cuộc thi (Pre-Pageant / Incubation)
+
+- **Hệ thống Định hướng & Match-making:** Chuyên gia hoặc Thuật toán AI phân tích chỉ số nhân trắc học, kỹ năng, gương mặt (với định hướng nhân tướng học/hình ảnh phù hợp) để gợi ý các cuộc thi phù hợp (Hoa hậu, Hoa khôi, Người mẫu Thương hiệu, Fitness...).
+- **Trung tâm dịch vụ phụ trợ (B2B Marketplace):** Nơi các thí sinh kết nối với các đối tác chiến lược:
+  - **Nhà thiết kế/Thương hiệu:** Thuê/tài trợ trang phục dạ hội, áo dài.
+  - **Makeup Artists/Stylists:** Đặt lịch theo gói đồng hành suốt cuộc thi.
+  - **Trung tâm Đào tạo:** Đăng ký khóa học Catwalk, ứng xử, giải phóng hình thể.
+- **Kết nối Nhà tài trợ sớm (Early Brand Endorsement):** Các nhãn hàng có thể tìm kiếm gương mặt tiềm năng từ vòng hồ sơ để tài trợ ngân sách đổi lại quyền lợi truyền thông ngay từ đầu.
+
+### 2. Giai đoạn 2: Trong cuộc thi (In-Pageant / Acceleration)
+
+- **Quản trị hình ảnh & Truyền thông số:** Tích hợp công cụ lên lịch bám sát timeline cuộc thi. Hỗ trợ thí sinh xây dựng nội dung trên TikTok, Facebook, Instagram tự động theo các tuyến bài (Content Matrix) có sẵn của app.
+- **Hệ thống Đánh giá Chất lượng (QC & Monitoring):** *(Áp dụng từ mô hình quản lý KOL chuyên nghiệp)* Theo dõi chỉ số tăng trưởng tương tác (Followers, Engagement, Sentiment) của từng thí sinh theo thời gian thực để các nhãn hàng/nhà đầu tư theo dõi "phong độ".
+
+### 3. Giai đoạn 3: Sau cuộc thi (Post-Pageant / Monetization)
+
+- **Hệ thống Booking Tự động (Smart Booking Engine):** Nhãn hàng (Brands) hoặc Agency tạo chiến dịch (Campaign) → Hệ thống tự động filter danh sách Người đẹp/Model đáp ứng tiêu chí (Chiều cao, độ tuổi, khu vực, phân khúc giá Catwalk/Event/KOL).
+- **Hợp đồng điện tử (Smart Contract):** Tự động khóa tiền cọc (Escrow) để bảo vệ quyền lợi cho cả hai bên, tránh tình trạng bùng show hoặc quỵt cát-xê.
+- **Quản lý Job ngắn hạn & dài hạn:** Phân loại rõ ràng giữa job sự kiện (Event, Catwalk, PG) và job đại sứ thương hiệu (Ambassador, Retainer contract).
+
+### 4. Tính năng Đặc biệt: Crown Funding (Quỹ Vương Miện / Gọi vốn cộng đồng)
+
+- **Ủng hộ dự án Nhân ái/Tài năng:** Trong các cuộc thi Hoa hậu, dự án Nhân ái chiếm điểm số rất lớn. Tính năng này cho phép Fan và Doanh nghiệp quyên góp tiền trực tiếp cho dự án xã hội của thí sinh (đảm bảo minh bạch qua sao kê/blockchain hoặc ví điện tử).
+- **Fan Voting & Gifting:** Tích hợp cổng bình chọn (Vote) nhận quà ảo quy đổi ra giá trị thực, giúp thí sinh có thêm ngân sách chi trả cho trang phục, makeup trong cuộc thi.
+
+---
+
+## II. HỌC HỎI TỪ CÁC MÔ HÌNH QUỐC TẾ & TÀI LIỆU KỸ THUẬT
+
+### Từ Backstage & StarNow
+
+- **Cơ chế Subscription (Thu phí thành viên):** Người đẹp/Model trả phí tháng/năm để có "Premium Profile" (được ưu tiên hiển thị đầu bảng tìm kiếm của Nhãn hàng, nhận tin tuyển dụng sớm).
+- **Portfolio điện tử chuẩn hóa:** Hồ sơ không chỉ có ảnh, mà bắt buộc phải có:
+  - Chiều cao, cân nặng, số đo 3 vòng
+  - Video Catwalk (Polaroid)
+  - Video giới thiệu bản thân
+  - Liên kết mạng xã hội
+  - Lịch trống (Availability Calendar)
+
+### Từ tài liệu Quản lý KOLs/Models (manager-kols-models)
+
+- **Three-Layer Data Strategy (Chiến lược dữ liệu 3 lớp):**
+  1. **Dữ liệu tự động (API):** Cập nhật tự động lượt follow, tương tác thực tế từ TikTok/Instagram của người đẹp.
+  2. **Dữ liệu thủ công (Plugin/Admin nhập):** Đánh giá từ chuyên gia về thái độ làm việc, kỹ năng catwalk, điểm uy tín (Reliability tracking).
+  3. **Dữ liệu báo giá (Rate Card):** Khóa khoảng giá tối thiểu cho các dịch vụ (Post, Video, Livestream, Dự sự kiện).
+
+---
+
+> Để đội ngũ kỹ thuật (Tech Leader, Developers, UI/UX Designers) có thể nắm bắt chính xác logic cốt lõi và triển khai hệ thống phần mềm mà không bị chệch hướng, tài liệu này cần được viết bằng ngôn ngữ chuẩn kỹ thuật: rõ ràng, phân tách module và tường minh về mặt dữ liệu (Data & Logic Flow).
+>
+> Dưới đây là bản **Tài liệu Định hướng Phát triển Sản phẩm Tổng hợp** (Product Requirement Document - PRD Shortform). Có thể gửi thẳng file này cho Tech Leader của dự án làm kim chỉ nam triển khai.
+
+---
+
+# TÀI LIỆU ĐỊNH HƯỚNG PHÁT TRIỂN SẢN PHẨM (PRODUCT SPECIFICATION)
+
+**Dự án:** Nền tảng Công nghệ Quản trị & Kết nối Tài năng Giải trí 4.0
+
+---
+
+## MÔ ĐUN 1: KIẾN TRÚC PHÂN HẠNG TÀI NĂNG SỐ HÓA (TALENT TIERING ENGINE)
+
+Hệ thống Core Backend sẽ tự động chạy thuật toán quét dữ liệu đầu vào của Model/Người đẹp và chấm điểm tự động theo **Hệ số 100 điểm**, sau đó xếp vào **4 Tier (Hạng)**.
+
+### 1. Thuật toán chấm điểm 10 Tiêu chí *(Mỗi tiêu chí tối đa 10 điểm)*
+
+| Mã | Tiêu chí | Mô tả |
+|---|---|---|
+| **M1.1** | Danh hiệu & Thành tích | Phân loại theo cấp cuộc thi (Quốc tế/Quốc gia = 9-10đ; Cấp Tỉnh/Ngành = 5-6đ; Tự do = 1-2đ). |
+| **M1.2** | Nhân trắc học & Hình thể | Tính điểm dựa trên dữ liệu chiều cao, cấu trúc số đo và tỷ lệ đối xứng gương mặt/khung xương. |
+| **M1.3** | Social Metrics | API tự động quét, đo lường tổng lượng Followers, Reach và Engagement Rate trên TikTok, Instagram, Facebook. |
+| **M1.4** | Học vấn & Ngoại ngữ | Điểm số dựa trên trình độ bằng cấp và chứng chỉ ngoại ngữ thực tế (VD: IELTS ≥ 7.0 / Song ngữ = 10đ). |
+| **M1.5** | Portfolio & Kinh nghiệm | Bộ lưu trữ hồ sơ năng lực, thâm niên trong nghề và số lượng chiến dịch lớn từng hợp tác thành công. |
+| **M1.6** | Uy tín Vận hành & Thái độ | Tự động tích lũy điểm dựa trên lịch sử làm việc thực tế trên app (Đúng giờ, không hủy show, đánh giá sao từ Brand). |
+| **M1.7** | Kỹ năng Chuyên môn | Đánh giá năng lực thực tế về Catwalk, Pose dáng, Diễn xuất trước camera, Live-streaming hoặc MC. |
+| **M1.8** | Giá trị Thương mại (ROI) | Đo lường khả năng chuyển đổi doanh thu hoặc hiệu ứng Viral mà tài năng mang lại cho chiến dịch. |
+| **M1.9** | Thích ứng Công nghệ | Tần suất tương tác, cập nhật hồ sơ số và năng lực tự sáng tạo nội dung số (Content Creator). |
+| **M1.10** | An toàn Hình ảnh (Brand Safety) | Bộ lọc tự động quét lịch sử số, đảm bảo hồ sơ "sạch", không scandal để bảo vệ cho các nhãn hàng tài trợ. |
+
+### 2. Logic phân Tier tự động của hệ thống (Tiering Logic)
+
+| Hạng | Khoảng điểm | Mô tả |
+|---|---|---|
+| **🥇 HẠNG S** (Celeb / Super VIP) | 90 – 100 điểm | Nhóm Hoa hậu Quốc gia, Ngôi sao hạng S. |
+| **🥈 HẠNG A** (High-end Professional) | 70 – 89 điểm | Nhóm Á hậu, Hoa khôi lớn, Siêu mẫu Runway chuyên nghiệp, MC VIP. |
+| **🥉 HẠNG B** (Mid-range / Freelance) | 45 – 69 điểm | Nhóm Mẫu ảnh Lookbook, Micro/Mid-tier KOLs, PG VIP sự kiện cao cấp. |
+| **⬜ HẠNG C** (Entry-level / Newbie) | 20 – 44 điểm | Nhóm mẫu tự do mới vào nghề, diễn viên phụ, PG sự kiện đại trà. |
+
+> [!NOTE]
+> **Lưu ý cho Kỹ thuật:** Nếu tổng điểm dưới 20, tự động chuyển trạng thái tài khoản thành *"Dự bị/Chờ cập nhật"* (Potential Profile).
+
+---
+
+## MÔ ĐUN 2: KỊCH BẢN KẾT NỐI VÀ TỰ ĐỘNG HÓA THƯƠNG MẠI (MATCH-MAKING B2B)
+
+Hệ thống phải tối ưu hóa quy trình kết nối (Match-making) giữa **nguồn cung** (Model) và **nguồn cầu** (30 Doanh nghiệp mục tiêu thuộc 3 nhóm chiến lược: Local Brands, Event Agencies, Luxury Brands).
+
+### 1. Luồng trải nghiệm phía Doanh nghiệp (Brand Portal Flow)
+
+1. **Bước 1:** Brand đăng nhập hệ thống → Khởi tạo chiến dịch (Campaign) theo nhu cầu *(VD: Chụp ảnh Lookbook thời trang, Event Khai trương xe sang, Phiên Mega Live bán mỹ phẩm)*.
+2. **Bước 2:** Brand thiết lập bộ lọc nâng cao (Filter System): Lọc theo Tier (S/A/B/C) → Lọc theo Tiêu chí chuyên sâu *(VD: Cần Hạng B có tiêu chí số 7 về Livestream đạt từ 8 điểm trở lên)*.
+3. **Bước 3:** Hệ thống AI quét Data và trả về danh sách Hồ sơ (Verified Profiles) phù hợp tối ưu nhất tương ứng với 20 ngành nghề/công việc → Brand bấm nút **"Gửi lời mời kết nối"** hoặc **"Book ngay"**.
+
+### 2. Luồng trải nghiệm phía Tài năng (Talent Portal Flow)
+
+Thí sinh/Model nhận thông báo Job (Push Notification) khớp lệnh từ hệ thống → Xem kịch bản công việc, yêu cầu trang phục, thời gian, địa điểm và mức cát-xê minh bạch → Bấm **"Chấp nhận"** hoặc **"Từ chối"**.
+
+---
+
+## MÔ ĐUN 3: TÍNH NĂNG CỐT LÕI & CƠ CHẾ BẢO VỆ (CORE FEATURES)
+
+### 1. Hệ thống Bảo vệ Dòng tiền Ký quỹ (Escrow Payment System)
+
+- **Logic vận hành:** Khi hai bên khớp lệnh giao dịch thành công, ngân sách booking từ Doanh nghiệp sẽ tự động được khóa/ký quỹ (Escrow) trong hệ thống của sàn.
+- **Điều kiện giải ngân (Release Condition):** Số tiền chỉ được tự động giải ngân cho Model sau khi hệ thống ghi nhận sự kiện hoàn thành công việc (Brand bấm xác nhận nghiệm thu hoặc hệ thống tự động nghiệm thu sau 24h nếu không có khiếu nại).
+- **Xử lý tranh chấp (Dispute Resolution):** Nếu xảy ra sự cố hủy show hoặc không đúng cam kết, Admin hệ thống có quyền can thiệp dựa trên minh chứng hợp đồng điện tử để hoàn trả dòng tiền và tự động trừ điểm Uy tín (Tiêu chí số 6) của bên vi phạm.
+
+### 2. Giải pháp Quản trị Doanh nghiệp Tập trung (Enterprise Tools)
+
+- **Tích hợp QR & GPS Check-in:** Dành cho các đơn vị chạy sự kiện (Event Agencies). Hệ thống quản lý lịch trình bằng cách bắt buộc nhân sự PG/Model quét mã QR tại hiện trường hoặc định vị vị trí thời gian thực để tự động chấm công.
+- **Giải pháp Tài chính 1 Hóa đơn:** Backend xử lý gom toàn bộ giao dịch của chiến dịch *(VD: Book 30 PG cho event)* thành một hóa đơn tổng duy nhất xuất cho Doanh nghiệp, sàn tự động phân rã dòng tiền chi trả cho từng cá nhân để tối ưu chứng từ thuế cho khối Agency.
+
+### 3. Hệ thống CMS Giải đấu & Cổng Bình chọn (Voting Engine)
+
+- **Công cụ dành cho BTC Cuộc thi Sắc đẹp:** Cung cấp giao diện quản trị (Dashboard) số hóa toàn bộ hồ sơ nhân trắc học của thí sinh, loại bỏ thủ tục giấy tờ.
+- **Cổng bình chọn số:** Tích hợp ví điện tử thời gian thực để người hâm mộ vote cho thí sinh, tự động đồng bộ điểm số lên bảng xếp hạng và thiết lập cơ chế chia sẻ doanh thu (Revenue Sharing) tự động giữa Sàn và Ban tổ chức.
+
+---
+
+## MÔ ĐUN 4: ĐỊNH HƯỚNG GIAO DIỆN (UI/UX DESIGN SPECIFICATIONS)
+
+- **Phong cách thiết kế:** Luxury Tech / Futuristic Minimalist *(Công nghệ hiện đại kết hợp Xa xỉ)*.
+- **Bảng màu chủ đạo (Color Palette):**
+  - **Nền tảng (Background):** Màu tối sâu (Deep Dark Blue / Matte Black) để tăng chiều sâu và tạo cảm giác cao cấp.
+  - **Màu nhận diện phân hạng:**
+    - Hạng S → Viền **Vàng Kim** phát sáng (Gold Neon Aura)
+    - Hạng A → Viền **Bạc ánh kim** (Silver Metallic)
+    - Hạng B → Sắc **Tím/Xanh Neon** thời thượng
+    - Hạng C → **Xanh Mint** tối giản
+- **Yêu cầu thiết kế scannable:** Toàn bộ chỉ số, điểm số hệ 100 của model phải được hiển thị dưới dạng **Đồ thị mạng nhện (Radar Chart)** hoặc **thanh đo tiến trình (Progress Bar)** để các Giám đốc Marketing của brand có thể đọc vị toàn bộ thế mạnh của tài năng chỉ trong vòng **5 giây**.
+
+---
+
+## Trả lời câu hỏi của Tùng về 30 câu hỏi đầu vào
 
 Để xây dựng một hệ thống tự động chấm điểm và đưa ra gợi ý cuộc thi phù hợp nhất cho các thí sinh (như Hoa hậu cấp Quốc gia, Hoa khôi Du lịch, Người mẫu Thời trang/Runway, hay Người mẫu Ảnh/KOLs), bảng khảo sát cần kết hợp giữa **thông tin hành chính** và **hệ thống câu hỏi trắc nghiệm có trọng số (điểm số)**.
 

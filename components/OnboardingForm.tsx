@@ -139,8 +139,12 @@ export default function OnboardingForm() {
       return;
     }
 
-    // No survey question validation required, allowed to submit with empty answers
-
+    // Validate that all survey questions are answered (only when step === 5)
+    for (const q of SURVEY_QUESTIONS) {
+      if (surveyAnswers[q.id] === undefined) {
+        return;
+      }
+    }
     // Survey grading algorithm
     let pageantSum = 0;
     let runwaySum = 0;
@@ -175,7 +179,7 @@ export default function OnboardingForm() {
     };
 
     SURVEY_QUESTIONS.forEach((q) => {
-      const ansIdx = surveyAnswers[q.id] !== undefined ? surveyAnswers[q.id] : 0;
+      const ansIdx = surveyAnswers[q.id];
       const points = gradingMatrix[q.id][ansIdx];
       pageantSum += points.pageant;
       runwaySum += points.runway;
@@ -272,17 +276,17 @@ export default function OnboardingForm() {
     }).sort((a, b) => b.matchScore - a.matchScore);
 
     return (
-      <div className="w-full max-w-5xl mx-auto glass-panel p-6 md:p-8 rounded-3xl shadow-2xl animate-in fade-in slide-in-from-bottom-6 duration-500 border border-white/10 text-left relative overflow-hidden">
-        <div className="absolute top-0 right-0 -z-10 h-72 w-72 rounded-full bg-amber-500/3 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 -z-10 h-72 w-72 rounded-full bg-purple-600/3 blur-3xl pointer-events-none" />
+      <div className="w-full max-w-5xl mx-auto bg-[#08090f] p-6 md:p-8 rounded-3xl shadow-2xl animate-in fade-in slide-in-from-bottom-6 duration-500 border border-[#151b2d] text-left relative overflow-hidden">
+        <div className="absolute top-0 right-0 -z-10 h-72 w-72 rounded-full bg-amber-400/5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -z-10 h-72 w-72 rounded-full bg-[#a855f7]/5 blur-3xl pointer-events-none" />
         
         <div className="flex flex-col md:flex-row gap-8 items-stretch">
           
           {/* LEFT SIDE: Radar Chart & Main Stats */}
-          <div className="md:w-2/5 flex flex-col items-center justify-between border-r border-white/5 pr-0 md:pr-8">
+          <div className="md:w-2/5 flex flex-col items-center justify-between border-r border-[#151b2d] pr-0 md:pr-8">
             <div className="text-center w-full">
-              <div className="relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-amber-200 to-yellow-600 shadow-[0_0_20px_rgba(251,191,36,0.3)]">
-                <CheckCircle2 className="h-8 w-8 text-slate-950" />
+              <div className="relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-400/10 border border-amber-400/30 shadow-[0_0_20px_rgba(244,196,48,0.15)]">
+                <CheckCircle2 className="h-8 w-8 text-amber-400" />
               </div>
               <h2 className="mb-2 font-display text-xl font-extrabold tracking-tight text-white uppercase">
                 Khảo Sát Hoàn Tất
@@ -293,7 +297,7 @@ export default function OnboardingForm() {
             </div>
 
             {/* Dynamic Interactive SVG Radar Chart */}
-            <div className="relative my-6 h-52 w-52 rounded-2xl border border-white/5 bg-slate-950/40 p-4 shadow-inner">
+            <div className="relative my-6 h-52 w-52 rounded-2xl border border-[#151b2d] bg-slate-950 p-4 shadow-inner">
               <svg viewBox="0 0 200 200" className="h-full w-full">
                 <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
                 <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
@@ -305,20 +309,20 @@ export default function OnboardingForm() {
 
                 <polygon
                   points={calculateRadarPath()}
-                  fill="rgba(251,191,36,0.18)"
+                  fill="rgba(244,196,48,0.18)"
                   stroke="url(#goldGradient)"
                   strokeWidth="2.5"
                   className="animate-in zoom-in-50 duration-700"
                 />
 
-                <text x="100" y="20" fill="#fbbf24" fontSize="9" fontWeight="bold" textAnchor="middle">PAGEANT</text>
+                <text x="100" y="20" fill="#f4c430" fontSize="9" fontWeight="bold" textAnchor="middle">PAGEANT</text>
                 <text x="30" y="152" fill="#a855f7" fontSize="9" fontWeight="bold" textAnchor="middle">SÀN DIỄN</text>
                 <text x="170" y="152" fill="#06b6d4" fontSize="9" fontWeight="bold" textAnchor="middle">KOL</text>
 
                 <defs>
                   <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#fef08a" />
-                    <stop offset="50%" stopColor="#f59e0b" />
+                    <stop offset="50%" stopColor="#f4c430" />
                     <stop offset="100%" stopColor="#b45309" />
                   </linearGradient>
                 </defs>
@@ -326,17 +330,17 @@ export default function OnboardingForm() {
             </div>
 
             <div className="w-full space-y-4">
-              <div className="rounded-2xl glass-panel-light p-4">
+              <div className="rounded-2xl border border-[#3e3415] bg-[#08090f] p-4">
                 <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-bold">Định hướng cốt lõi</span>
                 <span className="block text-xs font-bold text-amber-400 mt-1">{results.mainCategory}</span>
               </div>
               
               <div className="flex gap-3">
-                <div className="flex-1 rounded-xl bg-white/2 p-3 text-center border border-white/5">
+                <div className="flex-1 rounded-xl bg-slate-950 p-3.5 text-center border border-[#151b2d]">
                   <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-bold">Tier Ban Đầu</span>
                   <span className="text-base font-extrabold text-amber-400 mt-1 block">Tier {results.tier}</span>
                 </div>
-                <div className="flex-1 rounded-xl bg-white/2 p-3 text-center border border-white/5">
+                <div className="flex-1 rounded-xl bg-slate-950 p-3.5 text-center border border-[#151b2d]">
                   <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-bold">Điểm Hoàn Thiện</span>
                   <span className="text-base font-extrabold text-white mt-1 block">{results.profileScore}/100</span>
                 </div>
@@ -351,11 +355,11 @@ export default function OnboardingForm() {
             </div>
           </div>
 
-          {/* RIGHT SIDE: 20 Suitable Jobs (Danh mục 20 công việc phù hợp) */}
+          {/* RIGHT SIDE: 20 Suitable Jobs (Danh mục 20 công việc phù hợp) - Purple border (AI) */}
           <div className="flex-1 space-y-4 flex flex-col">
             <div>
               <h3 className="font-display font-extrabold text-sm text-white uppercase tracking-wider flex items-center gap-2">
-                <Sparkles className="h-4.5 w-4.5 text-amber-400" />
+                <Sparkles className="h-4.5 w-4.5 text-amber-400 animate-pulse" />
                 Danh mục định hướng việc làm phù hợp (AI Recommended Roles)
               </h3>
               <p className="text-[11px] text-slate-400 mt-1">
@@ -364,7 +368,7 @@ export default function OnboardingForm() {
             </div>
 
             {/* Scrollable list of 20 jobs */}
-            <div className="flex-1 overflow-y-auto max-h-[460px] pr-2 space-y-2">
+            <div className="flex-1 overflow-y-auto max-h-[460px] pr-2 space-y-2 custom-scrollbar">
               {calculatedJobs.map((job, idx) => {
                 const isHigh = job.matchScore >= 80;
                 const isMid = job.matchScore >= 50 && job.matchScore < 80;
@@ -372,7 +376,7 @@ export default function OnboardingForm() {
                 return (
                   <div
                     key={job.id}
-                    className="flex items-center gap-4 rounded-xl border border-white/5 bg-slate-900/10 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                    className="flex items-center gap-4 rounded-xl border border-white/5 bg-[#08090f] p-3.5 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
                   >
                     {/* Position badge */}
                     <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[10px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
@@ -391,14 +395,14 @@ export default function OnboardingForm() {
                           {job.matchScore}% Match
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-500 truncate mt-0.5">{job.desc}</p>
+                      <p className="text-[10px] text-slate-500 truncate mt-1 font-medium">{job.desc}</p>
                       
                       {/* Matching meter bar */}
-                      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mt-2">
+                      <div className="h-1.5 w-full bg-slate-950 rounded-full overflow-hidden mt-2">
                         <div
                           className={cn(
                             "h-full rounded-full transition-all duration-500",
-                            isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-600"
+                            isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-700"
                           )}
                           style={{ width: `${job.matchScore}%` }}
                         />
@@ -416,14 +420,15 @@ export default function OnboardingForm() {
   }
 
   return (
-    <div className="w-full max-w-xl rounded-2xl border border-white/10 bg-slate-950/60 p-6 shadow-2xl backdrop-blur-xl">
+    <div className="w-full max-w-xl rounded-2xl border border-[#151b2d] bg-[#08090f] p-8 shadow-2xl relative overflow-hidden">
+      <div className="absolute top-0 right-0 -z-10 h-32 w-32 bg-amber-400/5 rounded-full blur-2xl pointer-events-none" />
       {/* Header Stepper */}
       <div className="mb-6">
         <div className="flex justify-between items-center text-xs font-semibold text-slate-400">
           <span className="uppercase tracking-wider text-amber-400 font-bold">Bước {step} / 5</span>
           <span>{Math.round((step / 5) * 100)}% Hoàn thành</span>
         </div>
-        <div className="mt-2 flex h-1.5 w-full gap-1 rounded-full bg-white/5">
+        <div className="mt-2.5 flex h-1.5 w-full gap-1 rounded-full bg-slate-950">
           {[1, 2, 3, 4, 5].map((s) => (
             <div
               key={s}
@@ -702,8 +707,8 @@ export default function OnboardingForm() {
             {SURVEY_QUESTIONS.map((q, idx) => {
               const selectedIdx = surveyAnswers[q.id];
               return (
-                <div key={q.id} className="rounded-xl border border-white/5 bg-slate-900/40 p-4 space-y-3">
-                  <h4 className="text-sm font-semibold text-slate-200">
+                <div key={q.id} className="rounded-xl border border-[#151b2d] bg-[#08090f] p-5 space-y-3.5">
+                  <h4 className="text-xs font-bold text-slate-200">
                     Câu {idx + 1}: {q.question}
                   </h4>
                   <div className="space-y-2">
@@ -714,10 +719,10 @@ export default function OnboardingForm() {
                           key={oIdx}
                           onClick={() => handleSurveySelect(q.id, oIdx)}
                           className={cn(
-                            "flex items-center gap-3 rounded-lg border px-4 py-3 text-xs text-left cursor-pointer transition-all duration-200",
+                            "flex items-center gap-3.5 rounded-xl border px-5 py-3.5 text-xs text-left cursor-pointer transition-all duration-300",
                             isSelected
-                              ? "border-amber-400 bg-amber-400/10 text-amber-300 font-medium"
-                              : "border-white/5 bg-white/2 hover:bg-white/5 text-slate-400"
+                              ? "border-amber-400 bg-amber-400/10 text-amber-300 font-bold shadow-[0_0_15px_rgba(244,196,48,0.05)]"
+                              : "border-[#151b2d] bg-slate-950/40 hover:bg-white/2 text-slate-400"
                           )}
                         >
                           <div className={cn(
@@ -726,7 +731,7 @@ export default function OnboardingForm() {
                           )}>
                             {isSelected && <div className="h-2 w-2 rounded-full bg-amber-400" />}
                           </div>
-                          <span className="flex-1">{opt}</span>
+                          <span className="flex-1 leading-normal">{opt}</span>
                         </div>
                       );
                     })}

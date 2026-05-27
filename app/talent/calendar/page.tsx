@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Calendar as CalendarIcon, Clock, MapPin, ArrowLeft, Plus } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, MapPin, ArrowLeft, Plus, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function CalendarPage() {
@@ -24,60 +24,75 @@ export default function CalendarPage() {
     {
       id: "s1",
       title: "Livestream Son Môi Glow",
-      brand: "Glow Beauty",
+      brand: "Glow Beauty Cosmetics",
       date: "25 Tháng 6, 2026",
       time: "20:00 - 22:00",
       location: "Studio Cầu Giấy, Hà Nội",
-      status: "Đã ký quỹ"
+      status: "Đã ký quỹ",
+      borderColor: "border-[#153f2d] shadow-[0_0_15px_rgba(16,185,129,0.02)]",
+      badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
     },
     {
       id: "s2",
-      title: "Fitting Đầm Dạ Hội",
+      title: "Fitting Đầm Dạ Hội VIP",
       brand: "VNDress Fashion",
       date: "26 Tháng 6, 2026",
       time: "14:00 - 16:00",
       location: "Gem Center, TP. Hồ Chí Minh",
-      status: "Thử trang phục"
+      status: "Thử trang phục",
+      borderColor: "border-[#3e3415] shadow-[0_0_15px_rgba(244,196,48,0.02)]",
+      badgeColor: "bg-amber-400/10 border-amber-400/20 text-amber-300"
     },
     {
       id: "s3",
-      title: "Summer Runway Show",
+      title: "Summer Runway Show 2026",
       brand: "VNDress Fashion",
       date: "28 Tháng 6, 2026",
       time: "09:00 - 18:00",
       location: "Gem Center, TP. Hồ Chí Minh",
-      status: "Biểu diễn chính"
+      status: "Biểu diễn chính",
+      borderColor: "border-[#2f1c4f] shadow-[0_0_15px_rgba(168,85,247,0.02)]",
+      badgeColor: "bg-purple-500/10 border-purple-500/20 text-purple-300"
     }
   ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-8 animate-in fade-in duration-500 pb-10">
+      
+      {/* Page Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <button onClick={() => router.push("/talent/dashboard")} className="text-slate-400 hover:text-white">
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => router.push("/talent/dashboard")} 
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#151b2d] bg-[#08090f] text-slate-400 hover:text-white transition-all cursor-pointer"
+          >
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="font-display text-xl font-bold text-white tracking-tight">Lịch Trình</h1>
-            <p className="text-xs text-slate-400">Xem show diễn, buổi chụp ảnh & fitting đồ đã đặt trước</p>
+            <h1 className="font-display text-3xl font-black text-white tracking-tight uppercase leading-none">Lịch Trình</h1>
+            <p className="text-xs text-slate-400 mt-2 font-medium">Xem lịch trình show diễn, lịch fitting đồ & buổi chụp hình đã được lên lịch.</p>
           </div>
         </div>
-        <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white">
-          <Plus className="h-4.5 w-4.5" />
+        
+        <button 
+          onClick={() => router.push("/talent/settings")}
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#151b2d] bg-[#08090f] text-white hover:bg-white/5 transition-all cursor-pointer"
+        >
+          <Plus className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Grid calendar indicators */}
-      <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-5 shadow-lg backdrop-blur-xl">
-        <h3 className="font-display font-semibold text-xs text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
+      {/* Grid calendar indicators - styled like dashboard.htm banner */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/7 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.12),transparent_34%),linear-gradient(135deg,rgba(15,23,42,0.94),rgba(2,6,23,0.98))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
+        <h3 className="font-display font-black text-xs text-white uppercase tracking-wider mb-5 flex items-center gap-2">
           <CalendarIcon className="h-4.5 w-4.5 text-amber-400" /> Tháng 6, 2026
         </h3>
         
-        <div className="grid grid-cols-7 gap-2 text-center text-[10px] text-slate-500 font-bold uppercase mb-2 border-b border-white/5 pb-2">
+        <div className="grid grid-cols-7 gap-2.5 text-center text-[10px] text-slate-500 font-black uppercase mb-4 border-b border-white/5 pb-3">
           <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
         </div>
 
-        <div className="grid grid-cols-7 gap-2 text-center">
+        <div className="grid grid-cols-7 gap-2.5 text-center">
           {/* Pad empty spots for Monday start */}
           <span></span><span></span><span></span>
           {Array.from({ length: 15 }).map((_, idx) => {
@@ -91,10 +106,10 @@ export default function CalendarPage() {
               <div
                 key={day}
                 className={cn(
-                  "flex flex-col items-center justify-center h-10 w-full rounded-lg text-xs font-bold transition-all",
-                  isReserved && "bg-amber-400 text-slate-950 shadow-[0_0_8px_rgba(251,191,36,0.25)]",
-                  !isReserved && isAvailable && "border border-amber-400/30 text-amber-300",
-                  !isReserved && !isAvailable && "border border-white/5 text-slate-600"
+                  "flex flex-col items-center justify-center h-12 w-full rounded-xl text-xs font-bold transition-all duration-300",
+                  isReserved && "bg-[#f4c430] text-slate-950 shadow-[0_0_12px_rgba(244,196,48,0.25)] font-black",
+                  !isReserved && isAvailable && "border border-amber-400/30 bg-amber-400/5 text-amber-300",
+                  !isReserved && !isAvailable && "border border-[#151b2d] bg-slate-950/20 text-slate-600"
                 )}
               >
                 {day}
@@ -106,36 +121,43 @@ export default function CalendarPage() {
 
       {/* Detailed show lists */}
       <div className="space-y-4">
-        <h3 className="font-display font-bold text-sm text-white">🔥 Danh sách Lịch Diễn</h3>
+        <h3 className="font-display font-black text-xs text-white uppercase tracking-wider flex items-center gap-2">
+          🔥 Danh Sách Lịch Show Chi Tiết
+        </h3>
         
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {schedules.map((item) => (
-            <div key={item.id} className="rounded-xl border border-white/5 bg-slate-900/20 p-4 space-y-2.5 backdrop-blur-md">
+            <div 
+              key={item.id} 
+              className={cn(
+                "group relative overflow-hidden rounded-2xl border bg-[#08090f] p-6 transition-all duration-300 hover:bg-slate-950 flex flex-col justify-between h-48",
+                item.borderColor
+              )}
+            >
               <div className="flex justify-between items-start">
-                <h4 className="text-xs font-semibold text-white">{item.title}</h4>
-                <span className={cn(
-                  "rounded px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider",
-                  item.status === "Đã ký quỹ" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-white/5 text-slate-400"
-                )}>
+                <h4 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors leading-snug">{item.title}</h4>
+                <span className={cn("inline-flex items-center rounded border px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-wider", item.badgeColor)}>
                   {item.status}
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-semibold">{item.brand}</p>
               
-              <div className="border-t border-white/5 pt-2 flex flex-col gap-1 text-[10px] text-slate-400">
-                <div className="flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5 text-amber-400" />
-                  <span>{item.date} • {item.time}</span>
+              <p className="text-[10px] text-slate-500 font-bold mt-1.5">{item.brand}</p>
+              
+              <div className="border-t border-[#151b2d] pt-3.5 mt-4 flex flex-col gap-1.5 text-[10px] text-slate-400">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-amber-400 shrink-0" />
+                  <span className="font-semibold">{item.date} • {item.time}</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-slate-500" />
-                  <span>{item.location}</span>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-slate-500 shrink-0" />
+                  <span className="truncate font-semibold">{item.location}</span>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+
     </div>
   );
 }
