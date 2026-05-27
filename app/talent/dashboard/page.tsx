@@ -148,7 +148,7 @@ export default function DashboardPage() {
                 >
                   <div className="flex justify-between items-start">
                     <span className="rounded bg-white/5 px-2 py-0.5 text-[8px] text-slate-400 uppercase font-semibold">
-                      {job.tag}
+                      {job.tag === "Runway" ? "Người mẫu sàn diễn" : job.tag}
                     </span>
                     <div className="text-right">
                       <span className="font-display font-extrabold text-sm text-amber-400">{job.matchScore}%</span>

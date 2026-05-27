@@ -57,7 +57,7 @@ export default function LandingPage() {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-white">Định Hướng AI</h3>
-            <p className="text-xs text-slate-400">Khảo sát & đề xuất hướng đi Pageant, Runway, KOL phù hợp.</p>
+            <p className="text-xs text-slate-400">Khảo sát & đề xuất hướng đi Pageant, Người mẫu sàn diễn, KOL phù hợp.</p>
           </div>
         </div>
 

@@ -12,7 +12,7 @@ const SURVEY_QUESTIONS = [
     question: "Định hướng phát triển nghề nghiệp ưu tiên của bạn là gì?",
     options: [
       "Đại sứ thương hiệu, quay TVC quảng cáo và làm KOL truyền thông",
-      "Trình diễn thời trang cao cấp trên các sàn runway thời trang lớn",
+      "Trình diễn thời trang cao cấp trên các sàn diễn thời trang lớn",
       "Tham gia các đấu trường sắc đẹp, các cuộc thi hoa hậu lớn"
     ]
   },
@@ -31,7 +31,7 @@ const SURVEY_QUESTIONS = [
     options: [
       "Dưới 1m68 (Phù hợp làm gương mặt KOC đại diện, review, beauty blogger)",
       "Từ 1m68 đến 1m73 (Chiều cao tiêu chuẩn cho Pageant và Model)",
-      "Trên 1m73 (Chiều cao lý tưởng cho siêu mẫu thời trang, Runway Model)"
+      "Trên 1m73 (Chiều cao lý tưởng cho siêu mẫu thời trang, Người mẫu sàn diễn)"
     ]
   },
   {
@@ -170,7 +170,7 @@ export default function OnboardingForm() {
     if (scores.pageant >= scores.runway && scores.pageant >= scores.kol) {
       mainCategory = "Hoa hậu / Hoa khôi / Đại sứ sắc đẹp";
     } else if (scores.runway >= scores.pageant && scores.runway >= scores.kol) {
-      mainCategory = "Siêu mẫu Runway / High-end Professional";
+      mainCategory = "Người mẫu sàn diễn / High-end Professional";
     }
 
     // Profile completion score calculation
@@ -281,7 +281,7 @@ export default function OnboardingForm() {
               PAGEANT ({results.pageant}%)
             </text>
             <text x="22" y="152" fill="#a855f7" fontSize="8" fontWeight="bold" textAnchor="middle">
-              RUNWAY ({results.runway}%)
+              SÀN DIỄN ({results.runway}%)
             </text>
             <text x="178" y="152" fill="#06b6d4" fontSize="8" fontWeight="bold" textAnchor="middle">
               KOL ({results.kol}%)

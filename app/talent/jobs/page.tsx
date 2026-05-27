@@ -92,7 +92,7 @@ export default function JobsPage() {
                 : "bg-slate-900/40 border border-white/5 text-slate-400 hover:text-white"
             )}
           >
-            {tag}
+            {tag === "Runway" ? "Người mẫu sàn diễn" : tag}
           </button>
         ))}
       </div>
@@ -112,7 +112,7 @@ export default function JobsPage() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="rounded bg-white/5 px-2 py-0.5 text-[9px] text-slate-400 uppercase font-semibold">
-                      {camp.type}
+                      {camp.type === "Runway" ? "Người mẫu sàn diễn" : camp.type}
                     </span>
                     {camp.escrowed && (
                       <span className="flex items-center gap-0.5 rounded bg-emerald-500/10 px-2 py-0.5 text-[9px] text-emerald-400 font-semibold border border-emerald-500/20">
