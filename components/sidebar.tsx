@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const talentMenuItems = [
   { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
-  { label: "Khám phá bản thân", icon: Sparkles, href: "/talent/onboarding" },
+  { label: "Khám phá bản thân", icon: Sparkles, href: "/talent/survey" },
   { label: "Hồ sơ cá nhân", icon: User, href: "/talent/portfolio" },
   { label: "Việc phù hợp", icon: Briefcase, href: "/talent/jobs" },
   { label: "Quỹ vương miện", icon: Crown, href: "/talent/crown" },

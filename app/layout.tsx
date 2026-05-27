@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="vi" className={`${inter.variable} h-full dark antialiased`} style={{ colorScheme: "dark" }}>
       <body className="h-full bg-[#03050c] text-slate-100 font-sans selection:bg-amber-500/30 selection:text-amber-200">
         <ThemeProvider>
-          <div className="flex flex-col h-screen w-screen relative">
+          <div className="flex flex-col h-screen w-full relative overflow-x-hidden">
 
             {/* Ambient background glows */}
             <div className="absolute top-[-10%] right-[-10%] -z-10 h-[600px] w-[600px] rounded-full bg-amber-500/5 blur-[150px] pointer-events-none" />

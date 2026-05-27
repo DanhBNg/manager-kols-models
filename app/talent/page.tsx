@@ -83,7 +83,7 @@ export default function LandingPage() {
       </div>
 
       <button
-        onClick={() => router.push("/talent/onboarding")}
+        onClick={() => router.push("/talent/survey")}
         className="flex h-14 w-full items-center justify-center rounded-xl bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 font-display font-bold text-slate-950 shadow-[0_4px_20px_rgba(245,158,11,0.25)] hover:shadow-[0_4px_25px_rgba(245,158,11,0.35)] active:scale-98 transition-all duration-300"
       >
         Bắt Đầu Khám Phá Tiềm Năng <ArrowRight className="ml-2 h-5 w-5" />

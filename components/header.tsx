@@ -37,7 +37,7 @@ export default function Header() {
         </button>
         <div className="flex items-center gap-3 border-l border-white/5 pl-6">
           <img
-            src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=50&h=50&q=80"
+            src="/avatar.png"
             alt="Profile avatar"
             className="h-9 w-9 rounded-full object-cover border border-amber-400/30"
           />

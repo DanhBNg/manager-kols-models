@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import {
   Shield, Sparkles, MapPin, Eye, Star, Share2,
   Award, Calendar, DollarSign, BookOpen, GraduationCap,
-  Users, Check, ArrowUpRight, ShieldCheck, Heart, User
+  Users, Check, ArrowUpRight, ShieldCheck, Heart, User, Crown, ShieldAlert
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import RadarChart from "@/components/ui/RadarChart";
 
 const JOBS_LIST = [
   { id: 1, title: "Đại sứ thương hiệu", desc: "Gương mặt đại diện thương hiệu luxury", weights: { pageant: 0.4, runway: 0.2, kol: 0.4 } },
@@ -40,7 +41,18 @@ export default function PortfolioPage() {
     const stored = localStorage.getItem("vnp_talent_profile");
     if (stored) {
       try {
-        setProfile(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (parsed && (parsed.avatar?.includes("unsplash.com") || !parsed.avatar)) {
+          parsed.avatar = "/avatar.png";
+        }
+        if (parsed) {
+          if (parsed.name === "Nguyễn Mai Anh") {
+            parsed.surveyScores = { pageant: 50, runway: 45, kol: 95 };
+            parsed.mainCategory = "KOL / Người mẫu ảnh / Giải trí thế hệ mới";
+          }
+        }
+        localStorage.setItem("vnp_talent_profile", JSON.stringify(parsed));
+        setProfile(parsed);
       } catch (e) {
         console.error(e);
       }
@@ -53,7 +65,7 @@ export default function PortfolioPage() {
         hometown: "Nam Định",
         phone: "0912345678",
         email: "maianh.nguyen@beautyapp.vn",
-        avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=150&h=150&q=80",
+        avatar: "/avatar.png",
         height: 172,
         weight: 51,
         bust: 85,
@@ -78,7 +90,7 @@ export default function PortfolioPage() {
         reliability: 96,
         reviewsCount: 18,
         averageRating: 4.9,
-        surveyScores: { pageant: 75, runway: 80, kol: 91 },
+        surveyScores: { pageant: 50, runway: 45, kol: 95 },
         mainCategory: "KOL / Người mẫu ảnh / Giải trí thế hệ mới"
       });
     }
@@ -86,28 +98,7 @@ export default function PortfolioPage() {
 
   if (!profile) return null;
 
-  const calculateRadarPath = () => {
-    const cx = 100;
-    const cy = 100;
-    const maxVal = 100;
-    const radius = 60;
-    const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
 
-    const getCoords = (val: number, angleDeg: number) => {
-      const rad = (angleDeg - 90) * (Math.PI / 180);
-      const dist = (val / maxVal) * radius;
-      return {
-        x: cx + dist * Math.cos(rad),
-        y: cy + dist * Math.sin(rad)
-      };
-    };
-
-    const ptPageant = getCoords(scores.pageant, 0);
-    const ptRunway = getCoords(scores.runway, 120);
-    const ptKol = getCoords(scores.kol, 240);
-
-    return `${ptPageant.x},${ptPageant.y} ${ptRunway.x},${ptRunway.y} ${ptKol.x},${ptKol.y}`;
-  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
@@ -115,9 +106,14 @@ export default function PortfolioPage() {
       {/* Cover Banner Header - Premium styling */}
       <div className="relative rounded-2xl border border-[#151b2d] bg-[#08090f] p-5 shadow-xl">
         {/* Cover Background */}
-        <div className="h-36 md:h-48 w-full rounded-xl bg-gradient-to-r from-slate-950 via-[#0e111d] to-slate-950 relative overflow-hidden border border-white/5">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(244,196,48,0.06),transparent)]" />
-          <div className="absolute top-4 right-4 text-[9px] font-mono tracking-widest text-[#f4c430]/30 font-bold uppercase">
+        <div className="h-36 md:h-48 w-full rounded-xl relative overflow-hidden border border-white/5 bg-slate-950">
+          <img
+            src="/cover_image.png"
+            alt="Cover banner"
+            className="h-full w-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80" />
+          <div className="absolute top-4 right-4 text-[9px] font-mono tracking-widest text-[#f4c430]/50 font-bold uppercase">
             VNP BEAUTY SYSTEM PORTFOLIO
           </div>
         </div>
@@ -151,13 +147,19 @@ export default function PortfolioPage() {
               <Share2 className="h-4 w-4" /> Chia sẻ hồ sơ
             </button>
             <span className={cn(
-              "flex h-10 items-center rounded-xl border px-5 font-display text-xs font-extrabold uppercase tracking-widest shadow-md",
-              profile.tier === "S" && "border-amber-400 bg-amber-400/10 text-amber-300 shadow-amber-500/10",
-              profile.tier === "A" && "border-slate-300 bg-slate-400/10 text-slate-200",
+              "flex h-10 items-center gap-1.5 rounded-xl border px-4 font-display text-xs font-black uppercase tracking-widest shadow-md transition-all duration-300",
+              profile.tier === "S" && "border-amber-400 bg-gradient-to-r from-amber-500/25 to-[#221a0a]/90 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)]",
+              profile.tier === "A" && "border-slate-300/60 bg-gradient-to-r from-slate-400/10 to-[#171922]/90 text-slate-200 shadow-[0_0_15px_rgba(203,213,225,0.1)]",
               profile.tier === "B" && "border-purple-400 bg-purple-500/10 text-purple-300",
-              profile.tier === "C" && "border-emerald-400 bg-emerald-500/10 text-emerald-300"
+              profile.tier === "C" && "border-teal-400 bg-teal-500/10 text-teal-300",
+              profile.tier === "Potential" && "border-rose-500 bg-rose-500/10 text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.15)]"
             )}>
-              Tier {profile.tier}
+              {profile.tier === "S" && <Crown className="h-4 w-4 text-amber-400 animate-pulse" />}
+              {profile.tier === "A" && <Award className="h-4 w-4 text-slate-300" />}
+              {profile.tier === "B" && <Star className="h-4 w-4 text-purple-400" />}
+              {profile.tier === "C" && <Award className="h-4 w-4 text-teal-400" />}
+              {profile.tier === "Potential" && <ShieldAlert className="h-4 w-4 text-rose-400" />}
+              {profile.tier === "Potential" ? "Dự bị / Chờ cập nhật" : `Hạng ${profile.tier}`}
             </span>
           </div>
         </div>
@@ -166,8 +168,35 @@ export default function PortfolioPage() {
       {/* Main Grid: 2 columns on Desktop (1/3 and 2/3) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        {/* LEFT COLUMN: Profile Bio & Measurements (1/3 width) */}
+        {/* LEFT COLUMN: Profile Bio, Photo & Measurements (1/3 width) */}
         <div className="space-y-8">
+
+          {/* Model Full-Body Photo Card */}
+          <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-5 space-y-4">
+            <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
+              <Award className="h-4.5 w-4.5 text-amber-400" /> Ảnh Người Mẫu (Full-body)
+            </h3>
+
+            <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-slate-950 border border-white/5 group shadow-inner">
+              <img
+                src="/fullbody_model.png"
+                alt="Model Full-body portrait"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-102"
+              />
+              {/* Subtle luxury gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08090f] via-transparent to-transparent opacity-80" />
+
+              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                <div>
+                  <span className="text-[8px] font-mono tracking-widest text-[#f4c430] font-bold uppercase">POLAROID BOOK</span>
+                  <h4 className="text-xs font-black text-white mt-0.5">NGUYỄN MAI ANH</h4>
+                </div>
+                <div className="text-[8px] font-mono bg-black/40 border border-white/10 px-2 py-0.5 rounded text-slate-300">
+                  Ratio: 3:4
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Physical Measurements Card - Silver border style */}
           <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-5">
@@ -232,7 +261,7 @@ export default function PortfolioPage() {
                   <BookOpen className="h-4.5 w-4.5" />
                 </div>
                 <div>
-                  <span className="block font-bold text-white">Ngoại ngữ thành thạo</span>
+                  <span className="block font-bold text-white">Ngoại ngữ: Tiếng Anh</span>
                   <span className="block text-[10px] text-slate-400 mt-1 leading-normal">
                     {Array.isArray(profile.languages) ? profile.languages.join(", ") : profile.languages}
                   </span>
@@ -246,25 +275,140 @@ export default function PortfolioPage() {
         {/* RIGHT COLUMN: Rate card, Availability and radar chart (2/3 width) */}
         <div className="lg:col-span-2 space-y-8">
 
-          {/* Top statistics strip - Glowing stats like Admin */}
-          <div className="grid grid-cols-3 gap-5">
+          {/* Top statistics grid - Glowing stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
 
-            {/* 1. MXH Interaction - Cyan */}
-            <div className="rounded-2xl bg-[#08090f] border border-[#143d4d] shadow-[0_0_15px_rgba(34,211,238,0.02)] p-5">
+            {/* Card 1: Thứ Hạng Người Mẫu - Dynamic theme based on Tier */}
+            {(() => {
+              const t = profile.tier || "A";
+              const tierConfig: Record<string, any> = {
+                S: {
+                  border: "border-amber-400/80",
+                  bg: "bg-gradient-to-br from-amber-500/20 via-[#221a0a]/95 to-[#070913]/98",
+                  shadow: "shadow-[0_0_20px_rgba(245,158,11,0.25)]",
+                  hoverShadow: "hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]",
+                  glow: "bg-amber-500/30",
+                  icon: <Crown className="h-4.5 w-4.5 text-amber-400 fill-amber-400/25 animate-bounce" style={{ animationDuration: '3s' }} />,
+                  label: "CELEB / SUPER VIP",
+                  labelColor: "text-amber-400",
+                  badge: "bg-amber-400/25 text-amber-300 border-amber-400/30",
+                  badgeText: "90 - 100 ĐIỂM",
+                  titleGradient: "bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500",
+                  titleText: "HẠNG S",
+                  subtitleColor: "text-amber-300",
+                  desc: "Hoa hậu Quốc gia, Ngôi sao hạng S."
+                },
+                A: {
+                  border: "border-slate-300/60",
+                  bg: "bg-gradient-to-br from-slate-400/10 via-[#171922]/90 to-[#070913]/95",
+                  shadow: "shadow-[0_0_20px_rgba(203,213,225,0.08)]",
+                  hoverShadow: "hover:shadow-[0_0_25px_rgba(203,213,225,0.18)]",
+                  glow: "bg-slate-400/20",
+                  icon: <Award className="h-4.5 w-4.5 text-slate-300" />,
+                  label: "HIGH-END PRO",
+                  labelColor: "text-slate-300",
+                  badge: "bg-slate-400/20 text-slate-200 border-slate-400/30",
+                  badgeText: "70 - 89 ĐIỂM",
+                  titleGradient: "bg-gradient-to-r from-slate-100 via-slate-300 to-slate-400",
+                  titleText: "HẠNG A",
+                  subtitleColor: "text-slate-300",
+                  desc: "Á hậu, Hoa khôi lớn, Siêu mẫu Runway chuyên nghiệp, MC VIP."
+                },
+                B: {
+                  border: "border-purple-500/40",
+                  bg: "bg-gradient-to-br from-purple-500/10 via-[#1a1128]/90 to-[#070913]/95",
+                  shadow: "shadow-[0_0_20px_rgba(168,85,247,0.08)]",
+                  hoverShadow: "hover:shadow-[0_0_25px_rgba(168,85,247,0.18)]",
+                  glow: "bg-purple-500/20",
+                  icon: <Star className="h-4.5 w-4.5 text-purple-400" />,
+                  label: "MID FREELANCE",
+                  labelColor: "text-purple-400",
+                  badge: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+                  badgeText: "45 - 69 ĐIỂM",
+                  titleGradient: "bg-gradient-to-r from-purple-200 to-pink-500",
+                  titleText: "HẠNG B",
+                  subtitleColor: "text-purple-300",
+                  desc: "Người mẫu ảnh Lookbook, Micro/Mid-tier KOLs, PG VIP sự kiện cao cấp."
+                },
+                C: {
+                  border: "border-teal-500/30",
+                  bg: "bg-gradient-to-br from-teal-500/10 via-[#0e1f1e]/90 to-[#070913]/95",
+                  shadow: "shadow-[0_0_20px_rgba(20,184,166,0.08)]",
+                  hoverShadow: "hover:shadow-[0_0_25px_rgba(20,184,166,0.18)]",
+                  glow: "bg-teal-500/20",
+                  icon: <Award className="h-4.5 w-4.5 text-teal-400" />,
+                  label: "ENTRY / NEWBIE",
+                  labelColor: "text-teal-400",
+                  badge: "bg-teal-500/20 text-teal-300 border-teal-500/30",
+                  badgeText: "20 - 44 ĐIỂM",
+                  titleGradient: "bg-gradient-to-r from-teal-200 to-emerald-400",
+                  titleText: "HẠNG C",
+                  subtitleColor: "text-teal-300",
+                  desc: "Người mẫu tự do mới vào nghề, diễn viên phụ, PG sự kiện đại trà."
+                },
+                Potential: {
+                  border: "border-rose-500/40",
+                  bg: "bg-gradient-to-br from-rose-500/20 via-[#260f12]/95 to-[#070913]/98",
+                  shadow: "shadow-[0_0_20px_rgba(244,63,94,0.15)]",
+                  hoverShadow: "hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]",
+                  glow: "bg-rose-500/30",
+                  icon: <ShieldAlert className="h-4.5 w-4.5 text-rose-400 animate-pulse" />,
+                  label: "POTENTIAL PROFILE",
+                  labelColor: "text-rose-400",
+                  badge: "bg-rose-500/20 text-rose-300 border-rose-500/30",
+                  badgeText: "< 20 ĐIỂM",
+                  titleGradient: "bg-gradient-to-r from-rose-200 via-rose-300 to-red-500",
+                  titleText: "DỰ BỊ",
+                  subtitleColor: "text-rose-300",
+                  desc: "Dự bị / Chờ cập nhật hồ sơ."
+                }
+              };
+              const cfg = tierConfig[t] || tierConfig["A"];
+
+              return (
+                <div className={cn(
+                  "relative overflow-hidden rounded-2xl border-2 p-4 text-left transition-all duration-300 hover:scale-[1.02]",
+                  cfg.border, cfg.bg, cfg.shadow, cfg.hoverShadow
+                )}>
+                  <div className={cn("absolute -right-4 -top-4 h-16 w-16 rounded-full blur-xl pointer-events-none", cfg.glow)}></div>
+
+                  <div className="flex items-center justify-between mb-2.5">
+                    <div className="flex items-center gap-1.5">
+                      {cfg.icon}
+                      <span className={cn("text-[8px] font-black uppercase tracking-widest", cfg.labelColor)}>
+                        {cfg.label}
+                      </span>
+                    </div>
+                    <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[7px] font-black uppercase tracking-wider border", cfg.badge)}>
+                      {cfg.badgeText}
+                    </span>
+                  </div>
+                  <span className={cn("block text-2xl font-black tracking-wide font-display bg-clip-text text-transparent", cfg.titleGradient)}>
+                    {cfg.titleText}
+                  </span>
+                  <span className={cn("mt-0.5 block text-[9.5px] font-bold", cfg.subtitleColor)}>
+                    {cfg.desc}
+                  </span>
+                </div>
+              );
+            })()}
+
+            {/* Card 2: MXH Interaction - Cyan */}
+            <div className="rounded-2xl bg-[#08090f] border border-[#143d4d] shadow-[0_0_15px_rgba(34,211,238,0.02)] p-4 hover:border-cyan-400/30 transition-colors">
               <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider block">Tương Tác MXH</span>
               <h4 className="text-lg font-extrabold text-white mt-1.5">{(profile.engagementRate || 4.8)}% ER</h4>
               <span className="text-[9px] text-cyan-400 block mt-1 font-semibold">{(Number(profile.followersCount || 120000) / 1000).toFixed(0)}k Followers</span>
             </div>
 
-            {/* 2. Reliability - Purple */}
-            <div className="rounded-2xl bg-[#08090f] border border-[#2f1c4f] shadow-[0_0_15px_rgba(168,85,247,0.02)] p-5">
+            {/* Card 3: Độ Tin Cậy - Purple */}
+            <div className="rounded-2xl bg-[#08090f] border border-[#2f1c4f] shadow-[0_0_15px_rgba(168,85,247,0.02)] p-4 hover:border-purple-400/30 transition-colors">
               <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider block">Độ Tin Cậy</span>
               <h4 className="text-lg font-extrabold text-white mt-1.5">{(profile.reliability || 96)}%</h4>
               <span className="text-[9px] text-[#a855f7] block mt-1 font-semibold">{(profile.reviewsCount || 18)} Shows thành công</span>
             </div>
 
-            {/* 3. Average Rating - Gold */}
-            <div className="rounded-2xl bg-[#08090f] border border-[#3e3415] shadow-[0_0_15px_rgba(234,179,8,0.02)] p-5">
+            {/* Card 4: Average Rating - Gold */}
+            <div className="rounded-2xl bg-[#08090f] border border-[#3e3415] shadow-[0_0_15px_rgba(234,179,8,0.02)] p-4 hover:border-amber-400/30 transition-colors">
               <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider block">Đánh Giá TB</span>
               <h4 className="text-lg font-extrabold text-white mt-1.5 flex items-center gap-1">
                 {(profile.averageRating || 4.9).toFixed(1)} <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
@@ -295,127 +439,146 @@ export default function PortfolioPage() {
             </div>
           </div>
 
-          {/* Availability and Radar Chart Side-by-Side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Availability Calendar */}
+          <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-4">
+            <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
+              <Calendar className="h-4.5 w-4.5 text-slate-400" /> Lịch Trình Nhận Show Tháng 6
+            </h3>
 
-            {/* Calendar Availability */}
-            <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-4">
-              <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
-                <Calendar className="h-4.5 w-4.5 text-slate-400" /> Lịch Trình Nhận Show Tháng 6
-              </h3>
+            <div className="grid grid-cols-5 gap-2.5">
+              {["24/06", "25/06", "26/06", "27/06", "28/06"].map((date) => {
+                const day = date.split("/")[0];
+                const isAvailable = profile.availabilityCalendar?.some((d: string) => d.endsWith(day));
 
-              <div className="grid grid-cols-5 gap-2.5">
-                {["24/06", "25/06", "26/06", "27/06", "28/06"].map((date) => {
-                  const day = date.split("/")[0];
-                  const isAvailable = profile.availabilityCalendar?.some((d: string) => d.endsWith(day));
-
-                  return (
-                    <div
-                      key={date}
-                      className={cn(
-                        "flex flex-col items-center justify-center h-14 w-full rounded-xl border text-center transition-all",
-                        isAvailable
-                          ? "border-amber-400/40 bg-amber-400/5 text-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.1)]"
-                          : "border-white/5 bg-slate-950/40 text-slate-600"
-                      )}
-                    >
-                      <span className="text-xs uppercase font-bold">{day}</span>
-                      <span className="text-[9px] font-semibold mt-0.5">{isAvailable ? "Rảnh" : "Bận"}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="text-[9px] text-slate-500 leading-normal">
-                * Nhãn hàng có thể chọn ngày trống trên và ấn "Book" để gửi đề nghị ký quỹ.
-              </p>
+                return (
+                  <div
+                    key={date}
+                    className={cn(
+                      "flex flex-col items-center justify-center h-14 w-full rounded-xl border text-center transition-all",
+                      isAvailable
+                        ? "border-amber-400/40 bg-amber-400/5 text-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.1)]"
+                        : "border-white/5 bg-slate-950/40 text-slate-600"
+                    )}
+                  >
+                    <span className="text-xs uppercase font-bold">{day}</span>
+                    <span className="text-[9px] font-semibold mt-0.5">{isAvailable ? "Rảnh" : "Bận"}</span>
+                  </div>
+                );
+              })}
             </div>
-
-            {/* AI Radar Chart */}
-            <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 flex gap-4 items-center justify-between">
-              <div className="space-y-2 flex-1">
-                <h3 className="font-display font-black text-xs text-white uppercase tracking-wider">
-                  Định Hướng AI
-                </h3>
-                <p className="text-[10px] leading-relaxed text-slate-400">
-                  Sự nghiệp phù hợp nhất:<br />
-                  <b className="text-amber-400 font-bold block mt-1.5 text-xs">{profile.mainCategory}</b>
-                </p>
-              </div>
-
-              {/* SVG Radar */}
-              <div className="h-28 w-28 shrink-0 rounded-xl border border-[#151b2d] bg-slate-950 p-2 shadow-inner">
-                <svg viewBox="0 0 200 200" className="h-full w-full">
-                  <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255,255,255,0.05)" />
-                  <circle cx="100" cy="100" r="30" fill="none" stroke="rgba(255,255,255,0.05)" />
-                  <polygon points={calculateRadarPath()} fill="rgba(244,196,48,0.2)" stroke="#f4c430" strokeWidth="2.5" />
-                  <text x="100" y="25" fill="#f4c430" fontSize="11" fontWeight="bold" textAnchor="middle">P</text>
-                  <text x="35" y="145" fill="#a855f7" fontSize="11" fontWeight="bold" textAnchor="middle">R</text>
-                  <text x="165" y="145" fill="#06b6d4" fontSize="11" fontWeight="bold" textAnchor="middle">K</text>
-                </svg>
-              </div>
-            </div>
-
+            <p className="text-[9px] text-slate-500 leading-normal">
+              * Nhãn hàng có thể chọn ngày trống trên và ấn "Book" để gửi đề nghị ký quỹ.
+            </p>
           </div>
 
-          {/* AI Recommended Roles (20 jobs) - Purple border (AI) */}
-          <div className="rounded-2xl border border-[#2f1c4f] bg-[#08090f] shadow-[0_0_15px_rgba(168,85,247,0.02)] p-6 space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#151b2d] pb-3">
-              <Sparkles className="h-5 w-5 text-purple-400 animate-pulse" />
-              <h3 className="font-display font-black text-xs text-white uppercase tracking-wider">
-                Xếp Hạng 20 Định Hướng Việc Làm AI (AI Competency Matching)
-              </h3>
+          {/* AI Career Diagnostic Group: Radar Chart & 20 Recommended Roles */}
+          <div className="rounded-2xl border border-[#2f1c4f] bg-[#08090f] shadow-[0_0_20px_rgba(168,85,247,0.03)] p-6 space-y-6">
+            <div className="flex items-center gap-2.5 border-b border-[#151b2d] pb-4 justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-purple-400 animate-pulse" />
+                <div>
+                  <h3 className="font-display font-black text-xs text-white uppercase tracking-wider">
+                    Định Hướng Sự Nghiệp
+                  </h3>
+                  <span className="block text-[8px] text-slate-500 font-bold uppercase mt-0.5 tracking-wider">
+                    Chẩn đoán năng lực & Tương thích việc làm
+                  </span>
+                </div>
+              </div>
+              <div className="text-[9px] font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20 uppercase">
+                AI Powered
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-              {(() => {
-                const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
-                const calculatedJobs = JOBS_LIST.map((job) => {
-                  const matchScore = Math.round(
-                    scores.pageant * job.weights.pageant +
-                    scores.runway * job.weights.runway +
-                    scores.kol * job.weights.kol
-                  );
-                  return { ...job, matchScore };
-                }).sort((a, b) => b.matchScore - a.matchScore);
 
-                return calculatedJobs.map((job, idx) => {
-                  const isHigh = job.matchScore >= 80;
-                  const isMid = job.matchScore >= 50 && job.matchScore < 80;
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+              {/* Radar Chart Summary Column */}
+              <div className="md:col-span-5 flex flex-col justify-between p-4 rounded-xl border border-white/2 bg-slate-950/40">
+                <div className="space-y-2">
+                  <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black">Đề xuất phù hợp nhất</span>
+                  <h4 className="text-xs font-bold text-white leading-relaxed">
+                    {profile.mainCategory}
+                  </h4>
+                  <p className="text-[9px] text-slate-400 leading-normal">
+                    Hệ thống đề xuất hướng đi chuyên nghiệp dựa trên nhân trắc học và phản hồi khảo sát định tính.
+                  </p>
+                </div>
 
-                  return (
-                    <div
-                      key={job.id}
-                      className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3.5 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
-                    >
-                      <div className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[9px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
-                        {idx + 1}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-center">
-                          <h4 className="text-xs font-bold text-white truncate group-hover:text-amber-400 transition-colors">
-                            {job.title}
-                          </h4>
-                          <span className={cn(
-                            "font-display text-[10px] font-extrabold",
-                            isHigh ? "text-amber-400" : isMid ? "text-purple-400" : "text-slate-500"
-                          )}>
-                            {job.matchScore}% Match
-                          </span>
+                {/* SVG Radar */}
+                <div className="h-32 w-32 mx-auto my-4 shrink-0 rounded-xl border border-[#151b2d] bg-slate-950 p-2 shadow-inner">
+                  <RadarChart
+                    scores={profile.surveyScores}
+                    fillColor="rgba(244,196,48,0.2)"
+                    strokeColor="#f4c430"
+                    strokeWidth={2.5}
+                    labelFontSize={11}
+                    labelFontWeight="bold"
+                  />
+                </div>
+
+                <div className="flex justify-between items-center text-[9px] text-slate-500 border-t border-white/5 pt-2 mt-2">
+                  <span>P: Pageant</span>
+                  <span>R: Runway</span>
+                  <span>K: KOL</span>
+                </div>
+              </div>
+
+              {/* 20 Recommended Roles Column */}
+              <div className="md:col-span-7 space-y-3">
+                <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black text-left">Bảng xếp hạng 20 vị trí tương thích</span>
+
+                <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                  {(() => {
+                    const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
+                    const calculatedJobs = JOBS_LIST.map((job) => {
+                      const matchScore = Math.round(
+                        scores.pageant * job.weights.pageant +
+                        scores.runway * job.weights.runway +
+                        scores.kol * job.weights.kol
+                      );
+                      return { ...job, matchScore };
+                    }).sort((a, b) => b.matchScore - a.matchScore);
+
+                    return calculatedJobs.map((job, idx) => {
+                      const isHigh = job.matchScore >= 80;
+                      const isMid = job.matchScore >= 50 && job.matchScore < 80;
+
+                      return (
+                        <div
+                          key={job.id}
+                          className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                        >
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[9px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
+                            {idx + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-center">
+                              <h4 className="text-[11px] font-bold text-white truncate group-hover:text-amber-400 transition-colors">
+                                {job.title}
+                              </h4>
+                              <span className={cn(
+                                "font-display text-[9px] font-extrabold",
+                                isHigh ? "text-amber-400" : isMid ? "text-purple-400" : "text-slate-500"
+                              )}>
+                                {job.matchScore}% Match
+                              </span>
+                            </div>
+                            <p className="text-[8px] text-slate-500 truncate mt-0.5">{job.desc}</p>
+                            <div className="h-1 w-full bg-slate-900 rounded-full overflow-hidden mt-1.5">
+                              <div
+                                className={cn(
+                                  "h-full rounded-full transition-all duration-500",
+                                  isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-700"
+                                )}
+                                style={{ width: `${job.matchScore}%` }}
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <p className="text-[9px] text-slate-500 truncate mt-1 font-medium">{job.desc}</p>
-                        <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden mt-2">
-                          <div
-                            className={cn(
-                              "h-full rounded-full transition-all duration-500",
-                              isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-700"
-                            )}
-                            style={{ width: `${job.matchScore}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                });
-              })()}
+                      );
+                    });
+                  })()}
+                </div>
+              </div>
             </div>
           </div>
 
