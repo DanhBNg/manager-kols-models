@@ -134,6 +134,11 @@ export default function OnboardingForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (step < 5) {
+      nextStep();
+      return;
+    }
+
     // Validate that all survey questions are answered
     for (const q of SURVEY_QUESTIONS) {
       if (surveyAnswers[q.id] === undefined) {
