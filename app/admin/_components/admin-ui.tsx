@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   ArrowRight,
@@ -111,15 +111,15 @@ function AdminHeader() {
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-3xl">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <StatusBadge label="Single Admin Control Center" tone="cyan" />
-            <StatusBadge label="Live Ops" tone="emerald" />
+            <StatusBadge label="Trung tâm quản trị tập trung" tone="cyan" />
+            <StatusBadge label="Vận hành trực tiếp" tone="emerald" />
             <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">May 2026</span>
           </div>
           <h1 className="font-display text-3xl font-black tracking-tight text-white md:text-5xl">
-            ADMIN <span className="bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-600 bg-clip-text text-transparent">CONTROL CENTER</span>
+            QUẢN TRỊ <span className="bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-600 bg-clip-text text-transparent">TRUNG TÂM ĐIỀU PHỐI</span>
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
-            Van hanh toan bo Beauty Talent Ecosystem: kiem duyet ho so, giam sat escrow, dieu phoi campaign, xu ly tranh chap va theo doi rui ro nen tang.
+            Vận hành toàn bộ hệ sinh thái Beauty Talent: kiểm duyệt hồ sơ, giám sát ký quỹ, điều phối chiến dịch, xử lý tranh chấp và theo dõi rủi ro nền tảng.
           </p>
         </div>
 
@@ -165,15 +165,15 @@ function OperationsTable({ rows = operations }: Readonly<{ rows?: AdminTableRow[
     <GlassPanel className="p-0">
       <div className="flex flex-col gap-4 border-b border-white/7 p-5 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Operational Queue</h2>
-          <p className="mt-1 text-xs text-slate-500">Inline actions for profile, campaign, escrow and dispute review.</p>
+          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Hàng đợi vận hành</h2>
+          <p className="mt-1 text-xs text-slate-500">Xử lý nhanh hồ sơ, chiến dịch, ký quỹ và tranh chấp ngay trên bảng.</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="flex h-9 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-[10px] font-black uppercase tracking-wider text-slate-300 transition hover:bg-white/10">
-            <Filter className="h-3.5 w-3.5" /> Filters
+            <Filter className="h-3.5 w-3.5" /> Bộ lọc
           </button>
           <button className="flex h-9 items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/10 px-3 text-[10px] font-black uppercase tracking-wider text-amber-300 transition hover:bg-amber-400/15">
-            <Download className="h-3.5 w-3.5" /> Export
+            <Download className="h-3.5 w-3.5" /> Xuất dữ liệu
           </button>
         </div>
       </div>
@@ -182,12 +182,12 @@ function OperationsTable({ rows = operations }: Readonly<{ rows?: AdminTableRow[
         <table className="w-full min-w-[760px] border-collapse">
           <thead>
             <tr className="border-b border-white/7 text-left text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-              <th className="px-5 py-3">Entity</th>
-              <th className="px-5 py-3">Owner</th>
-              <th className="px-5 py-3">Value</th>
-              <th className="px-5 py-3">Status</th>
-              <th className="px-5 py-3">Risk</th>
-              <th className="px-5 py-3 text-right">Action</th>
+              <th className="px-5 py-3">Đối tượng</th>
+              <th className="px-5 py-3">Phụ trách</th>
+              <th className="px-5 py-3">Giá trị</th>
+              <th className="px-5 py-3">Trạng thái</th>
+              <th className="px-5 py-3">Rủi ro</th>
+              <th className="px-5 py-3 text-right">Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -229,8 +229,8 @@ function ActivityAndRisk() {
     <div className="grid gap-5 xl:grid-cols-2">
       <GlassPanel>
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Live Activity</h2>
-          <StatusBadge label="Realtime" tone="emerald" />
+          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Hoạt động mới</h2>
+          <StatusBadge label="Thời gian thực" tone="emerald" />
         </div>
         <div className="space-y-3">
           {liveActivity.map((item, index) => (
@@ -238,7 +238,7 @@ function ActivityAndRisk() {
               <div className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
               <div>
                 <p className="text-xs font-semibold text-slate-300">{item}</p>
-                <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-600">{index + 3} min ago</span>
+                <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-600">{index + 3} phút trước</span>
               </div>
             </div>
           ))}
@@ -247,8 +247,8 @@ function ActivityAndRisk() {
 
       <GlassPanel>
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Risk Alerts</h2>
-          <StatusBadge label="4 open" tone="rose" />
+          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Cảnh báo rủi ro</h2>
+          <StatusBadge label="4 đang mở" tone="rose" />
         </div>
         <div className="space-y-3">
           {riskAlerts.map((item) => (
@@ -271,10 +271,10 @@ function FinanceAndVerification() {
       <GlassPanel className="xl:col-span-7">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Revenue & Escrow</h2>
-            <p className="mt-1 text-xs text-slate-500">GMV, platform fee, voting and funding flow.</p>
+            <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Doanh thu & Ký quỹ</h2>
+            <p className="mt-1 text-xs text-slate-500">GMV, phí nền tảng, doanh thu bình chọn và quỹ tài trợ.</p>
           </div>
-          <StatusBadge label="Finance" tone="gold" />
+          <StatusBadge label="Tài chính" tone="gold" />
         </div>
         <div className="space-y-5">
           {revenueBars.map((bar) => (
@@ -293,8 +293,8 @@ function FinanceAndVerification() {
 
       <GlassPanel className="xl:col-span-5">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Verification Queue</h2>
-          <StatusBadge label="3 pending" tone="amber" />
+          <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Hàng đợi xác minh</h2>
+          <StatusBadge label="3 chờ xử lý" tone="amber" />
         </div>
         <div className="space-y-3">
           {verificationQueue.map((item) => (
@@ -307,9 +307,9 @@ function FinanceAndVerification() {
                 <StatusBadge label={`Tier ${item.tier}`} tone={item.tone} />
               </div>
               <div className="mt-4 flex items-center justify-between border-t border-white/7 pt-3">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Due in {item.due}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Còn {item.due}</span>
                 <button className="flex h-8 items-center gap-1.5 rounded-lg bg-white px-2.5 text-[10px] font-black uppercase tracking-wider text-slate-950">
-                  <Check className="h-3.5 w-3.5" /> Approve
+                  <Check className="h-3.5 w-3.5" /> Duyệt
                 </button>
               </div>
             </div>
@@ -370,13 +370,13 @@ export function AdminModulePage({
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                 <input
-                  aria-label="Search admin records"
-                  placeholder="Search records..."
+                  aria-label="Tìm bản ghi quản trị"
+                  placeholder="Tìm bản ghi..."
                   className="h-11 w-full rounded-xl border border-white/10 bg-black/20 pl-9 pr-3 text-xs font-semibold text-white outline-none transition focus:border-cyan-400/40 sm:w-64"
                 />
               </div>
               <button className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-600 px-4 text-[10px] font-black uppercase tracking-wider text-slate-950">
-                Quick Action <ArrowRight className="h-3.5 w-3.5" />
+                Thao tác nhanh <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
@@ -398,3 +398,5 @@ export function AdminModulePage({
 export function AdminModuleRoutePage({ moduleKey }: Readonly<{ moduleKey: string }>) {
   return <AdminModulePage {...getAdminModulePage(moduleKey)} />;
 }
+
+

@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { Outfit } from "next/font/google";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ThemeProvider } from "@/components/theme-provider";
 import BottomNavigation from "@/components/BottomNavigation";
 import { 
@@ -25,7 +25,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const router = useRouter();
 
   // Determine active portal type
   const isTalent = pathname.startsWith("/talent");
@@ -35,45 +34,45 @@ export default function RootLayout({
 
   // Sidebar Menu Items based on portal
   const talentMenuItems = [
-    { label: "Dashboard", icon: Home, href: "/talent/dashboard" },
-    { label: "Onboarding", icon: Sparkles, href: "/talent/onboarding" },
-    { label: "Portfolio", icon: User, href: "/talent/portfolio" },
-    { label: "Jobs Marketplace", icon: Briefcase, href: "/talent/jobs" },
-    { label: "Crown Funding", icon: Crown, href: "/talent/crown" },
-    { label: "Lịch Trình", icon: Calendar, href: "/talent/calendar" },
-    { label: "Tin Nhắn", icon: MessageSquare, href: "/talent/messages" },
-    { label: "Thu Nhập", icon: Wallet, href: "/talent/wallet" },
-    { label: "Cài Đặt", icon: Settings, href: "/talent/settings" },
+    { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
+    { label: "Nhập hồ sơ", icon: Sparkles, href: "/talent/onboarding" },
+    { label: "Hồ sơ năng lực", icon: User, href: "/talent/portfolio" },
+    { label: "Việc phù hợp", icon: Briefcase, href: "/talent/jobs" },
+    { label: "Quỹ vương miện", icon: Crown, href: "/talent/crown" },
+    { label: "Lịch trình", icon: Calendar, href: "/talent/calendar" },
+    { label: "Tin nhắn", icon: MessageSquare, href: "/talent/messages" },
+    { label: "Thu nhập", icon: Wallet, href: "/talent/wallet" },
+    { label: "Cài đặt", icon: Settings, href: "/talent/settings" },
   ];
 
   const brandMenuItems = [
-    { label: "Dashboard", icon: LayoutDashboard, href: "/brand/dashboard" },
-    { label: "Campaigns", icon: Briefcase, href: "/brand/campaigns" },
-    { label: "Discover Talents", icon: Sparkles, href: "/brand/discover" },
-    { label: "Escrow & Bookings", icon: Shield, href: "/brand/bookings" },
-    { label: "Messages", icon: MessageSquare, href: "/brand/messages" },
-    { label: "Settings", icon: Settings, href: "/brand/settings" },
+    { label: "Tổng quan", icon: LayoutDashboard, href: "/brand/dashboard" },
+    { label: "Chiến dịch", icon: Briefcase, href: "/brand/campaigns" },
+    { label: "Tìm tài năng", icon: Sparkles, href: "/brand/discover" },
+    { label: "Ký quỹ & Booking", icon: Shield, href: "/brand/bookings" },
+    { label: "Tin nhắn", icon: MessageSquare, href: "/brand/messages" },
+    { label: "Cài đặt", icon: Settings, href: "/brand/settings" },
   ];
 
   const adminMenuItems = [
-    { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
-    { label: "Talents", icon: User, href: "/admin/talents" },
-    { label: "Brands", icon: Building2, href: "/admin/brands" },
-    { label: "Campaigns", icon: Megaphone, href: "/admin/campaigns" },
-    { label: "Jobs", icon: Briefcase, href: "/admin/jobs" },
-    { label: "Payments & Escrow", icon: Wallet, href: "/admin/payments-escrow" },
-    { label: "Competitions", icon: Crown, href: "/admin/competitions" },
-    { label: "Analytics", icon: BarChart3, href: "/admin/analytics" },
-    { label: "Moderation", icon: Shield, href: "/admin/moderation" },
-    { label: "CMS", icon: FileWarning, href: "/admin/cms" },
-    { label: "Users & Permissions", icon: User, href: "/admin/users-permissions" },
-    { label: "Notifications", icon: RadioTower, href: "/admin/notifications" },
-    { label: "Settings", icon: Settings, href: "/admin/settings" },
-    { label: "Audit Logs", icon: Activity, href: "/admin/audit-logs" },
+    { label: "Tổng quan", icon: LayoutDashboard, href: "/admin/dashboard" },
+    { label: "Tài năng", icon: User, href: "/admin/talents" },
+    { label: "Nhãn hàng", icon: Building2, href: "/admin/brands" },
+    { label: "Chiến dịch", icon: Megaphone, href: "/admin/campaigns" },
+    { label: "Công việc", icon: Briefcase, href: "/admin/jobs" },
+    { label: "Thanh toán & Ký quỹ", icon: Wallet, href: "/admin/payments-escrow" },
+    { label: "Cuộc thi", icon: Crown, href: "/admin/competitions" },
+    { label: "Phân tích", icon: BarChart3, href: "/admin/analytics" },
+    { label: "Kiểm duyệt", icon: Shield, href: "/admin/moderation" },
+    { label: "Quản trị nội dung", icon: FileWarning, href: "/admin/cms" },
+    { label: "Người dùng & Quyền", icon: User, href: "/admin/users-permissions" },
+    { label: "Thông báo", icon: RadioTower, href: "/admin/notifications" },
+    { label: "Cài đặt", icon: Settings, href: "/admin/settings" },
+    { label: "Nhật ký hệ thống", icon: Activity, href: "/admin/audit-logs" },
   ];
 
   const currentMenuItems = isTalent ? talentMenuItems : isBrand ? brandMenuItems : isAdmin ? adminMenuItems : [];
-  const portalName = isTalent ? "Talent App" : isBrand ? "Brand Portal" : isAdmin ? "Admin Portal" : "";
+  const portalName = isTalent ? "Cổng tài năng" : isBrand ? "Cổng nhãn hàng" : isAdmin ? "Cổng quản trị" : "";
 
   return (
     <html lang="vi" className={`${outfit.variable} h-full dark antialiased`} style={{ colorScheme: "dark" }}>
@@ -91,7 +90,7 @@ export default function RootLayout({
                 {/* Logo Section */}
                 <div className="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/10 border border-amber-500/20 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                    <span className="text-xl">👑</span>
+                    <Crown className="h-5 w-5 text-amber-300" />
                   </div>
                   <div>
                     <h1 className="font-display font-extrabold text-sm tracking-wide text-white uppercase">
@@ -129,15 +128,15 @@ export default function RootLayout({
 
                 {/* Footer Switch Portal */}
                 <div className="border-t border-white/5 pt-4 mt-auto">
-                  <button 
-                    onClick={() => router.push("/")}
+                  <Link
+                    href="/"
                     className="flex w-full items-center justify-between rounded-xl border border-white/5 bg-slate-900/30 px-4 py-3 text-xs font-semibold text-slate-400 hover:border-amber-400/40 hover:text-white transition-all"
                   >
                     <span className="flex items-center gap-2">
-                      <LogOut className="h-4 w-4" /> Đổi Cổng Portal
+                      <LogOut className="h-4 w-4" /> Đổi cổng truy cập
                     </span>
                     <ChevronRight className="h-3 w-3" />
-                  </button>
+                  </Link>
                 </div>
               </aside>
             )}
@@ -167,12 +166,12 @@ export default function RootLayout({
                     <div className="flex items-center gap-3 border-l border-white/5 pl-6">
                       <img 
                         src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=50&h=50&q=80" 
-                        alt="Profile avatar" 
+                        alt="Ảnh đại diện quản trị viên" 
                         className="h-9 w-9 rounded-full object-cover border border-amber-400/30"
                       />
                       <div className="text-left">
                         <span className="block text-xs font-bold text-white">Quản trị viên</span>
-                        <span className="block text-[10px] text-slate-500">Developer Portal</span>
+                        <span className="block text-[10px] text-slate-500">Cổng vận hành</span>
                       </div>
                     </div>
                   </div>
@@ -196,3 +195,4 @@ export default function RootLayout({
     </html>
   );
 }
+
