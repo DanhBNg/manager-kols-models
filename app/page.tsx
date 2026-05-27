@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import { User, Shield, Briefcase, Crown, Sparkles, Star } from "lucide-react";
+import { User, Briefcase, Crown, Sparkles, Star } from "lucide-react";
 
 export default function RootGatewayPage() {
   return (
@@ -36,11 +35,11 @@ export default function RootGatewayPage() {
       </div>
 
       {/* Grid of Portals with luxury styling */}
-      <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-3 gap-5">
-        
+      <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-5">
+
         {/* Talent Portal */}
-        <Link 
-          href="/talent" 
+        <Link
+          href="/talent"
           className="group relative flex flex-col justify-between items-start rounded-2xl glass-panel p-6 text-left luxury-card-hover border-glow-gold hover:bg-slate-900/40"
         >
           <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -52,7 +51,7 @@ export default function RootGatewayPage() {
             </div>
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors uppercase tracking-wider">Talent App</h3>
+            <h3 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors uppercase tracking-wider">Talent Portal</h3>
             <p className="text-[11px] text-slate-400 mt-2 leading-relaxed">
               Dành cho Model, KOL, Hoa khôi, MC. Khảo sát năng lực, tạo hồ sơ số & nhận booking tự động.
             </p>
@@ -60,8 +59,8 @@ export default function RootGatewayPage() {
         </Link>
 
         {/* Brand Portal */}
-        <Link 
-          href="/brand" 
+        <Link
+          href="/brand"
           className="group relative flex flex-col justify-between items-start rounded-2xl glass-panel p-6 text-left luxury-card-hover hover:border-purple-500/30 hover:bg-slate-900/40 border-glow-purple"
         >
           <div className="mb-8">
@@ -73,24 +72,6 @@ export default function RootGatewayPage() {
             <h3 className="text-sm font-bold text-white group-hover:text-purple-400 transition-colors uppercase tracking-wider">Brand Portal</h3>
             <p className="text-[11px] text-slate-400 mt-2 leading-relaxed">
               Dành cho Nhãn hàng & Agency. Khám phá tài năng với AI Match, đăng chiến dịch & ký quỹ an toàn.
-            </p>
-          </div>
-        </Link>
-
-        {/* Admin Portal */}
-        <Link 
-          href="/admin" 
-          className="group relative flex flex-col justify-between items-start rounded-2xl glass-panel p-6 text-left luxury-card-hover hover:border-cyan-500/30 hover:bg-slate-900/40 border-glow-cyan"
-        >
-          <div className="mb-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_10px_rgba(34,211,238,0.15)]">
-              <Shield className="h-5 w-5" />
-            </div>
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors uppercase tracking-wider">Admin System</h3>
-            <p className="text-[11px] text-slate-400 mt-2 leading-relaxed">
-              Ban quản trị hệ thống. Duyệt thông tin hồ sơ, đối chiếu giao dịch & giải quyết tranh chấp.
             </p>
           </div>
         </Link>

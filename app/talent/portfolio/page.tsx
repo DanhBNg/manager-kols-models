@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  Shield, Sparkles, MapPin, Eye, Star, Share2, 
+import {
+  Shield, Sparkles, MapPin, Eye, Star, Share2,
   Award, Calendar, DollarSign, BookOpen, GraduationCap,
   Users, Check, ArrowUpRight, ShieldCheck, Heart, User
 } from "lucide-react";
@@ -111,7 +111,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      
+
       {/* Cover Banner Header - Premium styling */}
       <div className="relative rounded-2xl border border-[#151b2d] bg-[#08090f] p-5 shadow-xl">
         {/* Cover Background */}
@@ -137,7 +137,7 @@ export default function PortfolioPage() {
 
             <div className="space-y-1.5 pb-1">
               <div className="flex items-center gap-2.5">
-                <h2 className="font-display font-black text-white text-xl md:text-2xl uppercase tracking-wider">{profile.name}</h2>
+                <h2 className="font-display font-black text-white text-xl md:text-2xl tracking-wide">Nguyễn Mai Anh</h2>
                 <ShieldCheck className="h-6 w-6 text-amber-400 shrink-0" />
               </div>
               <p className="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
@@ -165,16 +165,16 @@ export default function PortfolioPage() {
 
       {/* Main Grid: 2 columns on Desktop (1/3 and 2/3) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {/* LEFT COLUMN: Profile Bio & Measurements (1/3 width) */}
         <div className="space-y-8">
-          
+
           {/* Physical Measurements Card - Silver border style */}
           <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-5">
             <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
-              <User className="h-4.5 w-4.5 text-slate-400" /> Thông Số Nhân Trắc
+              <User className="h-4.5 w-4.5 text-slate-400" /> Ngoại Hình
             </h3>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-xl bg-slate-950 p-3.5 text-center border border-white/2">
                 <span className="block text-[9px] text-slate-500 font-bold uppercase tracking-wider">Chiều Cao</span>
@@ -215,7 +215,7 @@ export default function PortfolioPage() {
             <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
               <GraduationCap className="h-4.5 w-4.5 text-slate-400" /> Học Vấn & Ngôn Ngữ
             </h3>
-            
+
             <div className="space-y-4 text-xs text-slate-300">
               <div className="flex gap-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-400/10 text-amber-400">
@@ -226,7 +226,7 @@ export default function PortfolioPage() {
                   <span className="block text-[10px] text-slate-400 mt-1">{profile.education}</span>
                 </div>
               </div>
-              
+
               <div className="flex gap-3 border-t border-[#151b2d] pt-4">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
                   <BookOpen className="h-4.5 w-4.5" />
@@ -245,10 +245,10 @@ export default function PortfolioPage() {
 
         {/* RIGHT COLUMN: Rate card, Availability and radar chart (2/3 width) */}
         <div className="lg:col-span-2 space-y-8">
-          
+
           {/* Top statistics strip - Glowing stats like Admin */}
           <div className="grid grid-cols-3 gap-5">
-            
+
             {/* 1. MXH Interaction - Cyan */}
             <div className="rounded-2xl bg-[#08090f] border border-[#143d4d] shadow-[0_0_15px_rgba(34,211,238,0.02)] p-5">
               <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider block">Tương Tác MXH</span>
@@ -279,7 +279,7 @@ export default function PortfolioPage() {
             <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
               <DollarSign className="h-4.5 w-4.5 text-amber-400" /> Bảng Giá Dịch Vụ Cố Định (Rate Card)
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3.5">
               {Object.entries(profile.rateCard || {
                 "Instagram Post": 3000000,
@@ -297,13 +297,13 @@ export default function PortfolioPage() {
 
           {/* Availability and Radar Chart Side-by-Side */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
+
             {/* Calendar Availability */}
             <div className="rounded-2xl border border-[#151b2d] bg-[#08090f] p-6 space-y-4">
               <h3 className="font-display font-black text-xs text-white uppercase tracking-wider border-b border-[#151b2d] pb-3 flex items-center gap-2">
                 <Calendar className="h-4.5 w-4.5 text-slate-400" /> Lịch Trình Nhận Show Tháng 6
               </h3>
-              
+
               <div className="grid grid-cols-5 gap-2.5">
                 {["24/06", "25/06", "26/06", "27/06", "28/06"].map((date) => {
                   const day = date.split("/")[0];

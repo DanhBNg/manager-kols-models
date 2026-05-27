@@ -1,0 +1,89 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  Home, User, Briefcase, Crown, MessageSquare, Calendar, Wallet, Settings,
+  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const talentMenuItems = [
+  { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
+  { label: "Khám phá bản thân", icon: Sparkles, href: "/talent/onboarding" },
+  { label: "Hồ sơ cá nhân", icon: User, href: "/talent/portfolio" },
+  { label: "Việc phù hợp", icon: Briefcase, href: "/talent/jobs" },
+  { label: "Quỹ vương miện", icon: Crown, href: "/talent/crown" },
+  { label: "Lịch trình", icon: Calendar, href: "/talent/calendar" },
+  { label: "Tin nhắn", icon: MessageSquare, href: "/talent/messages" },
+  { label: "Thu nhập", icon: Wallet, href: "/talent/wallet" },
+  { label: "Cài đặt", icon: Settings, href: "/talent/settings" },
+];
+
+const brandMenuItems = [
+  { label: "Tổng quan", icon: LayoutDashboard, href: "/brand/dashboard" },
+  { label: "Chiến dịch", icon: Briefcase, href: "/brand/campaigns" },
+  { label: "Tìm tài năng", icon: Sparkles, href: "/brand/discover" },
+  { label: "Ký quỹ & Booking", icon: Shield, href: "/brand/bookings" },
+  { label: "Tin nhắn", icon: MessageSquare, href: "/brand/messages" },
+  { label: "Cài đặt", icon: Settings, href: "/brand/settings" },
+];
+
+export default function Sidebar() {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const isTalent = pathname.startsWith("/talent");
+  const isBrand = pathname.startsWith("/brand");
+  const isGateway = pathname === "/";
+
+  const currentMenuItems = isTalent ? talentMenuItems : isBrand ? brandMenuItems : [];
+
+  if (isGateway || currentMenuItems.length === 0) {
+    return null;
+  }
+
+  return (
+    <aside className="hidden md:flex w-72 shrink-0 flex-col border-r border-white/5 bg-[#050711] p-6 overflow-y-auto">
+      {/* Sidebar Navigation Links */}
+      <nav className="flex-1 space-y-2 overflow-y-auto pr-1">
+        {currentMenuItems.map((item) => {
+          const isActive = pathname === item.href || (item.href.split("/").length > 3 && pathname.startsWith(item.href));
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={cn(
+                "flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold tracking-wide transition-all duration-300 group relative",
+                isActive
+                  ? "bg-gradient-to-r from-amber-400/10 to-yellow-600/5 text-amber-300 border border-amber-500/20 shadow-[0_4px_12px_rgba(245,158,11,0.05)]"
+                  : "text-slate-400 hover:bg-white/2 hover:text-slate-100 border border-transparent"
+              )}
+            >
+              {isActive && (
+                <div className="absolute left-0 top-1/3 bottom-1/3 w-0.5 rounded bg-amber-400" />
+              )}
+              <Icon className={cn("h-4.5 w-4.5 transition-transform duration-300 group-hover:scale-110", isActive ? "text-amber-400" : "text-slate-400 group-hover:text-slate-100")} />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Footer Switch Portal */}
+      <div className="border-t border-white/5 pt-4 mt-auto">
+        <button
+          onClick={() => router.push("/")}
+          className="flex w-full items-center justify-between rounded-xl border border-white/5 bg-slate-950/40 px-4 py-3 text-[11px] font-bold text-slate-400 hover:border-amber-400/40 hover:text-white hover:bg-slate-900/20 transition-all cursor-pointer"
+        >
+          <span className="flex items-center gap-2">
+            <LogOut className="h-4 w-4" /> Đổi cổng truy cập
+          </span>
+          <ChevronRight className="h-3 w-3" />
+        </button>
+      </div>
+    </aside>
+  );
+}
