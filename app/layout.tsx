@@ -35,10 +35,10 @@ export default function RootLayout({
   // Sidebar Menu Items based on portal
   const talentMenuItems = [
     { label: "Dashboard", icon: Home, href: "/talent/dashboard" },
-    { label: "Onboarding", icon: Sparkles, href: "/talent/onboarding" },
+    { label: "Khảo sát", icon: Sparkles, href: "/talent/onboarding" },
     { label: "Portfolio", icon: User, href: "/talent/portfolio" },
     { label: "Jobs Marketplace", icon: Briefcase, href: "/talent/jobs" },
-    { label: "Crown Funding", icon: Crown, href: "/talent/crown" },
+    { label: "Quỹ Vương Miện", icon: Crown, href: "/talent/crown" },
     { label: "Lịch Trình", icon: Calendar, href: "/talent/calendar" },
     { label: "Tin Nhắn", icon: MessageSquare, href: "/talent/messages" },
     { label: "Thu Nhập", icon: Wallet, href: "/talent/wallet" },

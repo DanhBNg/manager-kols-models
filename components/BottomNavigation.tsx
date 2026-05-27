@@ -25,7 +25,7 @@ export default function BottomNavigation() {
       href: "/talent/jobs",
     },
     {
-      label: "Crown",
+      label: "Quỹ Vương Miện",
       icon: Crown,
       href: "/talent/crown",
     },

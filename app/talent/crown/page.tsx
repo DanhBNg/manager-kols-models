@@ -24,7 +24,7 @@ export default function CrownPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
-        <h1 className="font-display text-xl font-bold text-white tracking-tight">Crown Funding</h1>
+        <h1 className="font-display text-xl font-bold text-white tracking-tight">Quỹ Vương Miện</h1>
         <p className="text-xs text-slate-400">Gây quỹ cho các dự án nhân ái, dự án cộng đồng & vận động bình chọn</p>
       </div>
 
