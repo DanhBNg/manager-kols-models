@@ -139,13 +139,7 @@ export default function OnboardingForm() {
       return;
     }
 
-    // Validate that all survey questions are answered
-    for (const q of SURVEY_QUESTIONS) {
-      if (surveyAnswers[q.id] === undefined) {
-        alert("Vui lòng trả lời toàn bộ 5 câu hỏi định hướng sự nghiệp!");
-        return;
-      }
-    }
+    // No survey question validation required, allowed to submit with empty answers
 
     // Survey grading algorithm
     let pageantSum = 0;
@@ -181,7 +175,7 @@ export default function OnboardingForm() {
     };
 
     SURVEY_QUESTIONS.forEach((q) => {
-      const ansIdx = surveyAnswers[q.id];
+      const ansIdx = surveyAnswers[q.id] !== undefined ? surveyAnswers[q.id] : 0;
       const points = gradingMatrix[q.id][ansIdx];
       pageantSum += points.pageant;
       runwaySum += points.runway;
