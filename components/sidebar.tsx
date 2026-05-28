@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Home, User, Briefcase, Crown, MessageSquare, Calendar, Wallet, Settings,
-  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight
+  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight, Trophy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,12 +12,12 @@ const talentMenuItems = [
   { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
   { label: "Khám phá bản thân", icon: Sparkles, href: "/talent/survey" },
   { label: "Hồ sơ cá nhân", icon: User, href: "/talent/portfolio" },
+  { label: "Danh sách cuộc thi", icon: Trophy, href: "/talent/contests" },
   { label: "Việc phù hợp", icon: Briefcase, href: "/talent/jobs" },
   { label: "Quỹ vương miện", icon: Crown, href: "/talent/crown" },
   { label: "Lịch trình", icon: Calendar, href: "/talent/calendar" },
   { label: "Tin nhắn", icon: MessageSquare, href: "/talent/messages" },
   { label: "Thu nhập", icon: Wallet, href: "/talent/wallet" },
-  { label: "Cài đặt", icon: Settings, href: "/talent/settings" },
 ];
 
 const brandMenuItems = [
