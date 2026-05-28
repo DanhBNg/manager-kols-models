@@ -1,10 +1,15 @@
 # Tài liệu Kỹ thuật - Nền tảng Quản lý KOLs/Models
 
+> Cập nhật ngày 28/05/2026: hướng triển khai hiện tại của repo là **Next.js frontend + Laravel API backend**. Backend chính nằm trong `backend/`, dùng Laravel 12, Sanctum và SQLite cho local development. Các phần mô tả Laravel + Inertia/Breeze/Filament bên dưới là tài liệu tham khảo từ hướng cũ, không phải cấu trúc đang chạy chính.
+
+---
+# TÃ i liá»‡u Ká»¹ thuáº­t - Ná»n táº£ng Quáº£n lÃ½ KOLs/Models
+
 > **Note:** This directory contains technical specifications, database schemas, API documentation, and implementation details for developers.
 
-## 📚 Tổng quan
+## ðŸ“š Tá»•ng quan
 
-Tài liệu kỹ thuật được tổ chức theo từng module chức năng. Mỗi file chứa:
+TÃ i liá»‡u ká»¹ thuáº­t Ä‘Æ°á»£c tá»• chá»©c theo tá»«ng module chá»©c nÄƒng. Má»—i file chá»©a:
 - Database schema (SQL)
 - API endpoints (REST)
 - Business logic implementation (code examples)
@@ -12,71 +17,71 @@ Tài liệu kỹ thuật được tổ chức theo từng module chức năng. M
 
 ---
 
-## 🏗️ Kiến trúc Hệ thống Khuyến nghị
+## ðŸ—ï¸ Kiáº¿n trÃºc Há»‡ thá»‘ng Khuyáº¿n nghá»‹
 
-### Mô hình Laravel + Inertia.js + React/Vue
+### MÃ´ hÃ¬nh Laravel + Inertia.js + React/Vue
 
-| Thành phần | Công nghệ khuyến nghị | Vai trò |
+| ThÃ nh pháº§n | CÃ´ng nghá»‡ khuyáº¿n nghá»‹ | Vai trÃ² |
 |------------|----------------------|---------|
-| **Backend** | PHP 8.3+ & Laravel | Xử lý Logic, Cơ sở dữ liệu, Bảo mật |
-| **Cầu nối** | Inertia.js | Truyền dữ liệu trực tiếp, không cần viết REST API cồng kềnh |
-| **Frontend** | React / Vue + TypeScript | Xây dựng giao diện ứng dụng Single Page App (SPA) mượt mà |
-| **Bundler** | Vite | Biên dịch mã TypeScript cực nhanh |
+| **Backend** | PHP 8.3+ & Laravel | Xá»­ lÃ½ Logic, CÆ¡ sá»Ÿ dá»¯ liá»‡u, Báº£o máº­t |
+| **Cáº§u ná»‘i** | Inertia.js | Truyá»n dá»¯ liá»‡u trá»±c tiáº¿p, khÃ´ng cáº§n viáº¿t REST API cá»“ng ká»nh |
+| **Frontend** | React / Vue + TypeScript | XÃ¢y dá»±ng giao diá»‡n á»©ng dá»¥ng Single Page App (SPA) mÆ°á»£t mÃ  |
+| **Bundler** | Vite | BiÃªn dá»‹ch mÃ£ TypeScript cá»±c nhanh |
 
-**Lợi ích của stack này:**
-- ✅ **Tốc độ phát triển nhanh:** Inertia.js giảm 50% code boilerplate
-- ✅ **Type-safe:** TypeScript + Laravel typed properties
-- ✅ **SEO-friendly:** Server-side rendering với Inertia SSR
-- ✅ **Developer experience:** Hot reload, auto-completion, debugging tools
-- ✅ **Ecosystem:** Laravel packages + React/Vue components
+**Lá»£i Ã­ch cá»§a stack nÃ y:**
+- âœ… **Tá»‘c Ä‘á»™ phÃ¡t triá»ƒn nhanh:** Inertia.js giáº£m 50% code boilerplate
+- âœ… **Type-safe:** TypeScript + Laravel typed properties
+- âœ… **SEO-friendly:** Server-side rendering vá»›i Inertia SSR
+- âœ… **Developer experience:** Hot reload, auto-completion, debugging tools
+- âœ… **Ecosystem:** Laravel packages + React/Vue components
 
 ---
 
-## 📁 Cấu trúc Tài liệu
+## ðŸ“ Cáº¥u trÃºc TÃ i liá»‡u
 
 ### [Core Features Technical Specs](./plans/Core-Features-Technical-Specs.md)
-Chi tiết kỹ thuật cho các tính năng cốt lõi (Luồng 1):
+Chi tiáº¿t ká»¹ thuáº­t cho cÃ¡c tÃ­nh nÄƒng cá»‘t lÃµi (Luá»“ng 1):
 
-**Nội dung:**
+**Ná»™i dung:**
 - Technology Stack (React, Node.js, PostgreSQL, Redis, S3, Elasticsearch)
 - Database Schema (10 tables: users, profiles, photos, videos, social_accounts, calendar_events, jobs, applications, bookings)
 - API Endpoints (Authentication, Profile Management, Social Media Integration, Search, Job Posting, Calendar)
-- Image Processing Pipeline (Upload → AI checks → Variants generation → CDN)
+- Image Processing Pipeline (Upload â†’ AI checks â†’ Variants generation â†’ CDN)
 - Search Algorithm (Elasticsearch query + Ranking score calculation)
 - Anti-Fraud Detection (Fake follower detection algorithm)
 - Calendar Sync Logic (Google Calendar 2-way sync)
 - Performance Optimization (Redis caching, Database indexes, Materialized views)
 - Security Implementation (JWT authentication, Data encryption)
 
-**Khi nào cần đọc:**
+**Khi nÃ o cáº§n Ä‘á»c:**
 - Khi implement user registration & profile management
-- Khi xây dựng search & filtering features
-- Khi tích hợp social media APIs
+- Khi xÃ¢y dá»±ng search & filtering features
+- Khi tÃ­ch há»£p social media APIs
 - Khi implement calendar sync
 
 ---
 
 ### [Agency Module Technical Specs](./plans/Agency-Module-Technical-Specs.md)
-Chi tiết kỹ thuật cho module Agency Management (Phần 4.2):
+Chi tiáº¿t ká»¹ thuáº­t cho module Agency Management (Pháº§n 4.2):
 
-**Nội dung:**
+**Ná»™i dung:**
 - Database Schema (5 tables: agencies, agency_members, agency_talents, agency_wallets, agency_transactions)
 - API Endpoints (Agency Management, Talent Management, Booking Management, Financial Management)
 - Permission System (Role definitions: Owner/Admin/Coordinator/Viewer, Permission check middleware)
 - Business Logic Implementation:
-  - Ghost Profile Creation (Agency tạo profile không có login)
+  - Ghost Profile Creation (Agency táº¡o profile khÃ´ng cÃ³ login)
   - Talent Joining Agency (KOL join agency, transfer permissions)
-  - Agency-Talent Separation (Xử lý khi kết thúc hợp đồng)
+  - Agency-Talent Separation (Xá»­ lÃ½ khi káº¿t thÃºc há»£p Ä‘á»“ng)
 
-**Khi nào cần đọc:**
+**Khi nÃ o cáº§n Ä‘á»c:**
 - Khi implement agency registration & management
-- Khi xây dựng talent roster management
+- Khi xÃ¢y dá»±ng talent roster management
 - Khi implement centralized booking for agencies
-- Khi xây dựng agency wallet & financial reports
+- Khi xÃ¢y dá»±ng agency wallet & financial reports
 
 ---
 
-## 🛠️ Technology Stack Chi tiết
+## ðŸ› ï¸ Technology Stack Chi tiáº¿t
 
 ### Backend
 
@@ -115,7 +120,7 @@ Chi tiết kỹ thuật cho module Agency Management (Phần 4.2):
 
 | Component | Technology | Version | Purpose |
 |-----------|------------|---------|---------|
-| **Bridge** | Inertia.js | 1.x | Laravel ↔ React/Vue bridge |
+| **Bridge** | Inertia.js | 1.x | Laravel â†” React/Vue bridge |
 | **Framework** | React / Vue | 18.x / 3.x | UI library |
 | **Bundler** | Vite | 5.x | Fast build tool |
 | **Styling** | Tailwind CSS | 3.x | Utility-first CSS |
@@ -156,7 +161,7 @@ Chi tiết kỹ thuật cho module Agency Management (Phần 4.2):
 
 ---
 
-## 🗄️ Database Schema Overview
+## ðŸ—„ï¸ Database Schema Overview
 
 ### Core Tables (10 tables)
 
@@ -187,7 +192,7 @@ Chi tiết kỹ thuật cho module Agency Management (Phần 4.2):
 
 ---
 
-## 🔌 API Endpoints Overview
+## ðŸ”Œ API Endpoints Overview
 
 ### Authentication (6 endpoints)
 ```
@@ -264,32 +269,32 @@ POST   /api/agencies/:id/withdrawals
 
 ---
 
-## 🔐 Security Best Practices
+## ðŸ” Security Best Practices
 
 ### Authentication & Authorization
-- ✅ JWT tokens with RS256 algorithm
-- ✅ Refresh token rotation
-- ✅ Rate limiting: 100 requests/minute per IP
-- ✅ CORS configuration for allowed origins
-- ✅ CSRF protection for state-changing operations
+- âœ… JWT tokens with RS256 algorithm
+- âœ… Refresh token rotation
+- âœ… Rate limiting: 100 requests/minute per IP
+- âœ… CORS configuration for allowed origins
+- âœ… CSRF protection for state-changing operations
 
 ### Data Protection
-- ✅ Encryption at rest (AES-256)
-- ✅ Encryption in transit (TLS 1.3)
-- ✅ PII tokenization (phone, email, ID cards)
-- ✅ Database access control (IAM roles)
-- ✅ Audit logging for sensitive operations
+- âœ… Encryption at rest (AES-256)
+- âœ… Encryption in transit (TLS 1.3)
+- âœ… PII tokenization (phone, email, ID cards)
+- âœ… Database access control (IAM roles)
+- âœ… Audit logging for sensitive operations
 
 ### Input Validation
-- ✅ Request validation with Zod/Joi
-- ✅ SQL injection prevention (parameterized queries)
-- ✅ XSS prevention (Content Security Policy)
-- ✅ File upload validation (type, size, content)
-- ✅ NSFW image filtering (AI-powered)
+- âœ… Request validation with Zod/Joi
+- âœ… SQL injection prevention (parameterized queries)
+- âœ… XSS prevention (Content Security Policy)
+- âœ… File upload validation (type, size, content)
+- âœ… NSFW image filtering (AI-powered)
 
 ---
 
-## 🚀 Performance Optimization
+## ðŸš€ Performance Optimization
 
 ### Caching Strategy
 - **Profile data:** 1 hour TTL
@@ -311,7 +316,7 @@ POST   /api/agencies/:id/withdrawals
 
 ---
 
-## 📊 Monitoring & Observability
+## ðŸ“Š Monitoring & Observability
 
 ### Metrics to Track
 - **Performance:** API response time (p50, p95, p99)
@@ -327,7 +332,7 @@ POST   /api/agencies/:id/withdrawals
 
 ---
 
-## 🧪 Testing Strategy
+## ðŸ§ª Testing Strategy
 
 ### Unit Tests
 - Business logic functions
@@ -349,29 +354,29 @@ POST   /api/agencies/:id/withdrawals
 
 ---
 
-## 📖 Tài liệu Liên quan
+## ðŸ“– TÃ i liá»‡u LiÃªn quan
 
 **Business Documentation:**
-- [Luồng 1: Vận hành & Tính năng](../for-bussinees/overview/Luồng%201_%20Về%20luồng%20vận%20hành%20&%20Tính%20năng%20chính.md)
-- [Luồng 2: Mô hình Kinh doanh](../for-bussinees/overview/Luồng%202_%20Mô%20hình%20kinh%20doanh%20(Monetization%20Model)%20.md)
-- [Phần 4.2: Agency Module](../for-bussinees/overview/Phần%204.2_%20Tài%20khoản%20cấp%20Công%20ty%20quản%20lý%20(Agency_Manager).md)
+- [Luá»“ng 1: Váº­n hÃ nh & TÃ­nh nÄƒng](../for-bussinees/overview/Luá»“ng%201_%20Vá»%20luá»“ng%20váº­n%20hÃ nh%20&%20TÃ­nh%20nÄƒng%20chÃ­nh.md)
+- [Luá»“ng 2: MÃ´ hÃ¬nh Kinh doanh](../for-bussinees/overview/Luá»“ng%202_%20MÃ´%20hÃ¬nh%20kinh%20doanh%20(Monetization%20Model)%20.md)
+- [Pháº§n 4.2: Agency Module](../for-bussinees/overview/Pháº§n%204.2_%20TÃ i%20khoáº£n%20cáº¥p%20CÃ´ng%20ty%20quáº£n%20lÃ½%20(Agency_Manager).md)
 
 **Technical Specifications:**
 - [Core Features Technical Specs](./plans/Core-Features-Technical-Specs.md)
 - [Agency Module Technical Specs](./plans/Agency-Module-Technical-Specs.md)
 
-### Mô hình kiến trúc khuyến nghị khi dùng Laravel với TS
+### MÃ´ hÃ¬nh kiáº¿n trÃºc khuyáº¿n nghá»‹ khi dÃ¹ng Laravel vá»›i TS
 
-| Thành phần | Công nghệ khuyến nghị | Vai trò |
+| ThÃ nh pháº§n | CÃ´ng nghá»‡ khuyáº¿n nghá»‹ | Vai trÃ² |
 |---|---|---|
-| Backend | PHP 8.3+ & Laravel | Xử lý Logic, Cơ sở dữ liệu, Bảo mật |
-| Cầu nối | Inertia.js | Truyền dữ liệu trực tiếp, không cần viết REST API cồng kềnh |
-| Frontend | React / Vue + TypeScript | Xây dựng giao diện ứng dụng Single Page App (SPA) mượt mà |
-| Bundler | Vite | Biên dịch mã TypeScript cực nhanh |
+| Backend | PHP 8.3+ & Laravel | Xá»­ lÃ½ Logic, CÆ¡ sá»Ÿ dá»¯ liá»‡u, Báº£o máº­t |
+| Cáº§u ná»‘i | Inertia.js | Truyá»n dá»¯ liá»‡u trá»±c tiáº¿p, khÃ´ng cáº§n viáº¿t REST API cá»“ng ká»nh |
+| Frontend | React / Vue + TypeScript | XÃ¢y dá»±ng giao diá»‡n á»©ng dá»¥ng Single Page App (SPA) mÆ°á»£t mÃ  |
+| Bundler | Vite | BiÃªn dá»‹ch mÃ£ TypeScript cá»±c nhanh |
 
 **Admin Panel:** Filament
 
 ---
 
-**Cập nhật lần cuối:** 25/05/2026  
+**Cáº­p nháº­t láº§n cuá»‘i:** 25/05/2026  
 **Maintainer:** Development Team
