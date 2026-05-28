@@ -3,7 +3,7 @@ stages:
 
 deploy_preview:
   stage: deploy
-  image: node:18-alpine
+  image: node:20-alpine
   only:
     - cuong
   cache:
@@ -21,7 +21,7 @@ deploy_preview:
 
 deploy_production:
   stage: deploy
-  image: node:18-alpine
+  image: node:20-alpine
   only:
     - main
   cache:
