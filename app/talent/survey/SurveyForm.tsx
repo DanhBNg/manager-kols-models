@@ -328,17 +328,7 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
     if (resetCounter && resetCounter > 0) {
       setShowHistoryDashboard(false);
       setIsSubmitted(false);
-      
-      const stored = localStorage.getItem("vnp_talent_profile");
-      let isOnboarded = false;
-      if (stored) {
-        try {
-          const profile = JSON.parse(stored);
-          if (profile.isOnboarded) isOnboarded = true;
-        } catch (e) {}
-      }
-      
-      setStep(isOnboarded ? 6 : 1);
+      setStep(1);
       setActiveSurveyQIdx(0);
       setSurveyAnswers({});
     }
@@ -432,33 +422,7 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
     }
     
     setHistoryList(parsedHistory);
-    
-    // Check if we should auto start survey (because parameter start=true is set, or user is in Potential tier)
-    let shouldStartSurvey = false;
-    if (typeof window !== "undefined") {
-      const queryParams = new URLSearchParams(window.location.search);
-      const forceStart = queryParams.get("start") === "true";
-      const profileStr = localStorage.getItem("vnp_talent_profile");
-      let isPotential = false;
-      if (profileStr) {
-        try {
-          const profile = JSON.parse(profileStr);
-          if (profile.tier === "Potential") {
-            isPotential = true;
-          }
-        } catch (e) {}
-      }
-      shouldStartSurvey = forceStart || isPotential;
-    }
-
-    if (shouldStartSurvey) {
-      setShowHistoryDashboard(false);
-      setStep(6);
-      setActiveSurveyQIdx(0);
-      setSurveyAnswers({});
-    } else {
-      setShowHistoryDashboard(true);
-    }
+    setShowHistoryDashboard(true);
   }, []);
 
   const handleViewHistoryDetail = (entry: any) => {
@@ -537,8 +501,6 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
       basePct += Math.round((count / 3) * 20); // max 80%
     } else if (step === 5) {
       basePct = 80;
-    } else if (step === 6) {
-      basePct = 80;
       // Survey answered count ratio
       const answeredCount = Object.keys(surveyAnswers).length;
       basePct += Math.round((answeredCount / SURVEY_QUESTIONS.length) * 20); // max 100%
@@ -560,9 +522,6 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
       return mediaUploads.portfolio !== null;
     }
     if (step === 5) {
-      return true; // Completion screen is always valid
-    }
-    if (step === 6) {
       // Valid if all 20 questions are answered
       return SURVEY_QUESTIONS.every((q) => surveyAnswers[q.id] !== undefined);
     }
@@ -587,36 +546,6 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
 
   const handleRegisterComp = (compName: string) => {
     setRegisteredComp(prev => ({ ...prev, [compName]: true }));
-  };
-
-  const handleCompleteOnboarding = (startSurvey: boolean) => {
-    // Save to local storage for other views in the application
-    const userProfile = {
-      ...formData,
-      followersCount: getTotalFollowers().toString(),
-      surveyScores: {
-        pageant: 0,
-        runway: 0,
-        kol: 0
-      },
-      mainCategory: "Dự bị / Chờ cập nhật (Potential Profile)",
-      profileScore: 20, // initial completion score
-      tier: "Potential" as const,
-      isOnboarded: true,
-      avatar: mediaUploads.avatar ? `/uploads/${mediaUploads.avatar}` : "/avatar.png",
-      skills: formData.skills ? formData.skills.split(",").map(s => s.trim()) : [],
-      languages: formData.languages ? formData.languages.split(",").map(s => s.trim()) : [],
-      mediaUploads
-    };
-    localStorage.setItem("vnp_talent_profile", JSON.stringify(userProfile));
-
-    if (startSurvey) {
-      setStep(6);
-      setActiveSurveyQIdx(0);
-      setSurveyAnswers({});
-    } else {
-      router.push("/talent/dashboard");
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -1185,15 +1114,7 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
                 onClick={() => {
                   setShowHistoryDashboard(false);
                   setIsSubmitted(false);
-                  const stored = localStorage.getItem("vnp_talent_profile");
-                  let isOnboarded = false;
-                  if (stored) {
-                    try {
-                      const profile = JSON.parse(stored);
-                      if (profile.isOnboarded) isOnboarded = true;
-                    } catch (e) {}
-                  }
-                  setStep(isOnboarded ? 6 : 1);
+                  setStep(1);
                   setActiveSurveyQIdx(0);
                   setSurveyAnswers({});
                 }}
@@ -1291,7 +1212,7 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
         <div>
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">
-              {step === 6 ? "Định Hướng AI" : `Khảo Sát: Bước ${step} / 5`}
+              Khảo Sát: Bước {step} / 5
             </span>
             <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400 font-medium">
               {step === 1 && "Thông tin cơ bản"}
@@ -1299,15 +1220,11 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
               {step === 3 && "Học vấn & Kỹ năng"}
               {step === 4 && "Social & Portfolio"}
               {step === 5 && "Khảo sát định hướng"}
-              {step === 6 && `Câu hỏi ${activeSurveyQIdx + 1} / ${SURVEY_QUESTIONS.length}`}
             </span>
           </div>
           {/* Micro feedback text */}
           <p className="text-[10px] text-slate-500 mt-1">
-            {step === 6 
-              ? `Đang tiến hành khảo sát định hướng...`
-              : `Hồ sơ định hướng của bạn đã hoàn thiện `}
-            {step !== 6 && <strong className="text-amber-400 font-bold">{completenessPercent}%</strong>}
+            Hồ sơ định hướng của bạn đã hoàn thiện <strong className="text-amber-400 font-bold">{completenessPercent}%</strong>
           </p>
         </div>
 
@@ -1323,32 +1240,17 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
             </button>
           )}
           
-          {step === 6 ? (
-            <div className="w-full md:w-48 space-y-1 text-left">
-              <div className="flex justify-between text-[8px] font-bold text-slate-500 uppercase">
-                <span>Khảo sát</span>
-                <span>{Math.round((Object.keys(surveyAnswers).length / SURVEY_QUESTIONS.length) * 100)}%</span>
-              </div>
-              <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-amber-200 to-amber-500 transition-all duration-300"
-                  style={{ width: `${(Object.keys(surveyAnswers).length / SURVEY_QUESTIONS.length) * 100}%` }}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center gap-1 w-full md:w-48">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <div
-                  key={s}
-                  className={cn(
-                    "h-1.5 flex-1 rounded-full transition-all duration-500",
-                    s <= step ? "bg-gradient-to-r from-amber-200 to-amber-500" : "bg-white/5"
-                  )}
-                />
-              ))}
-            </div>
-          )}
+          <div className="flex items-center gap-1 w-full md:w-48">
+            {[1, 2, 3, 4, 5].map((s) => (
+              <div
+                key={s}
+                className={cn(
+                  "h-1.5 flex-1 rounded-full transition-all duration-500",
+                  s <= step ? "bg-gradient-to-r from-amber-200 to-amber-500" : "bg-white/5"
+                )}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -1873,45 +1775,25 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
           </div>
         )}
 
-        {/* STEP 5: ONBOARDING COMPLETION SCREEN */}
+        {/* STEP 5: ORIENTATION SURVEY (Single Question Card UI, zero scroll) */}
         {step === 5 && (
-          <div className="space-y-6 animate-in fade-in duration-300 max-w-xl mx-auto py-8 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/30 mx-auto text-emerald-400 mb-4 animate-bounce">
-              <Check className="h-8 w-8" />
-            </div>
-            
-            <h3 className="font-display font-black text-xl text-white uppercase tracking-tight">
-              Đăng Ký Tài Khoản Thành Công!
-            </h3>
-            
-            <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
-              Hồ sơ cơ bản của bạn đã được khởi tạo thành công với độ hoàn thiện ban đầu đạt <strong className="text-amber-400 font-bold">80%</strong>. Hãy thực hiện khảo sát định hướng nghề nghiệp bên dưới để tự động tính điểm xếp hạng Tier của bạn!
-            </p>
-            
-            <div className="pt-6 space-y-3">
-              <button
-                type="button"
-                onClick={() => handleCompleteOnboarding(true)}
-                className="flex h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 font-display text-xs font-black text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:scale-[1.02] active:scale-98 transition-all cursor-pointer gap-2 uppercase tracking-wider"
-              >
-                <Sparkles className="h-4 w-4" /> Làm Khảo Sát Định Hướng Ngay (Lên Tier)
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => handleCompleteOnboarding(false)}
-                className="flex h-12 w-full items-center justify-center rounded-xl border border-white/10 bg-transparent font-display text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white transition-all cursor-pointer gap-1.5"
-              >
-                Để sau, vào thẳng Dashboard <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 6: ORIENTATION SURVEY (Single Question Card UI, zero scroll) */}
-        {step === 6 && (
           <div className="space-y-6 animate-in fade-in duration-300 max-w-2xl mx-auto py-2">
             
+            {/* Header: Question indicator & Inner survey progress */}
+            <div className="flex justify-between items-center pb-2 border-b border-white/5">
+              <div>
+                <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">
+                  Định Hướng AI
+                </span>
+                <h4 className="text-[12px] font-bold text-slate-300 mt-0.5">
+                  Câu hỏi {activeSurveyQIdx + 1} / {SURVEY_QUESTIONS.length}
+                </h4>
+              </div>
+              <div className="text-[9px] font-bold text-slate-500 bg-white/5 px-2 py-0.5 rounded">
+                Đã trả lời: {Object.keys(surveyAnswers).length} / {SURVEY_QUESTIONS.length}
+              </div>
+            </div>
+
             {/* Centered Question Box */}
             <div className="rounded-2xl border border-white/5 bg-[#03050c]/40 p-6 space-y-5 text-center">
               <span className="inline-block text-[9px] font-bold text-slate-500 uppercase tracking-wider">Năng lực ứng xử & Định hướng</span>
@@ -1956,20 +1838,8 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
                   if (activeSurveyQIdx > 0) {
                     setActiveSurveyQIdx(prev => prev - 1);
                   } else {
-                    // Go back to Step 5 or History
-                    const stored = localStorage.getItem("vnp_talent_profile");
-                    let isOnboarded = false;
-                    if (stored) {
-                      try {
-                        const profile = JSON.parse(stored);
-                        if (profile.isOnboarded) isOnboarded = true;
-                      } catch (e) {}
-                    }
-                    if (isOnboarded && historyList.length > 0) {
-                      setShowHistoryDashboard(true);
-                    } else {
-                      setStep(5);
-                    }
+                    // Go back to Step 4
+                    setStep(4);
                   }
                 }}
                 className="flex h-9 items-center justify-center rounded-lg border border-white/10 px-4 text-[10px] font-bold text-slate-400 hover:text-white transition-all gap-1"
@@ -1977,44 +1847,29 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
                 <ArrowLeft className="h-3 w-3" /> Quay Lại
               </button>
 
-              {activeSurveyQIdx < SURVEY_QUESTIONS.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (activeSurveyQIdx < SURVEY_QUESTIONS.length - 1) {
-                      setActiveSurveyQIdx(prev => prev + 1);
-                    }
-                  }}
-                  disabled={surveyAnswers[activeQuestion.id] === undefined}
-                  className={cn(
-                    "flex h-9 items-center justify-center rounded-lg px-4 text-[10px] font-bold transition-all gap-1",
-                    surveyAnswers[activeQuestion.id] !== undefined
-                      ? "bg-white/10 hover:bg-white/15 text-white animate-pulse"
-                      : "bg-slate-800 text-slate-600 cursor-not-allowed opacity-40"
-                  )}
-                >
-                  Tiếp Theo <ArrowRight className="h-3 w-3" />
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={!isStepValid()}
-                  className={cn(
-                    "flex h-9 items-center justify-center rounded-lg px-4 text-[10px] font-black transition-all gap-1 shadow-lg",
-                    isStepValid()
-                      ? "bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 text-slate-950 hover:brightness-105 active:scale-98"
-                      : "bg-slate-800 text-slate-500 cursor-not-allowed opacity-40"
-                  )}
-                >
-                  Hoàn Thành <Sparkles className="h-3 w-3" />
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => {
+                  if (activeSurveyQIdx < SURVEY_QUESTIONS.length - 1) {
+                    setActiveSurveyQIdx(prev => prev + 1);
+                  }
+                }}
+                disabled={surveyAnswers[activeQuestion.id] === undefined}
+                className={cn(
+                  "flex h-9 items-center justify-center rounded-lg px-4 text-[10px] font-bold transition-all gap-1",
+                  surveyAnswers[activeQuestion.id] !== undefined
+                    ? "bg-white/10 hover:bg-white/15 text-white"
+                    : "bg-slate-800 text-slate-600 cursor-not-allowed opacity-40"
+                )}
+              >
+                Tiếp Theo <ArrowRight className="h-3 w-3" />
+              </button>
             </div>
 
           </div>
         )}
 
-        {/* Global Navigation Action Bar (For onboarding steps 1, 2, 3, 4) */}
+        {/* Global Navigation Action Bar (Except Step 5 which has its own) */}
         {step < 5 && (
           <div className="flex gap-3 pt-5 border-t border-white/5">
             {step > 1 && (
@@ -2039,6 +1894,24 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
               )}
             >
               Tiếp Tục <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Final Submit action button container at Step 5 */}
+        {step === 5 && (
+          <div className="flex justify-center pt-2">
+            <button
+              type="submit"
+              disabled={!isStepValid()}
+              className={cn(
+                "flex h-11 w-full max-w-xs items-center justify-center rounded-xl font-display text-[11px] font-bold transition-all gap-1.5 shadow-lg",
+                isStepValid()
+                  ? "bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 text-slate-950 hover:brightness-105 active:scale-98"
+                  : "bg-slate-800 text-slate-500 cursor-not-allowed opacity-50"
+              )}
+            >
+              Hoàn Thành Khảo Sát & Xem Kết Quả <Sparkles className="h-3.5 w-3.5" />
             </button>
           </div>
         )}
