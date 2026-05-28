@@ -1,50 +1,146 @@
 "use client";
 
-import { Bell, Search } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Bell, ChevronDown, Crown, LogOut, Search, UserCircle } from "lucide-react";
+
+type AuthUser = {
+  name: string;
+  email: string;
+  type: "talent" | "brand" | "agency";
+  status: string;
+};
+
+function getApiBaseUrl() {
+  return (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/$/, "");
+}
+
+function getUserLabel(user: AuthUser | null) {
+  if (!user) {
+    return {
+      name: "Nguyễn Mai Anh",
+      subtitle: "Tier A",
+    };
+  }
+
+  return {
+    name: user.name,
+    subtitle: user.type === "talent" ? "Talent" : user.type === "agency" ? "Agency" : "Brand",
+  };
+}
 
 export default function Header() {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [user] = useState<AuthUser | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const stored = window.localStorage.getItem("onstagevn_auth_user");
+    if (!stored) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(stored) as AuthUser;
+    } catch {
+      window.localStorage.removeItem("onstagevn_auth_user");
+      return null;
+    }
+  });
+  const label = getUserLabel(user);
+
+  async function handleLogout() {
+    const token = localStorage.getItem("onstagevn_auth_token");
+
+    if (token) {
+      try {
+        await fetch(`${getApiBaseUrl()}/auth/logout`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch {
+        // Local logout still clears the browser session when API is offline.
+      }
+    }
+
+    localStorage.removeItem("onstagevn_auth_token");
+    localStorage.removeItem("onstagevn_auth_user");
+    router.push("/auth/login");
+  }
+
   return (
-    <header className="sticky top-0 z-50 hidden md:flex h-16 shrink-0 items-center justify-between border-b border-white/5 bg-[#070913]/80 px-8 backdrop-blur-md">
-      {/* Logo Section */}
-      <div className="flex items-center gap-3 w-64 shrink-0">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-b from-[#141830] to-[#0a0c1a] border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-          <span className="text-xl">👑</span>
+    <header className="sticky top-0 z-50 hidden h-16 shrink-0 items-center justify-between border-b border-white/5 bg-[#070913]/80 px-8 backdrop-blur-md md:flex">
+      <div className="flex w-64 shrink-0 items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-500/30 bg-gradient-to-b from-[#141830] to-[#0a0c1a] shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+          <Crown className="h-5 w-5 text-amber-300" />
         </div>
         <div>
-          <h1 className="text-xl font-display font-black tracking-widest leading-none text-white">
+          <h1 className="font-display text-xl font-black leading-none tracking-widest text-white">
             <span className="text-gradient-gold">Onstage</span>VN
           </h1>
         </div>
       </div>
 
-      {/* Searchbox */}
-      <div className="flex-1 flex items-center gap-4 max-w-md ml-4">
+      <div className="ml-4 flex max-w-md flex-1 items-center gap-4">
         <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           <input
             type="text"
             placeholder="Tìm kiếm tài năng, chiến dịch, giao dịch..."
-            className="w-full rounded-xl border border-white/5 bg-slate-900/30 py-2 pl-9 pr-4 text-xs text-white focus:border-amber-400/50 focus:outline-none focus:bg-slate-900/50 transition-all"
+            className="w-full rounded-xl border border-white/5 bg-slate-900/30 py-2 pl-9 pr-4 text-xs text-white transition-all focus:border-amber-400/50 focus:bg-slate-900/50 focus:outline-none"
           />
         </div>
       </div>
 
-      {/* Notifications & Profile */}
       <div className="flex items-center gap-6">
-        <button className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/5 bg-slate-900/30 text-slate-400 hover:text-white transition-colors">
+        <button className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/5 bg-slate-900/30 text-slate-400 transition-colors hover:text-white">
           <Bell className="h-4.5 w-4.5" />
-          <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-red-500" />
+          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
         </button>
-        <div className="flex items-center gap-3 border-l border-white/5 pl-6">
-          <img
-            src="/avatar.png"
-            alt="Profile avatar"
-            className="h-9 w-9 rounded-full object-cover border border-amber-400/30"
-          />
-          <div className="text-left">
-            <span className="block text-xs font-bold text-white">Nguyễn Mai Anh</span>
-            <span className="block text-[10px] text-slate-500">Tier A</span>
-          </div>
+
+        <div className="relative border-l border-white/5 pl-6">
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            className="flex items-center gap-3 rounded-xl px-2 py-1 text-left transition-colors hover:bg-white/5"
+          >
+            <img
+              src="/avatar.png"
+              alt="Profile avatar"
+              className="h-9 w-9 rounded-full border border-amber-400/30 object-cover"
+            />
+            <div>
+              <span className="block text-xs font-bold text-white">{label.name}</span>
+              <span className="block text-[10px] text-slate-500">{label.subtitle}</span>
+            </div>
+            <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform ${open ? "rotate-180" : ""}`} />
+          </button>
+
+          {open && (
+            <div className="absolute right-0 top-12 w-64 rounded-xl border border-white/10 bg-[#080b16] p-2 shadow-2xl">
+              <div className="flex items-center gap-3 rounded-lg px-3 py-3">
+                <UserCircle className="h-9 w-9 text-amber-300" />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-white">{label.name}</p>
+                  <p className="truncate text-xs text-slate-500">{user?.email ?? "Tài khoản demo"}</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/10 hover:text-red-100"
+              >
+                <LogOut className="h-4 w-4" />
+                Đăng xuất
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

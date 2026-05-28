@@ -1,6 +1,5 @@
 "use client";
 
-import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/header";
@@ -8,22 +7,16 @@ import Sidebar from "@/components/sidebar";
 import { usePathname } from "next/navigation";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-sans",
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const isGateway = pathname === "/";
+  const isPublic = pathname === "/" || pathname.startsWith("/auth");
 
   return (
-    <html lang="vi" className={`${inter.variable} h-full dark antialiased`} style={{ colorScheme: "dark" }}>
+    <html lang="vi" className="h-full dark antialiased" style={{ colorScheme: "dark" }}>
       <body className="h-full bg-[#03050c] text-slate-100 font-sans selection:bg-amber-500/30 selection:text-amber-200">
         <ThemeProvider>
           <div className="flex flex-col h-screen w-full relative overflow-x-hidden">
@@ -33,13 +26,13 @@ export default function RootLayout({
             <div className="absolute bottom-[-10%] left-[-10%] -z-10 h-[700px] w-[700px] rounded-full bg-purple-600/5 blur-[160px] pointer-events-none" />
 
             {/* DESKTOP TOP BAR (Full width header at the top) */}
-            {!isGateway && <Header />}
+            {!isPublic && <Header />}
 
             {/* Bottom Section: Sidebar + Main Content */}
             <div className="flex flex-1 min-h-0 relative">
 
               {/* DESKTOP SIDEBAR */}
-              <Sidebar />
+              {!isPublic && <Sidebar />}
 
               {/* MAIN APP CONTENT */}
               <div className="flex-1 flex flex-col min-h-0">
@@ -54,7 +47,7 @@ export default function RootLayout({
             </div>
 
             {/* Mobile Bottom Navigation menu */}
-            <BottomNavigation />
+            {!isPublic && <BottomNavigation />}
           </div>
         </ThemeProvider>
       </body>

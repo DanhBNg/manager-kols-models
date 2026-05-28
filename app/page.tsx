@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { User, Briefcase, Crown, Sparkles, Star } from "lucide-react";
+import { User, Briefcase, Crown, Sparkles, Star, LogIn, UserPlus } from "lucide-react";
 
 export default function RootGatewayPage() {
   return (
@@ -32,6 +32,22 @@ export default function RootGatewayPage() {
         <p className="mx-auto max-w-md text-xs leading-relaxed text-slate-400 font-medium">
           Nền tảng công nghệ tối tân giúp kiến tạo hồ sơ số chuyên nghiệp, định hướng AI và tự động kết nối nhãn hàng cho các thế hệ tài năng sắc đẹp.
         </p>
+        <div className="flex items-center justify-center gap-3 pt-4">
+          <Link
+            href="/auth/login"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-slate-950/40 px-4 text-xs font-bold uppercase tracking-wider text-slate-200 transition-colors hover:border-amber-400/40 hover:text-amber-300"
+          >
+            <LogIn className="h-4 w-4" />
+            Đăng nhập
+          </Link>
+          <Link
+            href="/auth/register"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 px-4 text-xs font-bold uppercase tracking-wider text-slate-950 shadow-[0_4px_18px_rgba(245,158,11,0.18)]"
+          >
+            <UserPlus className="h-4 w-4" />
+            Đăng ký
+          </Link>
+        </div>
       </div>
 
       {/* Grid of Portals with luxury styling */}
