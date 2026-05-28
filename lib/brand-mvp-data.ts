@@ -3,20 +3,51 @@ export type TalentProfile = {
   name: string;
   type: string;
   city: string;
+  district: string;
   gender: string;
   age: number;
   height: number;
+  weight: number;
+  bust: number;
+  waist: number;
+  hips: number;
+  skinTone: string;
+  hairColor: string;
+  yearsOfExperience: number;
   tier: "A" | "B" | "C";
   verified: boolean;
+  rating: number;
+  completedJobs: number;
+  responseRate: number;
+  followersCount: number;
   followers: string;
+  engagementRate: number;
+  platforms: string[];
+  rateValue: number;
   rate: string;
+  rateUnit: string;
   avatar: string;
   cover: string;
+  fullBodyImage: string;
   skills: string[];
   experience: string;
   portfolio: string[];
   availability: string;
+  availabilityDates: string[];
   completion: number;
+  matchScore: number;
+  reliability: number;
+  education: string;
+  languages: string[];
+  rateCard: Record<string, number>;
+};
+
+export type CampaignStage = "new" | "shortlisted" | "interview" | "accepted" | "confirmed";
+
+export type CampaignTalent = {
+  talentId: string;
+  stage: CampaignStage;
+  note: string;
 };
 
 export type Campaign = {
@@ -24,14 +55,21 @@ export type Campaign = {
   title: string;
   jobType: string;
   city: string;
+  address: string;
   startDate: string;
   endDate: string;
+  deadline: string;
   talentQuantity: number;
   budget: string;
+  budgetValue: number;
+  benefits: string;
   status: "draft" | "published" | "closed";
   shortlistedTalentIds: string[];
+  applicants: CampaignTalent[];
   contactRequests: number;
   description: string;
+  requirements: string;
+  views: number;
 };
 
 export const partnerProfile = {
@@ -52,100 +90,236 @@ export const talents: TalentProfile[] = [
     name: "Nguyễn Mai Anh",
     type: "KOL",
     city: "Hà Nội",
+    district: "Ba Đình",
     gender: "Nữ",
     age: 24,
     height: 172,
+    weight: 51,
+    bust: 85,
+    waist: 60,
+    hips: 90,
+    skinTone: "Sáng",
+    hairColor: "Nâu đen",
+    yearsOfExperience: 3,
     tier: "A",
     verified: true,
+    rating: 4.9,
+    completedJobs: 18,
+    responseRate: 96,
+    followersCount: 120000,
     followers: "120K",
+    engagementRate: 4.8,
+    platforms: ["TikTok", "Instagram", "Facebook"],
+    rateValue: 8000000,
     rate: "từ 8.000.000đ",
+    rateUnit: "dự án",
     avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&h=500&q=80",
-    cover: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=900&q=80",
-    skills: ["Livestream", "MC", "Beauty review"],
+    cover: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80",
+    fullBodyImage: "/fullbody_model.png",
+    skills: ["Livestream", "MC", "Beauty review", "Social content"],
     experience: "3 năm làm KOL ngành mỹ phẩm, từng tham gia hơn 20 chiến dịch social commerce.",
     portfolio: ["Beauty Mega Live", "Organic Glow Launch", "Summer Makeup Lookbook"],
     availability: "Rảnh từ 10/06 đến 20/06",
+    availabilityDates: ["2026-06-10", "2026-06-15", "2026-06-17"],
     completion: 94,
+    matchScore: 98,
+    reliability: 96,
+    education: "Cử nhân Học viện Ngoại giao",
+    languages: ["Tiếng Việt", "Tiếng Anh IELTS 7.5"],
+    rateCard: {
+      "TikTok Video": 5000000,
+      "Livestream 2h": 8000000,
+      "Instagram Post": 3000000,
+      "Event Appearance": 12000000,
+    },
   },
   {
     id: "tal-2",
     name: "Khánh Linh",
     type: "Model",
     city: "TP. Hồ Chí Minh",
+    district: "Quận 1",
     gender: "Nữ",
     age: 22,
     height: 175,
+    weight: 53,
+    bust: 83,
+    waist: 59,
+    hips: 89,
+    skinTone: "Trung tính",
+    hairColor: "Đen",
+    yearsOfExperience: 4,
     tier: "B",
     verified: true,
+    rating: 4.8,
+    completedJobs: 22,
+    responseRate: 91,
+    followersCount: 85000,
     followers: "85K",
+    engagementRate: 5.2,
+    platforms: ["Instagram", "TikTok"],
+    rateValue: 5500000,
     rate: "từ 5.500.000đ",
+    rateUnit: "ngày",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&h=500&q=80",
-    cover: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=900&q=80",
-    skills: ["Lookbook", "Runway", "Fashion video"],
+    cover: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80",
+    fullBodyImage: "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=700&q=80",
+    skills: ["Lookbook", "Runway", "Fashion video", "Pose dáng"],
     experience: "Model lookbook và runway, phù hợp thời trang, lifestyle, mỹ phẩm cao cấp.",
     portfolio: ["Summer Fashion Runway", "Minimal Lookbook Q2"],
     availability: "Rảnh cuối tuần",
+    availabilityDates: ["2026-06-15", "2026-06-16", "2026-06-22"],
     completion: 88,
+    matchScore: 95,
+    reliability: 94,
+    education: "Cao đẳng Nghệ thuật",
+    languages: ["Tiếng Việt", "Tiếng Anh giao tiếp"],
+    rateCard: {
+      "Lookbook 1 ngày": 5500000,
+      "Runway show": 9000000,
+      "Fashion video": 7000000,
+    },
   },
   {
     id: "tal-3",
     name: "Lê Ngọc Hân",
     type: "MC",
     city: "TP. Hồ Chí Minh",
+    district: "Quận 3",
     gender: "Nữ",
     age: 27,
     height: 170,
+    weight: 50,
+    bust: 86,
+    waist: 61,
+    hips: 91,
+    skinTone: "Sáng",
+    hairColor: "Nâu",
+    yearsOfExperience: 5,
     tier: "A",
     verified: true,
+    rating: 4.9,
+    completedJobs: 31,
+    responseRate: 88,
+    followersCount: 240000,
     followers: "240K",
+    engagementRate: 3.9,
+    platforms: ["Facebook", "Instagram"],
+    rateValue: 12000000,
     rate: "từ 12.000.000đ",
+    rateUnit: "sự kiện",
     avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=500&h=500&q=80",
-    cover: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=900&q=80",
-    skills: ["MC event", "Public speaking", "Interview"],
+    cover: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
+    fullBodyImage: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=700&q=80",
+    skills: ["MC event", "Public speaking", "Interview", "Brand ambassador"],
     experience: "MC sự kiện và đại sứ thương hiệu, mạnh về beauty, lifestyle và talkshow.",
     portfolio: ["Organic Glow Cosmetics", "Beauty Talk Live"],
     availability: "Cần đặt lịch trước 7 ngày",
+    availabilityDates: ["2026-06-17", "2026-06-18", "2026-06-25"],
     completion: 96,
+    matchScore: 92,
+    reliability: 98,
+    education: "Cử nhân Báo chí truyền thông",
+    languages: ["Tiếng Việt", "Tiếng Anh trôi chảy"],
+    rateCard: {
+      "MC nửa ngày": 12000000,
+      "MC cả ngày": 18000000,
+      "Brand talkshow": 15000000,
+    },
   },
   {
     id: "tal-4",
     name: "Trần Thu Thảo",
     type: "PG",
     city: "Hà Nội",
+    district: "Cầu Giấy",
     gender: "Nữ",
     age: 21,
     height: 168,
+    weight: 48,
+    bust: 84,
+    waist: 58,
+    hips: 88,
+    skinTone: "Sáng",
+    hairColor: "Đen",
+    yearsOfExperience: 2,
     tier: "C",
     verified: false,
+    rating: 4.6,
+    completedJobs: 9,
+    responseRate: 82,
+    followersCount: 36000,
     followers: "36K",
+    engagementRate: 4.5,
+    platforms: ["TikTok", "Facebook"],
+    rateValue: 3000000,
     rate: "từ 3.000.000đ",
+    rateUnit: "ngày",
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=500&h=500&q=80",
-    cover: "https://images.unsplash.com/photo-1493655161922-ef98929de9d8?auto=format&fit=crop&w=900&q=80",
-    skills: ["PG event", "Activation", "Sampling"],
+    cover: "https://images.unsplash.com/photo-1493655161922-ef98929de9d8?auto=format&fit=crop&w=1200&q=80",
+    fullBodyImage: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=80",
+    skills: ["PG event", "Activation", "Sampling", "Booth staff"],
     experience: "PG activation tại trung tâm thương mại, phù hợp event ngắn ngày.",
     portfolio: ["Mall Activation", "Sampling FMCG"],
     availability: "Rảnh theo ca",
+    availabilityDates: ["2026-06-15", "2026-06-16", "2026-06-17"],
     completion: 72,
+    matchScore: 86,
+    reliability: 89,
+    education: "Sinh viên truyền thông",
+    languages: ["Tiếng Việt"],
+    rateCard: {
+      "PG theo ca": 1500000,
+      "PG cả ngày": 3000000,
+      "Activation 2 ngày": 5500000,
+    },
   },
   {
     id: "tal-5",
     name: "Phạm Minh Anh",
     type: "Dancer",
     city: "Đà Nẵng",
+    district: "Hải Châu",
     gender: "Nữ",
     age: 23,
     height: 166,
+    weight: 49,
+    bust: 82,
+    waist: 60,
+    hips: 88,
+    skinTone: "Trung tính",
+    hairColor: "Nâu sáng",
+    yearsOfExperience: 4,
     tier: "B",
     verified: true,
+    rating: 4.7,
+    completedJobs: 16,
+    responseRate: 90,
+    followersCount: 62000,
     followers: "62K",
+    engagementRate: 4.9,
+    platforms: ["TikTok", "Instagram"],
+    rateValue: 4500000,
     rate: "từ 4.500.000đ",
+    rateUnit: "show",
     avatar: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=500&h=500&q=80",
-    cover: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80",
+    cover: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
+    fullBodyImage: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=80",
     skills: ["Dance performance", "Choreography", "TikTok video"],
     experience: "Dancer biểu diễn event, viral challenge và video ngắn cho nhãn hàng.",
     portfolio: ["Dance Challenge Launch", "Music Event"],
     availability: "Rảnh tháng 06/2026",
+    availabilityDates: ["2026-06-20", "2026-06-21", "2026-06-22"],
     completion: 84,
+    matchScore: 84,
+    reliability: 92,
+    education: "Đào tạo biểu diễn chuyên nghiệp",
+    languages: ["Tiếng Việt", "Tiếng Anh cơ bản"],
+    rateCard: {
+      "Dance performance": 4500000,
+      "Choreography": 7000000,
+      "TikTok challenge": 6000000,
+    },
   },
 ];
 
@@ -157,42 +331,72 @@ export const campaigns: Campaign[] = [
     title: "Beauty Mega Live 06/2026",
     jobType: "KOL livestream",
     city: "Hà Nội",
+    address: "Studio Ba Đình, Hà Nội",
     startDate: "2026-06-10",
     endDate: "2026-06-20",
+    deadline: "2026-06-05",
     talentQuantity: 5,
     budget: "50.000.000đ - 80.000.000đ",
+    budgetValue: 80000000,
+    benefits: "Hỗ trợ makeup, trang phục, ăn nhẹ tại studio",
     status: "published",
     shortlistedTalentIds: ["tal-1", "tal-3"],
+    applicants: [
+      { talentId: "tal-1", stage: "shortlisted", note: "Phù hợp beauty livestream" },
+      { talentId: "tal-3", stage: "interview", note: "Cần kiểm tra lịch quay" },
+      { talentId: "tal-4", stage: "new", note: "Backup PG hỗ trợ set quay" },
+    ],
     contactRequests: 2,
+    views: 420,
     description: "Tìm KOL beauty livestream giới thiệu dòng sản phẩm mới, ưu tiên có kinh nghiệm review mỹ phẩm.",
+    requirements: "Nữ 20-28 tuổi, có TikTok/Instagram hoạt động tốt, nói chuyện tự nhiên trước camera.",
   },
   {
     id: "camp-2",
     title: "Lookbook Summer Fashion",
     jobType: "Model lookbook",
     city: "TP. Hồ Chí Minh",
+    address: "Studio Quận 1, TP. Hồ Chí Minh",
     startDate: "2026-07-01",
     endDate: "2026-07-03",
+    deadline: "2026-06-20",
     talentQuantity: 3,
     budget: "25.000.000đ - 40.000.000đ",
+    budgetValue: 40000000,
+    benefits: "Có ekip styling, ảnh portfolio sau buổi chụp",
     status: "draft",
     shortlistedTalentIds: ["tal-2"],
+    applicants: [
+      { talentId: "tal-2", stage: "shortlisted", note: "Phù hợp chiều cao và phong cách" },
+    ],
     contactRequests: 0,
+    views: 180,
     description: "Chụp lookbook thời trang hè, cần model nữ cao từ 170cm, phong cách clean, luxury.",
+    requirements: "Nữ 18-26 tuổi, cao từ 170cm, có kinh nghiệm lookbook hoặc runway.",
   },
   {
     id: "camp-3",
     title: "PG Event Khai Trương",
     jobType: "PG event",
     city: "Hà Nội",
+    address: "Trung tâm thương mại Cầu Giấy",
     startDate: "2026-06-25",
     endDate: "2026-06-26",
+    deadline: "2026-06-18",
     talentQuantity: 8,
     budget: "18.000.000đ - 30.000.000đ",
+    budgetValue: 30000000,
+    benefits: "Ăn trưa, đồng phục, hỗ trợ di chuyển nội thành",
     status: "closed",
     shortlistedTalentIds: ["tal-4"],
+    applicants: [
+      { talentId: "tal-4", stage: "confirmed", note: "Đã xác nhận ca sáng" },
+      { talentId: "tal-5", stage: "accepted", note: "Chờ xác nhận di chuyển" },
+    ],
     contactRequests: 1,
+    views: 260,
     description: "Cần PG cho sự kiện khai trương, làm theo ca, ưu tiên có kinh nghiệm activation.",
+    requirements: "Nữ 18-25 tuổi, giao tiếp tốt, có thể đứng booth 4-6 tiếng.",
   },
 ];
 
@@ -219,4 +423,8 @@ export const contactRequests = [
     createdAt: "2026-05-20",
   },
 ];
+
+export function findTalentById(id: string) {
+  return talents.find((talent) => talent.id === id);
+}
 

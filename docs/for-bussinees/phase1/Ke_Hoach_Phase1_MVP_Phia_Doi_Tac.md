@@ -1113,3 +1113,26 @@ Khi vòng lặp này chạy được, hệ thống sẽ có dữ liệu thật �
 - Có đủ tín hiệu để mở monetization ở Phase 2 hay không.
 
 Đây là nền tảng cần thiết trước khi mở rộng sang escrow, agency management, AI matching và payment workflow đầy đủ.
+
+## 17. Cập nhật theo UI_Brand_Phase1
+
+Tài liệu `UI_Brand_Phase1.md` làm rõ rằng phía đối tác không chỉ cần dashboard đơn giản, mà cần một workspace tuyển dụng thiên về desktop với 2 luồng chính:
+
+1. **Chủ động tìm kiếm talent (headhunting)**: đối tác dùng bộ lọc mạnh để tìm đúng người theo nhân khẩu học, ngoại hình, chuyên môn, social, lịch rảnh, ngân sách và chất lượng hồ sơ.
+2. **Đăng campaign/job posting**: đối tác tạo nhu cầu tuyển dụng, quản lý shortlist/ứng viên theo trạng thái và gửi yêu cầu liên hệ.
+
+Vì vậy, Phase 1 UI cần chỉnh theo các điểm bắt buộc sau:
+
+- `/brand/discover` phải là màn tìm kiếm chính, có filter sidebar rõ ràng, kết quả dạng card/table, có nút `Xem hồ sơ`, `Lưu`, `Liên hệ`.
+- Nút `Xem hồ sơ` không mở drawer ngắn nữa, mà đi tới route riêng `/brand/talents/[id]`.
+- `/brand/talents/[id]` là trang xem hồ sơ talent ở phía brand. Trang này có thể dùng cấu trúc giàu thông tin giống `/talent/portfolio`, nhưng phải ẩn/sửa các hành động của talent owner. Đối tác chỉ được xem hồ sơ, lưu shortlist, so sánh và gửi yêu cầu liên hệ.
+- `/brand/shortlists` cần hỗ trợ danh sách đã lưu, ghi chú nội bộ, gắn vào campaign và so sánh nhanh nhiều talent.
+- `/brand/campaigns` cần thể hiện job posting và ATS ở mức MVP: draft/published/closed, danh sách ứng viên theo stage `new`, `shortlisted`, `interview`, `accepted`, `confirmed`.
+- Các tính năng nâng cao trong `UI_Brand_Phase1.md` như team collaboration, analytics sâu, smart matching tự động, export PDF/Excel, email/SMS automation được ghi nhận là hướng phát triển sau MVP nếu chưa đủ thời gian.
+
+Tiêu chí nghiệm thu UI cập nhật:
+
+- Từ `/brand/discover`, đối tác bấm `Xem hồ sơ` và được chuyển sang `/brand/talents/[id]`.
+- Trang `/brand/talents/[id]` không điều hướng sang portal talent, không dùng quyền/tác vụ của talent, và có CTA dành cho brand.
+- Đối tác có thể quay lại màn tìm kiếm mà không mất định hướng.
+- Các màn Brand ưu tiên desktop/laptop, hiển thị đủ thông tin để ra quyết định tuyển dụng nhanh.

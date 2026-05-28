@@ -1,31 +1,44 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Briefcase,
   Calendar,
   CheckCircle2,
   ChevronRight,
+  Clock,
   MapPin,
   Plus,
-  Send,
   Users,
   X,
 } from "lucide-react";
-import { campaigns as initialCampaigns, talents, type Campaign } from "@/lib/brand-mvp-data";
+import { campaigns as initialCampaigns, talents, type Campaign, type CampaignStage } from "@/lib/brand-mvp-data";
 import { cn } from "@/lib/utils";
 
 type CampaignStatusTab = "all" | Campaign["status"];
+
+const stageLabels: Record<CampaignStage, string> = {
+  new: "Mới",
+  shortlisted: "Shortlist",
+  interview: "Phỏng vấn",
+  accepted: "Đã chọn",
+  confirmed: "Đã xác nhận",
+};
 
 const emptyForm = {
   title: "",
   jobType: "KOL livestream",
   city: "Hà Nội",
+  address: "",
   startDate: "2026-06-15",
   endDate: "2026-06-30",
+  deadline: "2026-06-10",
   talentQuantity: "3",
   budget: "20.000.000đ - 40.000.000đ",
+  benefits: "",
+  requirements: "",
   description: "",
 };
 
@@ -36,6 +49,7 @@ function statusLabel(status: Campaign["status"]) {
 }
 
 export default function CampaignsPage() {
+  const router = useRouter();
   const [campaigns, setCampaigns] = useState<Campaign[]>(initialCampaigns);
   const [activeTab, setActiveTab] = useState<CampaignStatusTab>("all");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
@@ -55,6 +69,20 @@ export default function CampaignsPage() {
     if (updatedSelected) setSelectedCampaign(updatedSelected);
   }
 
+  function moveApplicant(campaignId: string, talentId: string, stage: CampaignStage) {
+    const nextCampaigns = campaigns.map((campaign) => {
+      if (campaign.id !== campaignId) return campaign;
+      return {
+        ...campaign,
+        applicants: campaign.applicants.map((item) => item.talentId === talentId ? { ...item, stage } : item),
+      };
+    });
+
+    setCampaigns(nextCampaigns);
+    const updatedSelected = nextCampaigns.find((campaign) => campaign.id === campaignId);
+    if (updatedSelected) setSelectedCampaign(updatedSelected);
+  }
+
   function handleCreateCampaign(event: React.FormEvent) {
     event.preventDefault();
 
@@ -63,14 +91,21 @@ export default function CampaignsPage() {
       title: form.title || "Campaign mới",
       jobType: form.jobType,
       city: form.city,
+      address: form.address || form.city,
       startDate: form.startDate,
       endDate: form.endDate,
+      deadline: form.deadline,
       talentQuantity: Number(form.talentQuantity) || 1,
       budget: form.budget,
+      budgetValue: 40000000,
+      benefits: form.benefits || "Thỏa thuận theo brief",
       status: "draft",
       shortlistedTalentIds: [],
+      applicants: [],
       contactRequests: 0,
+      views: 0,
       description: form.description || "Chưa có mô tả brief.",
+      requirements: form.requirements || "Chưa có yêu cầu chi tiết.",
     };
 
     setCampaigns((current) => [newCampaign, ...current]);
@@ -89,16 +124,11 @@ export default function CampaignsPage() {
   }
 
   if (selectedCampaign) {
-    const shortlistedTalents = talents.filter((talent) => selectedCampaign.shortlistedTalentIds.includes(talent.id));
-
     return (
       <div className="space-y-6 pb-16">
         <section className="flex flex-col gap-4 border-b border-white/5 pb-5 md:flex-row md:items-start md:justify-between">
           <div className="flex gap-3">
-            <button
-              onClick={() => setSelectedCampaign(null)}
-              className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/5 bg-slate-900/30 text-slate-400 hover:text-white"
-            >
+            <button onClick={() => setSelectedCampaign(null)} className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/5 bg-slate-900/30 text-slate-400 hover:text-white">
               <ArrowLeft className="h-4 w-4" />
             </button>
             <div>
@@ -118,106 +148,116 @@ export default function CampaignsPage() {
 
           <div className="flex flex-wrap gap-2">
             {selectedCampaign.status === "draft" && (
-              <button
-                onClick={() => updateCampaignStatus(selectedCampaign.id, "published")}
-                className="flex h-10 items-center rounded-xl bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 px-4 text-xs font-black text-slate-950"
-              >
+              <button onClick={() => updateCampaignStatus(selectedCampaign.id, "published")} className="flex h-10 items-center rounded-xl bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 px-4 text-xs font-black text-slate-950">
                 <CheckCircle2 className="mr-2 h-4 w-4" />
                 Publish
               </button>
             )}
             {selectedCampaign.status !== "closed" && (
-              <button
-                onClick={() => updateCampaignStatus(selectedCampaign.id, "closed")}
-                className="flex h-10 items-center rounded-xl border border-white/10 bg-white/[0.03] px-4 text-xs font-black text-white hover:bg-white/10"
-              >
+              <button onClick={() => updateCampaignStatus(selectedCampaign.id, "closed")} className="flex h-10 items-center rounded-xl border border-white/10 bg-white/[0.03] px-4 text-xs font-black text-white hover:bg-white/10">
                 Đóng campaign
               </button>
             )}
           </div>
         </section>
 
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-4">
-            <MapPin className="mb-3 h-5 w-5 text-amber-300" />
-            <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">Khu vực</span>
-            <span className="text-sm font-black text-white">{selectedCampaign.city}</span>
-          </div>
-          <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-4">
-            <Calendar className="mb-3 h-5 w-5 text-cyan-300" />
-            <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">Thời gian</span>
-            <span className="text-sm font-black text-white">{selectedCampaign.startDate} - {selectedCampaign.endDate}</span>
-          </div>
-          <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-4">
-            <Users className="mb-3 h-5 w-5 text-emerald-300" />
-            <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">Cần tuyển</span>
-            <span className="text-sm font-black text-white">{selectedCampaign.talentQuantity} talent</span>
-          </div>
-          <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-4">
-            <Send className="mb-3 h-5 w-5 text-rose-300" />
-            <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">Yêu cầu liên hệ</span>
-            <span className="text-sm font-black text-white">{selectedCampaign.contactRequests}</span>
-          </div>
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-5">
+          {[
+            { label: "Địa điểm", value: selectedCampaign.address, icon: MapPin, color: "text-amber-300" },
+            { label: "Thời gian", value: `${selectedCampaign.startDate} - ${selectedCampaign.endDate}`, icon: Calendar, color: "text-cyan-300" },
+            { label: "Deadline", value: selectedCampaign.deadline, icon: Clock, color: "text-purple-300" },
+            { label: "Ứng viên", value: `${selectedCampaign.applicants.length}/${selectedCampaign.talentQuantity}`, icon: Users, color: "text-emerald-300" },
+            { label: "Lượt xem", value: selectedCampaign.views.toString(), icon: Briefcase, color: "text-rose-300" },
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <div key={item.label} className="rounded-2xl border border-white/5 bg-slate-950/25 p-4">
+                <Icon className={cn("mb-3 h-5 w-5", item.color)} />
+                <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">{item.label}</span>
+                <span className="text-sm font-black text-white">{item.value}</span>
+              </div>
+            );
+          })}
         </section>
 
-        <section className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-5 lg:col-span-5">
-            <h2 className="mb-4 text-xs font-black uppercase tracking-widest text-slate-300">Brief MVP</h2>
+        <section className="grid grid-cols-1 gap-6 xl:grid-cols-12">
+          <aside className="rounded-2xl border border-white/5 bg-slate-950/25 p-5 xl:col-span-4">
+            <h2 className="mb-4 text-xs font-black uppercase tracking-widest text-slate-300">Job posting brief</h2>
             <div className="space-y-4 text-sm">
               <div>
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">Ngân sách dự kiến</span>
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">Ngân sách</span>
                 <p className="mt-1 font-black text-amber-300">{selectedCampaign.budget}</p>
               </div>
               <div>
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">Yêu cầu chính</span>
-                <p className="mt-1 leading-relaxed text-slate-300">{selectedCampaign.description}</p>
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">Yêu cầu</span>
+                <p className="mt-1 leading-relaxed text-slate-300">{selectedCampaign.requirements}</p>
+              </div>
+              <div>
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">Phúc lợi</span>
+                <p className="mt-1 leading-relaxed text-slate-300">{selectedCampaign.benefits}</p>
               </div>
               <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3 text-xs leading-relaxed text-slate-500">
-                Phase 1 chỉ ghi nhận brief, shortlist và yêu cầu liên hệ. Hợp đồng, ví, escrow và chat realtime sẽ để giai đoạn sau.
+                ATS MVP dùng stage cơ bản: Mới, Shortlist, Phỏng vấn, Đã chọn, Đã xác nhận. Chat, email/SMS automation và payment để phase sau.
               </div>
             </div>
-          </div>
+          </aside>
 
-          <div className="space-y-4 lg:col-span-7">
+          <main className="space-y-4 xl:col-span-8">
             <div className="flex items-center justify-between">
-              <h2 className="text-xs font-black uppercase tracking-widest text-slate-300">Talent trong shortlist campaign</h2>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{shortlistedTalents.length} talent</span>
+              <h2 className="text-xs font-black uppercase tracking-widest text-slate-300">Applicant tracking board</h2>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{selectedCampaign.applicants.length} ứng viên</span>
             </div>
 
-            {shortlistedTalents.length === 0 ? (
-              <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-8 text-center">
-                <Users className="mx-auto mb-3 h-8 w-8 text-slate-600" />
-                <h3 className="text-sm font-black text-white">Chưa có talent trong campaign</h3>
-                <p className="mt-2 text-xs text-slate-500">Hãy lưu talent từ Discover hoặc Shortlist rồi gắn vào campaign.</p>
-              </div>
-            ) : (
-              shortlistedTalents.map((talent) => {
-                const requestKey = `${selectedCampaign.id}-${talent.id}`;
-                const requested = sentRequests[requestKey];
-
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-5">
+              {(Object.keys(stageLabels) as CampaignStage[]).map((stage) => {
+                const items = selectedCampaign.applicants.filter((item) => item.stage === stage);
                 return (
-                  <article key={talent.id} className="flex flex-col gap-4 rounded-2xl border border-white/5 bg-slate-950/25 p-4 md:flex-row md:items-center">
-                    <img src={talent.avatar} alt={talent.name} className="h-20 w-full rounded-2xl object-cover md:w-20" />
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-sm font-black text-white">{talent.name}</h3>
-                      <p className="mt-1 text-xs text-slate-500">{talent.type} · {talent.city} · {talent.rate}</p>
+                  <div key={stage} className="min-h-52 rounded-2xl border border-white/5 bg-slate-950/25 p-3">
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stageLabels[stage]}</span>
+                      <span className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-bold text-white">{items.length}</span>
                     </div>
-                    <button
-                      onClick={() => sendContactRequest(selectedCampaign.id, talent.id)}
-                      disabled={requested}
-                      className={cn(
-                        "flex h-10 shrink-0 items-center justify-center rounded-xl px-4 text-[10px] font-black uppercase tracking-wider",
-                        requested ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-300" : "bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 text-slate-950"
-                      )}
-                    >
-                      <Send className="mr-2 h-4 w-4" />
-                      {requested ? "Đã gửi" : "Gửi liên hệ"}
-                    </button>
-                  </article>
+                    <div className="space-y-2">
+                      {items.map((item) => {
+                        const talent = talents.find((candidate) => candidate.id === item.talentId);
+                        if (!talent) return null;
+                        const requestKey = `${selectedCampaign.id}-${talent.id}`;
+                        return (
+                          <article key={item.talentId} className="rounded-xl border border-white/5 bg-slate-900/40 p-3">
+                            <button onClick={() => router.push(`/brand/talents/${talent.id}`)} className="flex w-full items-center gap-2 text-left">
+                              <img src={talent.avatar} alt={talent.name} className="h-9 w-9 rounded-lg object-cover" />
+                              <div className="min-w-0">
+                                <h3 className="truncate text-[11px] font-black text-white">{talent.name}</h3>
+                                <p className="text-[9px] text-slate-500">{talent.type} · {talent.matchScore}% match</p>
+                              </div>
+                            </button>
+                            <p className="mt-2 line-clamp-2 text-[9px] leading-relaxed text-slate-500">{item.note}</p>
+                            <div className="mt-2 flex gap-1">
+                              {stage !== "confirmed" && (
+                                <button onClick={() => moveApplicant(selectedCampaign.id, talent.id, nextStage(stage))} className="flex-1 rounded-lg bg-white/5 px-2 py-1 text-[8px] font-black uppercase text-slate-300 hover:bg-white/10">
+                                  Chuyển
+                                </button>
+                              )}
+                              <button
+                                onClick={() => sendContactRequest(selectedCampaign.id, talent.id)}
+                                disabled={sentRequests[requestKey]}
+                                className={cn(
+                                  "flex-1 rounded-lg px-2 py-1 text-[8px] font-black uppercase",
+                                  sentRequests[requestKey] ? "bg-emerald-500/10 text-emerald-300" : "bg-amber-400 text-slate-950"
+                                )}
+                              >
+                                {sentRequests[requestKey] ? "Đã gửi" : "Liên hệ"}
+                              </button>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
                 );
-              })
-            )}
-          </div>
+              })}
+            </div>
+          </main>
         </section>
       </div>
     );
@@ -229,24 +269,21 @@ export default function CampaignsPage() {
         <div>
           <div className="mb-2 flex items-center gap-2">
             <span className="rounded-md border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-amber-300">
-              Campaign MVP
+              Job posting & ATS
             </span>
-            <span className="text-[10px] font-semibold text-slate-500">Draft / Publish / Close</span>
+            <span className="text-[10px] font-semibold text-slate-500">Phase 1</span>
           </div>
           <h1 className="font-display text-2xl font-black tracking-tight text-white">
-            Quản lý <span className="bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 bg-clip-text text-transparent">campaign</span>
+            Quản lý campaign tuyển dụng
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
-            Tạo brief tuyển dụng cơ bản, theo dõi shortlist và gửi yêu cầu liên hệ cho talent phù hợp.
+            Đăng job/campaign, theo dõi ứng viên theo stage và gửi yêu cầu liên hệ.
           </p>
         </div>
 
-        <button
-          onClick={() => setIsCreating(true)}
-          className="flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 px-5 text-xs font-black text-slate-950"
-        >
+        <button onClick={() => setIsCreating(true)} className="flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 px-5 text-xs font-black text-slate-950">
           <Plus className="mr-2 h-4 w-4" />
-          Tạo campaign
+          Tạo job/campaign
         </button>
       </section>
 
@@ -257,14 +294,7 @@ export default function CampaignsPage() {
           { id: "published", label: "Đang mở" },
           { id: "closed", label: "Đã đóng" },
         ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id as CampaignStatusTab)}
-            className={cn(
-              "rounded-xl px-4 py-2 text-xs font-black transition",
-              activeTab === tab.id ? "bg-white/10 text-white" : "text-slate-500 hover:text-white"
-            )}
-          >
+          <button key={tab.id} onClick={() => setActiveTab(tab.id as CampaignStatusTab)} className={cn("rounded-xl px-4 py-2 text-xs font-black transition", activeTab === tab.id ? "bg-white/10 text-white" : "text-slate-500 hover:text-white")}>
             {tab.label}
           </button>
         ))}
@@ -276,10 +306,7 @@ export default function CampaignsPage() {
             <div>
               <div className="mb-3 flex items-start justify-between gap-3">
                 <span className="rounded bg-white/5 px-2 py-0.5 text-[9px] font-bold uppercase text-slate-400">{campaign.jobType}</span>
-                <span className={cn(
-                  "rounded px-2 py-0.5 text-[9px] font-black uppercase",
-                  campaign.status === "published" ? "bg-emerald-500/10 text-emerald-300" : campaign.status === "closed" ? "bg-slate-500/10 text-slate-400" : "bg-amber-500/10 text-amber-300"
-                )}>
+                <span className={cn("rounded px-2 py-0.5 text-[9px] font-black uppercase", campaign.status === "published" ? "bg-emerald-500/10 text-emerald-300" : campaign.status === "closed" ? "bg-slate-500/10 text-slate-400" : "bg-amber-500/10 text-amber-300")}>
                   {statusLabel(campaign.status)}
                 </span>
               </div>
@@ -288,10 +315,14 @@ export default function CampaignsPage() {
             </div>
 
             <div className="mt-5 border-t border-white/5 pt-4">
-              <div className="mb-4 grid grid-cols-3 gap-2 text-xs">
+              <div className="mb-4 grid grid-cols-4 gap-2 text-xs">
                 <div>
-                  <span className="block text-[8px] font-bold uppercase text-slate-500">Thành phố</span>
-                  <span className="font-bold text-white">{campaign.city}</span>
+                  <span className="block text-[8px] font-bold uppercase text-slate-500">Views</span>
+                  <span className="font-bold text-white">{campaign.views}</span>
+                </div>
+                <div>
+                  <span className="block text-[8px] font-bold uppercase text-slate-500">Ứng viên</span>
+                  <span className="font-bold text-white">{campaign.applicants.length}</span>
                 </div>
                 <div>
                   <span className="block text-[8px] font-bold uppercase text-slate-500">Shortlist</span>
@@ -302,11 +333,8 @@ export default function CampaignsPage() {
                   <span className="font-bold text-emerald-300">{campaign.contactRequests}</span>
                 </div>
               </div>
-              <button
-                onClick={() => setSelectedCampaign(campaign)}
-                className="flex h-10 w-full items-center justify-center rounded-xl bg-white/5 text-[10px] font-black uppercase tracking-wider text-white hover:bg-white/10"
-              >
-                Xem chi tiết <ChevronRight className="ml-1 h-3.5 w-3.5" />
+              <button onClick={() => setSelectedCampaign(campaign)} className="flex h-10 w-full items-center justify-center rounded-xl bg-white/5 text-[10px] font-black uppercase tracking-wider text-white hover:bg-white/10">
+                Xem ATS & brief <ChevronRight className="ml-1 h-3.5 w-3.5" />
               </button>
             </div>
           </article>
@@ -315,23 +343,20 @@ export default function CampaignsPage() {
 
       {isCreating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md">
-          <form onSubmit={handleCreateCampaign} className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-[#070913] p-6 shadow-2xl">
+          <form onSubmit={handleCreateCampaign} className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/10 bg-[#070913] p-6 shadow-2xl">
             <button type="button" onClick={() => setIsCreating(false)} className="absolute right-4 top-4 text-slate-400 hover:text-white">
               <X className="h-5 w-5" />
             </button>
 
             <div className="mb-5">
-              <span className="text-[10px] font-black uppercase tracking-widest text-amber-300">Campaign brief</span>
-              <h2 className="mt-1 text-lg font-black text-white">Tạo campaign mới</h2>
+              <span className="text-[10px] font-black uppercase tracking-widest text-amber-300">Job posting form</span>
+              <h2 className="mt-1 text-lg font-black text-white">Tạo job/campaign mới</h2>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <label className="space-y-1 md:col-span-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Tiêu đề *</span>
-                <input value={form.title} onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))} required className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
-              </label>
+              <FormInput label="Tiêu đề job *" value={form.title} onChange={(value) => setForm((current) => ({ ...current, title: value }))} required />
               <label className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Loại công việc</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Loại hình *</span>
                 <select value={form.jobType} onChange={(event) => setForm((current) => ({ ...current, jobType: event.target.value }))} className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60">
                   <option>KOL livestream</option>
                   <option>Model lookbook</option>
@@ -340,28 +365,20 @@ export default function CampaignsPage() {
                   <option>Dancer performance</option>
                 </select>
               </label>
-              <label className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Thành phố</span>
-                <input value={form.city} onChange={(event) => setForm((current) => ({ ...current, city: event.target.value }))} className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
-              </label>
-              <label className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Ngày bắt đầu</span>
-                <input type="date" value={form.startDate} onChange={(event) => setForm((current) => ({ ...current, startDate: event.target.value }))} className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
-              </label>
-              <label className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Ngày kết thúc</span>
-                <input type="date" value={form.endDate} onChange={(event) => setForm((current) => ({ ...current, endDate: event.target.value }))} className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
-              </label>
-              <label className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Số lượng talent</span>
-                <input type="number" value={form.talentQuantity} onChange={(event) => setForm((current) => ({ ...current, talentQuantity: event.target.value }))} className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
-              </label>
-              <label className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Ngân sách</span>
-                <input value={form.budget} onChange={(event) => setForm((current) => ({ ...current, budget: event.target.value }))} className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
+              <FormInput label="Số lượng cần tuyển *" type="number" value={form.talentQuantity} onChange={(value) => setForm((current) => ({ ...current, talentQuantity: value }))} />
+              <FormInput label="Thành phố *" value={form.city} onChange={(value) => setForm((current) => ({ ...current, city: value }))} />
+              <FormInput label="Địa điểm *" value={form.address} onChange={(value) => setForm((current) => ({ ...current, address: value }))} />
+              <FormInput label="Ngân sách" value={form.budget} onChange={(value) => setForm((current) => ({ ...current, budget: value }))} />
+              <FormInput label="Ngày bắt đầu" type="date" value={form.startDate} onChange={(value) => setForm((current) => ({ ...current, startDate: value }))} />
+              <FormInput label="Ngày kết thúc" type="date" value={form.endDate} onChange={(value) => setForm((current) => ({ ...current, endDate: value }))} />
+              <FormInput label="Deadline ứng tuyển" type="date" value={form.deadline} onChange={(value) => setForm((current) => ({ ...current, deadline: value }))} />
+              <FormInput label="Phúc lợi" value={form.benefits} onChange={(value) => setForm((current) => ({ ...current, benefits: value }))} />
+              <label className="space-y-1 md:col-span-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Yêu cầu *</span>
+                <textarea value={form.requirements} onChange={(event) => setForm((current) => ({ ...current, requirements: event.target.value }))} required rows={3} className="w-full resize-none rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
               </label>
               <label className="space-y-1 md:col-span-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Mô tả brief *</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Mô tả công việc *</span>
                 <textarea value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} required rows={4} className="w-full resize-none rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
               </label>
             </div>
@@ -380,3 +397,30 @@ export default function CampaignsPage() {
   );
 }
 
+function nextStage(stage: CampaignStage): CampaignStage {
+  if (stage === "new") return "shortlisted";
+  if (stage === "shortlisted") return "interview";
+  if (stage === "interview") return "accepted";
+  return "confirmed";
+}
+
+function FormInput({
+  label,
+  value,
+  onChange,
+  type = "text",
+  required = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <label className="space-y-1">
+      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</span>
+      <input type={type} value={value} onChange={(event) => onChange(event.target.value)} required={required} className="w-full rounded-xl border border-white/5 bg-slate-900/50 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400/60" />
+    </label>
+  );
+}
