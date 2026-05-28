@@ -1,21 +1,14 @@
 <?php
 
-use App\Http\Controllers\SurveyController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::get('/auth/social/{provider}/redirect', [AuthController::class, 'socialRedirect']);
+Route::get('/auth/social/{provider}/callback', [AuthController::class, 'socialCallback']);
 
-    // Survey endpoints
-    Route::prefix('survey')->group(function () {
-        Route::post('/submit', [SurveyController::class, 'submit']);
-        Route::get('/progress', [SurveyController::class, 'progress']);
-        Route::post('/calculate', [SurveyController::class, 'calculate']);
-    });
-
-    // Recommendations endpoint
-    Route::get('/recommendations', [SurveyController::class, 'recommendations']);
+Route::middleware('auth:sanctum')->group(function (): void {
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
 });
