@@ -75,7 +75,7 @@ const INITIAL_CAMPAIGNS = [
     id: "camp-3",
     name: "Organic Glow Cosmetics Launch",
     type: "KOL Ambassador",
-    status: "Chờ Ký Quỹ",
+    status: "Chờ Đặt Cọc",
     budget: "90.000.000đ",
     budgetVal: 90000000,
     spent: "0đ",
@@ -302,7 +302,7 @@ interface CampaignPipeline {
                 detailTab === "budget" ? "border-amber-400 text-amber-400" : "border-transparent text-slate-500 hover:text-slate-300"
               )}
             >
-              Thu Chi & Ví Ký Quỹ
+              Thu Chi & Ví Đặt Cọc
             </button>
           </div>
 
@@ -370,12 +370,12 @@ interface CampaignPipeline {
                     <div key={t.id} className="rounded-xl border border-amber-500/10 bg-amber-500/5 p-3">
                       <img src={t.avatar} alt={t.name} className="h-8 w-8 rounded-full object-cover border border-amber-400/20 mb-2" />
                       <h4 className="text-[11px] font-bold text-white truncate">{t.name}</h4>
-                      <span className="block text-[8px] text-amber-400 font-semibold mt-1">Chờ Ký Quỹ</span>
+                      <span className="block text-[8px] text-amber-400 font-semibold mt-1">Chờ Đặt Cọc</span>
                       <button 
                         onClick={() => moveTalent(t.id, "accepted", "escrowed")}
                         className="mt-2 w-full rounded bg-gradient-to-r from-amber-200 to-yellow-600 font-bold text-slate-950 text-[9px] py-1 transition-all shadow-md"
                       >
-                        Ký Quỹ Ngay
+                        Đặt Cọc Ngay
                       </button>
                     </div>
                   ))}
@@ -385,7 +385,7 @@ interface CampaignPipeline {
               {/* Escrowed Column */}
               <div className="rounded-2xl border border-white/5 bg-slate-950/20 p-3 min-w-[180px] space-y-3">
                 <div className="flex justify-between items-center px-1">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Đã Ký Quỹ</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Đã Đặt Cọc</span>
                   <span className="rounded bg-white/5 px-1.5 py-0.2 text-[9px] font-bold text-white">{selectedCampaign.pipeline.escrowed.length}</span>
                 </div>
                 <div className="space-y-2">
@@ -514,7 +514,7 @@ interface CampaignPipeline {
                 </div>
 
                 <div className="rounded-xl border border-white/5 bg-slate-900/30 p-4">
-                  <span className="block text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1">Số Dư Khóa Ký Quỹ</span>
+                  <span className="block text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1">Số Dư Khóa Đặt Cọc</span>
                   <span className="text-lg font-black text-cyan-400">
                     {((selectedCampaign.pipeline.escrowed.length + selectedCampaign.pipeline.inProgress.length) * 10000000).toLocaleString("vi-VN")}đ
                   </span>
@@ -549,7 +549,7 @@ interface CampaignPipeline {
                       <tr>
                         <td className="px-4 py-3 font-semibold text-slate-400">TXN-0084</td>
                         <td className="px-4 py-3 text-white">Lê Ngọc Hân</td>
-                        <td className="px-4 py-3 text-slate-300">Đặt cọc Ký quỹ (Escrow Locked)</td>
+                        <td className="px-4 py-3 text-slate-300">Đặt cọc (Escrow Locked)</td>
                         <td className="px-4 py-3 text-cyan-400 font-bold">+15.000.000đ</td>
                         <td className="px-4 py-3"><span className="rounded bg-cyan-500/10 px-2 py-0.5 text-[9px] text-cyan-400 font-bold">Đang Khóa</span></td>
                         <td className="px-4 py-3 text-slate-500">2026-05-24 10:15</td>
@@ -572,7 +572,7 @@ interface CampaignPipeline {
                 QUẢN LÝ <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 bg-clip-text text-transparent">CHIẾN DỊCH</span>
               </h1>
               <p className="text-xs text-slate-400">
-                Theo dõi quy trình tuyển dụng tài năng, ký quỹ hợp đồng và phân phối nội dung quảng cáo.
+                Theo dõi quy trình tuyển dụng tài năng, đặt cọc hợp đồng và phân phối nội dung quảng cáo.
               </p>
             </div>
 
@@ -593,7 +593,7 @@ interface CampaignPipeline {
                 activeTab === "active" ? "bg-white/5 text-white" : "bg-transparent text-slate-400 hover:text-white"
               )}
             >
-              Đang Chạy ({campaigns.filter(c => c.status === "Đang Chạy" || c.status === "Chờ Ký Quỹ").length})
+              Đang Chạy ({campaigns.filter(c => c.status === "Đang Chạy" || c.status === "Chờ Đặt Cọc").length})
             </button>
             <button
               onClick={() => setActiveTab("draft")}
@@ -610,7 +610,7 @@ interface CampaignPipeline {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {campaigns
               .filter((c) => {
-                if (activeTab === "active") return c.status === "Đang Chạy" || c.status === "Chờ Ký Quỹ";
+                if (activeTab === "active") return c.status === "Đang Chạy" || c.status === "Chờ Đặt Cọc";
                 return c.status === "Nháp";
               })
               .map((camp) => (
@@ -625,7 +625,7 @@ interface CampaignPipeline {
                       </span>
                       <span className={cn(
                         "rounded px-2 py-0.5 text-[9px] font-bold",
-                        camp.status === "Đang Chạy" ? "bg-emerald-500/10 text-emerald-400" : camp.status === "Chờ Ký Quỹ" ? "bg-amber-500/10 text-amber-400" : "bg-white/10 text-slate-400"
+                        camp.status === "Đang Chạy" ? "bg-emerald-500/10 text-emerald-400" : camp.status === "Chờ Đặt Cọc" ? "bg-amber-500/10 text-amber-400" : "bg-white/10 text-slate-400"
                       )}>
                         {camp.status}
                       </span>

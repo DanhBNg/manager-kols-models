@@ -47,7 +47,7 @@ const INITIAL_BOOKINGS = [
     rate: 12000000,
     fee: 600000,
     total: 12600000,
-    status: "Chờ Ký Quỹ",
+    status: "Chờ Đặt Cọc",
     stage: 2,
     proofUrl: "",
     proofNotes: "",
@@ -121,7 +121,7 @@ export default function BookingsEscrowPage() {
     setBookings(updatedBookings);
     setWalletAvailable((prev) => prev - totalAmount);
     setEscrowLocked((prev) => prev + totalAmount);
-    alert("Đã ký quỹ thành công số tiền cát-xê! Tiền hiện đã được đóng băng an toàn trên hệ thống.");
+    alert("Đã đặt cọc thành công số tiền cát-xê! Tiền hiện đã được đóng băng an toàn trên hệ thống.");
   };
 
   const handleReleaseEscrow = (id: string, rate: number) => {
@@ -172,7 +172,7 @@ export default function BookingsEscrowPage() {
   // Filter Bookings based on Tab
   const filteredBookings = bookings.filter((b) => {
     if (activeTab === "All") return true;
-    if (activeTab === "escrow-pending") return b.status === "Chờ Ký Quỹ";
+    if (activeTab === "escrow-pending") return b.status === "Chờ Đặt Cọc";
     if (activeTab === "escrowed") return b.status === "Đang Thực Hiện";
     if (activeTab === "pending-review") return b.status === "Chờ Nghiệm Thu";
     if (activeTab === "completed") return b.status === "Hoàn Tất";
@@ -186,7 +186,7 @@ export default function BookingsEscrowPage() {
       {/* Page Header */}
       <div>
         <h1 className="font-display text-2xl font-extrabold tracking-tight text-white">
-          BOOKING & <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 bg-clip-text text-transparent">KÝ QUỸ ESCROW</span>
+          BOOKING & <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 bg-clip-text text-transparent">ĐẶT CỌC ESCROW</span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
           Hệ thống đảm bảo quyền lợi giao dịch 2 bên. Cát-xê được khóa an toàn và chỉ giải ngân khi brief được hoàn thành.
@@ -197,7 +197,7 @@ export default function BookingsEscrowPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5 backdrop-blur-md relative overflow-hidden">
           <div className="absolute right-4 top-4 text-cyan-500/20"><Lock className="h-10 w-10" /></div>
-          <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Đang Ký Quỹ (Đóng Băng)</span>
+          <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Đang Đặt Cọc (Đóng Băng)</span>
           <span className="text-xl font-black text-cyan-400 tracking-tight">{escrowLocked.toLocaleString("vi-VN")}đ</span>
           <span className="block text-[8px] text-slate-500 mt-1">An toàn tuyệt đối trên hệ thống</span>
         </div>
@@ -213,7 +213,7 @@ export default function BookingsEscrowPage() {
           <div className="absolute right-4 top-4 text-amber-500/20"><DollarSign className="h-10 w-10" /></div>
           <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ví Khả Dụng Để Book</span>
           <span className="text-xl font-black text-amber-400 tracking-tight">{walletAvailable.toLocaleString("vi-VN")}đ</span>
-          <span className="block text-[8px] text-slate-500 mt-1">Dùng để kích hoạt cọc ký quỹ mới</span>
+          <span className="block text-[8px] text-slate-500 mt-1">Dùng để kích hoạt đặt cọc mới</span>
         </div>
       </div>
 
@@ -221,7 +221,7 @@ export default function BookingsEscrowPage() {
       <div className="flex flex-wrap gap-2 border-b border-white/5 pb-2">
         {[
           { id: "All", label: "Tất cả" },
-          { id: "escrow-pending", label: "Chờ Ký Quỹ" },
+          { id: "escrow-pending", label: "Chờ Đặt Cọc" },
           { id: "escrowed", label: "Đang Chạy" },
           { id: "pending-review", label: "Chờ Nghiệm Thu" },
           { id: "completed", label: "Hoàn Tất" },
@@ -279,7 +279,7 @@ export default function BookingsEscrowPage() {
                     "rounded px-2 py-0.5 text-[9px] font-extrabold",
                     b.status === "Hoàn Tất" ? "bg-emerald-500/10 text-emerald-400" :
                     b.status === "Chờ Nghiệm Thu" ? "bg-cyan-500/10 text-cyan-400" :
-                    b.status === "Chờ Ký Quỹ" ? "bg-amber-500/10 text-amber-400" :
+                    b.status === "Chờ Đặt Cọc" ? "bg-amber-500/10 text-amber-400" :
                     b.status === "Tranh Chấp" ? "bg-rose-500/10 text-rose-400" :
                     "bg-white/10 text-slate-300"
                   )}>
@@ -311,7 +311,7 @@ export default function BookingsEscrowPage() {
               <div className="grid grid-cols-5 text-center text-[8px] text-slate-500 font-bold mt-1">
                 <span>1. Đã mời</span>
                 <span>2. Nhận Lời</span>
-                <span>3. Đã Ký Quỹ</span>
+                <span>3. Đã Đặt Cọc</span>
                 <span>4. Nghiệm Thu</span>
                 <span>5. Giải Ngân</span>
               </div>
@@ -319,12 +319,12 @@ export default function BookingsEscrowPage() {
 
             {/* Action buttons */}
             <div className="flex justify-end gap-2 border-t border-white/5 pt-4">
-              {b.status === "Chờ Ký Quỹ" && (
+              {b.status === "Chờ Đặt Cọc" && (
                 <button
                   onClick={() => handlePayEscrow(b.id, b.total)}
                   className="flex h-9 items-center justify-center rounded-xl bg-gradient-to-r from-amber-200 to-yellow-600 px-5 font-display text-[10px] font-bold text-slate-950 shadow-md hover:shadow-lg transition-all"
                 >
-                  Nạp Cọc Ký Quỹ Ngay
+                  Nạp Tiền Đặt Cọc Ngay
                 </button>
               )}
 
@@ -413,7 +413,7 @@ export default function BookingsEscrowPage() {
 
               <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4 text-center">
                 <Lock className="h-5 w-5 mx-auto text-cyan-400 mb-1.5" />
-                <h4 className="font-bold text-white">Số tiền cát-xê cọc ký quỹ:</h4>
+                <h4 className="font-bold text-white">Số tiền cát-xê đặt cọc:</h4>
                 <span className="text-base font-extrabold text-amber-400">{selectedBookingForReview.rate.toLocaleString("vi-VN")}đ</span>
                 <p className="text-[8px] text-slate-500 mt-1 leading-relaxed">
                   Hệ thống sẽ thực hiện chuyển thẳng số tiền này vào tài khoản của {selectedBookingForReview.talentName} sau khi bạn duyệt. Không thể hoàn tác.

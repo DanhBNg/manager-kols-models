@@ -24,7 +24,7 @@ const brandMenuItems = [
   { label: "Tổng quan", icon: LayoutDashboard, href: "/brand/dashboard" },
   { label: "Chiến dịch", icon: Briefcase, href: "/brand/campaigns" },
   { label: "Tìm tài năng", icon: Sparkles, href: "/brand/discover" },
-  { label: "Ký quỹ & Booking", icon: Shield, href: "/brand/bookings" },
+  { label: "Đặt cọc & Booking", icon: Shield, href: "/brand/bookings" },
   { label: "Tin nhắn", icon: MessageSquare, href: "/brand/messages" },
   { label: "Cài đặt", icon: Settings, href: "/brand/settings" },
 ];

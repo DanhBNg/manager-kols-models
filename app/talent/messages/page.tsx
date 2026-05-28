@@ -16,14 +16,14 @@ export default function MessagesPage() {
       campaignTitle: "Mega Live Son Môi 06/2026",
       avatar: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=80&h=80&q=80",
       verified: true,
-      lastMessage: "Bạn đã ký quỹ hợp đồng thành công.",
+      lastMessage: "Bạn đã đặt cọc hợp đồng thành công.",
       time: "10:30",
       unread: true,
       messages: [
         { sender: "brand", text: "Chào Mai Anh, chúng tôi đã xem hồ sơ và điểm matching của bạn rất cao (94%).", time: "09:00" },
         { sender: "talent", text: "Em cảm ơn chị. Em đã nhận được lời mời và rất sẵn lòng tham gia chiến dịch son môi mới.", time: "09:15" },
-        { sender: "brand", text: "Tốt quá, bên chị đã tiến hành chuyển khoản ký quỹ (Escrow) 8,000,000đ thành công vào ví hệ thống rồi nhé. Em check lịch để chuẩn bị dress code.", time: "10:28" },
-        { sender: "brand", text: "Bạn đã ký quỹ hợp đồng thành công.", time: "10:30" }
+        { sender: "brand", text: "Tốt quá, bên chị đã tiến hành chuyển khoản đặt cọc (Escrow) 8,000,000đ thành công vào ví hệ thống rồi nhé. Em check lịch để chuẩn bị dress code.", time: "10:28" },
+        { sender: "brand", text: "Bạn đã đặt cọc hợp đồng thành công.", time: "10:30" }
       ]
     },
     {
@@ -103,7 +103,7 @@ export default function MessagesPage() {
         </button>
         <div>
           <h1 className="font-display text-3xl font-black text-white tracking-tight uppercase leading-none">Tin Nhắn</h1>
-          <p className="text-xs text-slate-400 mt-2 font-medium font-sans">Trao đổi thỏa thuận, bàn bạc chi tiết hợp đồng & nhận biên nhận ký quỹ từ Brands.</p>
+          <p className="text-xs text-slate-400 mt-2 font-medium font-sans">Trao đổi thỏa thuận, bàn bạc chi tiết hợp đồng & nhận biên nhận đặt cọc từ Brands.</p>
         </div>
       </div>
 

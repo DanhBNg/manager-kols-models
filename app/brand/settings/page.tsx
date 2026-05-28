@@ -17,7 +17,7 @@ const INITIAL_TEAM = [
 // Mock Invoices
 const INITIAL_INVOICES = [
   { id: "INV-2903", date: "2026-05-24", campaign: "Beauty Mega Live 06/2026", amount: "120.000.000đ", method: "Chuyển khoản cọc" },
-  { id: "INV-2845", date: "2026-05-18", campaign: "Summer Runway Phú Quốc", amount: "150.000.000đ", method: "Ký quỹ cọc" },
+  { id: "INV-2845", date: "2026-05-18", campaign: "Summer Runway Phú Quốc", amount: "150.000.000đ", method: "Đặt cọc" },
   { id: "INV-2501", date: "2026-05-10", campaign: "Organic Cosmetics", amount: "5.000.000đ", method: "Phí dịch vụ VIP" }
 ];
 
@@ -92,7 +92,7 @@ export default function BrandSettingsPage() {
     };
 
     setInvoices(prev => [newInvoice, ...prev]);
-    alert(`Đã nạp giả lập thành công ${amount.toLocaleString("vi-VN")}đ vào ví cọc ký quỹ!`);
+    alert(`Đã nạp giả lập thành công ${amount.toLocaleString("vi-VN")}đ vào ví đặt cọc!`);
   };
 
   return (
@@ -369,7 +369,7 @@ export default function BrandSettingsPage() {
               <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5 backdrop-blur-md relative overflow-hidden">
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Số dư khả dụng</span>
                 <span className="text-xl font-black text-amber-400 tracking-tight">{walletBalance.toLocaleString("vi-VN")}đ</span>
-                <span className="block text-[8px] text-slate-500 mt-1">Dùng để đặt cọc ký quỹ các chiến dịch mới</span>
+                <span className="block text-[8px] text-slate-500 mt-1">Dùng để đặt cọc các chiến dịch mới</span>
               </div>
 
               {/* Deposit simulator form */}

@@ -150,7 +150,7 @@
   
 - **Payment Service:** Xử lý thanh toán
   - Tích hợp VNPay, Momo, Banking
-  - Escrow wallet (ví ký quỹ)
+  - Escrow wallet (ví đặt cọc)
   - Rút tiền về ngân hàng
 
 **4. Data Layer (Tầng Dữ liệu):**
@@ -983,7 +983,7 @@ Step 3: Hai bên chat trong platform
   ↓
 Step 4: Thỏa thuận giá & điều khoản
   ↓
-Step 5: Partner ký quỹ 100% vào Escrow Wallet
+Step 5: Partner đặt cọc 100% vào Escrow Wallet
   - Thanh toán qua VNPay/Momo/Banking
   - Tiền bị lock, không rút được
   ↓

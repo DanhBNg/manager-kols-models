@@ -2,7 +2,7 @@
 
 **VNP BeautyTalent** là hệ sinh thái vòng đời (Lifecycle Ecosystem) đồng hành cùng các thí sinh, người mẫu và nghệ sĩ trong ngành sắc đẹp - giải trí từ bước khởi đầu cho đến khi tỏa sáng và khai thác thương mại bền vững.
 
-Hệ thống số hóa quy trình quản trị, tự động chấm điểm xếp hạng tài năng (Talent Tiering), và tạo kênh kết nối trực tiếp (Match-making) giữa nhãn hàng (Brands) và người đẹp bằng các hợp đồng ký quỹ an toàn (Escrow Payment).
+Hệ thống số hóa quy trình quản trị, tự động chấm điểm xếp hạng tài năng (Talent Tiering), và tạo kênh kết nối trực tiếp (Match-making) giữa nhãn hàng (Brands) và người đẹp bằng các hợp đồng đặt cọc an toàn (Escrow Payment).
 
 ---
 
@@ -19,7 +19,7 @@ Hệ thống số hóa quy trình quản trị, tự động chấm điểm xế
 
 3. **Giai đoạn sau cuộc thi (Post-Pageant / Monetization)**
    * **Hệ thống Booking Tự động (Smart Booking Engine):** Nhãn hàng đăng chiến dịch, hệ thống sử dụng thuật toán AI tự động đối sánh và trả về danh sách các Talent phù hợp.
-   * **Ký quỹ bảo vệ dòng tiền (Escrow):** Tự động khóa tiền cọc thanh toán để bảo đảm quyền lợi đôi bên, tránh các rủi ro bùng show/bùng tiền.
+   * **Đặt cọc bảo vệ dòng tiền (Escrow):** Tự động khóa tiền cọc thanh toán để bảo đảm quyền lợi đôi bên, tránh các rủi ro bùng show/bùng tiền.
 
 4. **Quỹ Vương Miện (Crown Funding & Voting)**
    * **Gây quỹ nhân ái:** Nơi fan hâm mộ và doanh nghiệp có thể trực tiếp quyên góp ngân sách cho các dự án cộng đồng/xã hội của thí sinh.

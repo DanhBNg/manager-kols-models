@@ -34,7 +34,7 @@ export default function WalletPage() {
     },
     {
       id: "tx2",
-      title: "Ký quỹ: Summer Runway Collection",
+      title: "Đặt cọc: Summer Runway Collection",
       amount: "15.000.000đ",
       date: "23 Tháng 5, 2026",
       status: "Đang tạm khóa (Escrow)",
@@ -67,7 +67,7 @@ export default function WalletPage() {
         </button>
         <div>
           <h1 className="font-display text-3xl font-black text-white tracking-tight uppercase leading-none">Thu Nhập & Ví</h1>
-          <p className="text-xs text-slate-400 mt-2 font-medium">Quản lý số dư thu nhập khả dụng, lịch sử giải ngân & quỹ bảo lãnh ký quỹ.</p>
+          <p className="text-xs text-slate-400 mt-2 font-medium">Quản lý số dư thu nhập khả dụng, lịch sử giải ngân & quỹ bảo lãnh đặt cọc.</p>
         </div>
       </div>
 
@@ -100,13 +100,13 @@ export default function WalletPage() {
               <Vault className="h-5 w-5" />
             </div>
             <div>
-              <span className="block text-[10px] text-slate-500 font-bold uppercase tracking-wider">Đang bảo vệ giữ ký quỹ (Escrow)</span>
+              <span className="block text-[10px] text-slate-500 font-bold uppercase tracking-wider">Đang bảo vệ giữ tiền đặt cọc (Escrow)</span>
               <span className="font-display font-black text-white text-lg mt-1 font-mono">15.000.000đ</span>
             </div>
           </div>
           
           <span className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1 text-[9px] font-black uppercase tracking-wider border-cyan-400/25 bg-cyan-400/10 text-cyan-300">
-            <ShieldCheck className="h-4 w-4" /> Ký quỹ an toàn
+            <ShieldCheck className="h-4 w-4" /> Đặt cọc an toàn
           </span>
         </div>
       </div>
@@ -147,7 +147,7 @@ export default function WalletPage() {
                   {tx.amount}
                 </span>
                 <span className={cn("inline-block rounded border px-2 py-0.2 text-[8px] font-bold uppercase tracking-wider mt-1.5", tx.badgeColor)}>
-                  {tx.type === "income" ? "Thu nhập" : "Khóa ký quỹ"}
+                  {tx.type === "income" ? "Thu nhập" : "Khóa đặt cọc"}
                 </span>
               </div>
             </div>

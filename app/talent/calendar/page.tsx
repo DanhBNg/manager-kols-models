@@ -28,7 +28,7 @@ export default function CalendarPage() {
       date: "25 Tháng 6, 2026",
       time: "20:00 - 22:00",
       location: "Studio Cầu Giấy, Hà Nội",
-      status: "Đã ký quỹ",
+      status: "Đã đặt cọc",
       borderColor: "border-[#153f2d] shadow-[0_0_15px_rgba(16,185,129,0.02)]",
       badgeColor: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
     },

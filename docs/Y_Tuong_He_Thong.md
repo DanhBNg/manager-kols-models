@@ -119,9 +119,9 @@ Thí sinh/Model nhận thông báo Job (Push Notification) khớp lệnh từ h�
 
 ## MÔ ĐUN 3: TÍNH NĂNG CỐT LÕI & CƠ CHẾ BẢO VỆ (CORE FEATURES)
 
-### 1. Hệ thống Bảo vệ Dòng tiền Ký quỹ (Escrow Payment System)
+### 1. Hệ thống Bảo vệ Dòng tiền Đặt cọc (Escrow Payment System)
 
-- **Logic vận hành:** Khi hai bên khớp lệnh giao dịch thành công, ngân sách booking từ Doanh nghiệp sẽ tự động được khóa/ký quỹ (Escrow) trong hệ thống của sàn.
+- **Logic vận hành:** Khi hai bên khớp lệnh giao dịch thành công, ngân sách booking từ Doanh nghiệp sẽ tự động được khóa/đặt cọc (Escrow) trong hệ thống của sàn.
 - **Điều kiện giải ngân (Release Condition):** Số tiền chỉ được tự động giải ngân cho Model sau khi hệ thống ghi nhận sự kiện hoàn thành công việc (Brand bấm xác nhận nghiệm thu hoặc hệ thống tự động nghiệm thu sau 24h nếu không có khiếu nại).
 - **Xử lý tranh chấp (Dispute Resolution):** Nếu xảy ra sự cố hủy show hoặc không đúng cam kết, Admin hệ thống có quyền can thiệp dựa trên minh chứng hợp đồng điện tử để hoàn trả dòng tiền và tự động trừ điểm Uy tín (Tiêu chí số 6) của bên vi phạm.
 

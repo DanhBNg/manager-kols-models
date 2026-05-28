@@ -247,7 +247,7 @@ Dịch vụ tối ưu hồ sơ bởi chuyên gia:
 
 Nếu sau này hệ thống của bạn nâng cấp lên phương án quản lý khép kín (như đã phân tích ở Luồng 1), đây sẽ là "mỏ vàng" với tiềm năng doanh thu cao nhất và tính bền vững tốt nhất.
 
-### **3.1. Cơ chế Escrow (Ký quỹ)**
+### **3.1. Cơ chế Escrow (Đặt cọc)**
 
 #### **Quy trình Giao dịch:**
 
@@ -256,7 +256,7 @@ Nếu sau này hệ thống của bạn nâng cấp lên phương án quản lý
    ↓
 2. KOLs ứng tuyển → Đối tác chọn 10 người
    ↓
-3. Đối tác ký quỹ 100% giá trị (50 triệu) vào Escrow Wallet
+3. Đối tác đặt cọc 100% giá trị (50 triệu) vào Escrow Wallet
    ↓
 4. KOLs nhận thông báo xác nhận → Đi làm việc
    ↓
@@ -292,7 +292,7 @@ Nếu sau này hệ thống của bạn nâng cấp lên phương án quản lý
 - Nếu có lý do chính đáng (ốm, tai nạn): Cần chứng minh bằng giấy tờ
 
 **B. Đối tác không trả tiền:**
-- Tiền đã ký quỹ trước → Không xảy ra tình huống này
+- Tiền đã đặt cọc trước → Không xảy ra tình huống này
 - Nếu Đối tác khiếu nại không hợp lý: Admin can thiệp
 
 **C. Chất lượng công việc không đạt:**
@@ -693,8 +693,8 @@ Bán insights và reports cho brands dựa trên data của nền tảng.
 **Mục tiêu:** Triển khai nguồn thu lớn nhất - Commission
 
 14. **Escrow Wallet System**
-    - Ví ký quỹ riêng biệt với ví chính
-    - Đối tác ký quỹ tiền trước khi KOL nhận job
+    - Ví đặt cọc riêng biệt với ví chính
+    - Đối tác đặt cọc tiền trước khi KOL nhận job
     - Tự động giải ngân sau khi hoàn thành
     - Xử lý tranh chấp (Dispute Resolution)
     - **Tính năng:**
@@ -718,7 +718,7 @@ Bán insights và reports cho brands dựa trên data của nền tảng.
 
 17. **Milestone Payment**
     - Chia job thành nhiều milestone
-    - Ký quỹ từng phần
+    - Đặt cọc từng phần
     - Giải ngân theo tiến độ
     - Tracking completion status
 

@@ -6,10 +6,10 @@ import { User, Briefcase, Crown, Sparkles, Star } from "lucide-react";
 export default function RootGatewayPage() {
   return (
     <div className="relative flex min-h-[85vh] flex-col items-center justify-center text-center px-4 py-8 animate-in fade-in duration-700">
-      
+
       {/* Background Decorative Ambient Lights */}
       <div className="absolute -top-12 left-1/2 -translate-x-1/2 -z-10 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
-      
+
       {/* Premium Golden Header Crown */}
       <div className="relative mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-slate-950/60 border border-amber-500/30 shadow-[0_0_50px_rgba(245,158,11,0.25)] backdrop-blur-md">
         <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-br from-amber-400/20 to-yellow-600/10 blur-xl" />
@@ -20,12 +20,12 @@ export default function RootGatewayPage() {
 
       <div className="space-y-3 mb-12">
         <h1 className="font-display text-3xl font-black tracking-widest text-white md:text-5xl uppercase">
-          BEAUTY<span className="text-gradient-gold">TALENT</span>
+          ONSTAGE<span className="text-gradient-gold">VN</span>
         </h1>
         <div className="flex items-center justify-center gap-2">
           <span className="h-px w-8 bg-gradient-to-r from-transparent to-amber-500/50" />
           <span className="text-[10px] uppercase font-bold tracking-widest text-amber-400 flex items-center gap-1">
-            <Star className="h-3 w-3 fill-amber-400" /> LUXURY ENTERTAINMENT NETWORK
+            <Star className="h-3 w-3 fill-amber-400" /> THE BEAUTY TALENT CONNECTION
           </span>
           <span className="h-px w-8 bg-gradient-to-l from-transparent to-amber-500/50" />
         </div>
@@ -71,7 +71,7 @@ export default function RootGatewayPage() {
           <div>
             <h3 className="text-sm font-bold text-white group-hover:text-purple-400 transition-colors uppercase tracking-wider">Brand Portal</h3>
             <p className="text-[11px] text-slate-400 mt-2 leading-relaxed">
-              Dành cho Nhãn hàng & Agency. Khám phá tài năng với AI Match, đăng chiến dịch & ký quỹ an toàn.
+              Dành cho Nhãn hàng & Agency. Khám phá tài năng với AI Match, đăng chiến dịch & đặt cọc an toàn.
             </p>
           </div>
         </Link>

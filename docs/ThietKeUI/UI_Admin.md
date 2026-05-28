@@ -587,8 +587,8 @@ Admin theo dõi toàn bộ booking/job.
 | Draft | Brand tạo job |
 | Pending | Chờ Talent phản hồi |
 | Accepted | Talent chấp nhận |
-| Escrow Pending | Chờ ký quỹ |
-| Escrowed | Đã ký quỹ |
+| Escrow Pending | Chờ đặt cọc |
+| Escrowed | Đã đặt cọc |
 | In Progress | Đang thực hiện |
 | Completed | Hoàn tất |
 | Disputed | Có tranh chấp |
@@ -620,7 +620,7 @@ Admin cần thấy:
 
 Admin cần:
 
-- Theo dõi tiền ký quỹ.
+- Theo dõi tiền đặt cọc.
 - Theo dõi payout.
 - Theo dõi hoàn tiền.
 - Theo dõi doanh thu nền tảng.

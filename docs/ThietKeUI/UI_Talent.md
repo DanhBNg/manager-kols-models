@@ -106,17 +106,19 @@ Vì vậy UI nên ưu tiên card lớn, ảnh đẹp, tiến trình rõ ràng, g
         ↓
 Chọn vai trò: Talent
         ↓
-Onboarding hồ sơ cơ bản
+Onboarding hồ sơ cơ bản (Đăng ký nhanh < 3 phút)
         ↓
-Khảo sát định hướng 30 câu hỏi
+Vào Dashboard (Xem điểm hoàn thiện hồ sơ ban đầu)
         ↓
-Kết quả phù hợp: Hoa hậu / Runway / KOL-Giải trí
+Làm Khảo sát định hướng (Tự chọn từ Dashboard)
         ↓
-Hoàn thiện Portfolio
+Nhận kết quả phù hợp (Pageant / Runway / KOL-Giải trí) & Xác định phân hạng Tier
         ↓
-Nhận gợi ý cuộc thi, job, dịch vụ hỗ trợ
+Hoàn thiện Portfolio (Ảnh, Lịch rảnh, Liên kết mạng xã hội)
         ↓
-Ứng tuyển / Nhận booking / Crown Funding
+Nhận gợi ý việc làm khớp thuật toán (AI Scored Job Matching)
+        ↓
+Ứng tuyển / Nhận đặt cọc hợp đồng bảo đảm (Escrowed Booking) / Crown Funding
 ```
 
 ---
@@ -185,34 +187,23 @@ Các trường:
 - Instagram.
 - Facebook.
 - YouTube.
-- Ảnh portfolio.
-- Video catwalk.
-- Video giới thiệu bản thân.
+- Ảnh portfolio (Tối thiểu 3 ảnh).
+- Video catwalk (Tự chọn).
+- Video giới thiệu bản thân (Tự chọn).
 
-#### Step 5: Khảo sát định hướng
+#### Step 5: Hoàn thành & Điểm hồ sơ ban đầu
 
-Mỗi câu hỏi nên hiển thị như một card, không nên hiển thị toàn bộ 30 câu trên một trang.
-
-Cấu trúc màn hình:
-
-```text
-Câu 12/30
-Làn da của bạn thuộc tone nào và tình trạng hiện tại?
-
-[ ] Trắng mịn, đều màu, không tì vết
-[ ] Nâu khỏe khoắn, bánh mật, mịn màng
-[ ] Trắng sáng hoặc có hình xăm nhỏ nghệ thuật
-
-[Quay lại]                         [Tiếp tục]
-```
+- Hiển thị màn hình chúc mừng hoàn tất đăng ký.
+- Hiển thị tỷ lệ hoàn thành hồ sơ ban đầu (ví dụ: `30%`).
+- Nút CTA lớn: "Làm bài khảo sát định hướng nghề nghiệp" (Optional - để làm khảo sát 30 câu định hướng vị trí và tính toán Tier).
+- Nút phụ: "Vào Dashboard của tôi".
 
 ### 5.3. UX quan trọng
 
-- Có progress bar: `12/30 câu`.
-- Cho phép lưu tạm.
-- Cho phép bỏ qua một vài trường không bắt buộc.
-- Sau mỗi phần có micro feedback: “Hồ sơ của bạn đã hoàn thiện 45%”.
-- Không dùng ngôn ngữ chấm điểm quá nặng nề. Nên dùng “định hướng phù hợp” thay vì “đánh giá ngoại hình”.
+- **Đăng ký cực nhanh (< 3 phút):** Cho phép bỏ qua (Skip) hầu hết các bước không bắt buộc (như số đo chi tiết, liên kết mạng xã hội, video) để tránh drop-off.
+- **Tách biệt khảo sát:** Tuyệt đối không bắt buộc làm bài khảo sát 30 câu ngay trong quá trình đăng ký. Đưa bài khảo sát thành một gợi ý nổi bật sau khi vào Dashboard.
+- **Thanh tiến trình (Progress Bar):** Hiển thị rõ ràng tiến độ đăng ký kèm ước lượng thời gian còn lại (ví dụ: "Chỉ còn 1 phút").
+- **Nhận diện trực quan:** Sau khi hoàn thành, cung cấp phản hồi tích cực và hiển thị điểm hoàn thiện hồ sơ ban đầu để tạo động lực cập nhật tiếp.
 
 ---
 
@@ -273,29 +264,10 @@ Dashboard là trung tâm điều hướng của Talent. Mỗi lần vào app, Ta
 - Có việc gì cần hoàn thiện.
 - Thu nhập và lịch trình hiện tại ra sao.
 
-### 7.2. Layout desktop
+### 7.2. Định hướng Thiết kế Giao diện (Responsive & Device Priority)
 
-```text
----------------------------------------------------
-Header: Logo | Search | Notifications | Avatar
----------------------------------------------------
-Hero Profile Summary
-- Ảnh đại diện
-- Tên Talent
-- Tier
-- Profile Score
-- CTA: Hoàn thiện hồ sơ
----------------------------------------------------
-Quick Stats
-[Job phù hợp] [Lịch tuần này] [Thu nhập] [Hồ sơ hoàn thiện]
----------------------------------------------------
-AI Recommendation
----------------------------------------------------
-Job Matching List        | Radar Chart / Profile Strength
----------------------------------------------------
-Cuộc thi phù hợp         | Marketplace dịch vụ đề xuất
----------------------------------------------------
-```
+- **Ưu tiên Mobile-first:** Do 85% KOL/Model sử dụng điện thoại, giao diện Talent Portal được thiết kế tối ưu hóa 100% cho màn hình dọc di động (Mobile Web / PWA / Native App).
+- **Layout Desktop:** Đóng vai trò là bản hiển thị co giãn (responsive) tương thích trên máy tính, không xây dựng giao diện desktop chuyên biệt cho Talent để tránh phình to codebase. Toàn bộ các tương tác (từ kéo thả, xem ảnh, check lịch đến nghiệm thu công việc) đều được thiết kế dễ dàng thao tác bằng 1 tay trên màn hình cảm ứng di động.
 
 ### 7.3. Layout mobile
 
@@ -363,13 +335,16 @@ Thu nhập tháng này
 ```text
 [Ảnh cover]
 [Avatar]
-Nguyễn Mai Anh
+Nguyễn Mai Anh  [Huy hiệu Phân hạng Mạng xã hội - ví dụ: 💎 Star]
 Tier A | Verified Talent
 KOL Beauty • MC • Event Guest
-Location: Hà Nội
-Profile Score: 82/100
+Location: Hà Nội | 🟢 Đang Rảnh (Lịch trống tuần này)
+Profile Score: 82/100 (Tăng +200% khả năng nhận job)
 [Book Talent] [Message] [Share]
 ```
+
+- **Huy hiệu Phân hạng MXH (Social Badges):** Hiển thị dựa trên lượng follower được sync tự động hàng tuần (như 🥉 Micro, 🥈 Rising, 🥇 Influencer, 💎 Star, 👑 Celebrity).
+- **Trạng thái lịch rảnh (Availability Badge):** Hiển thị trạng thái hoạt động tức thời (🟢 Rảnh / 🔴 Bận) giúp nhà tuyển dụng ra quyết định book nhanh mà không cần nhắn tin hỏi trước.
 
 #### Section 1: Key Metrics
 
@@ -455,7 +430,7 @@ Budget: 8.000.000đ - 12.000.000đ
 Thời gian: 20:00, 25/06/2026
 Địa điểm: Online / Studio Hà Nội
 Yêu cầu: Nữ, nói tốt, có kinh nghiệm livestream
-Escrow: Đã ký quỹ
+Escrow: Đã đặt cọc
 [Chi tiết] [Ứng tuyển]
 ```
 
@@ -493,11 +468,11 @@ Màn hình chi tiết job cần có:
 Nên hiển thị rõ:
 
 ```text
-Tiền đã được ký quỹ bởi Brand.
-Bạn sẽ được thanh toán sau khi Brand xác nhận hoàn thành hoặc sau 24h nếu không có khiếu nại.
+Tiền đã được đặt cọc bảo đảm bởi Brand.
+Bạn sẽ được hệ thống tự động giải ngân sau khi Brand xác nhận hoàn thành, hoặc tự động giải ngân sau 48h (kể từ khi bạn gửi sản phẩm nghiệm thu) nếu không có khiếu nại phát sinh từ phía Brand.
 ```
 
-Điều này tạo niềm tin và khác biệt so với việc nhận job qua tin nhắn cá nhân.
+Điều này tạo niềm tin tuyệt đối cho người mẫu và khác biệt so với việc nhận job tự do bên ngoài.
 
 ---
 
@@ -528,6 +503,35 @@ Số người ủng hộ: 1.248
 - Cập nhật tiến độ.
 - Nút chia sẻ social.
 - Fan voting/gifting.
+
+---
+
+## 11. Màn hình Ví & Quản lý thu nhập (Wallet / Earnings)
+
+### 11.1. Mục tiêu
+Giúp Talent có cái nhìn trực quan về tiền cát-xê của mình, phân định rõ ràng giữa tiền khả dụng và tiền đang bị khóa đặt cọc (Escrow) để yên tâm thực hiện công việc.
+
+### 11.2. Cấu trúc màn hình di động
+
+```text
+[VÍ CỦA TÔI] 
+Số dư khả dụng (Rút được): 12.500.000đ
+[Nút: Rút Tiền Về Bank]
+
+---------------------------------------------------
+🔒 ĐANG KHÓA ĐẶT CỌC (ESCROW): 8.000.000đ
+(Cát-xê đã được Brand chuyển vào sàn, đang bảo vệ chờ bạn làm xong job)
+- Job: Livestream Mỹ phẩm Glow Beauty (8.000.000đ) -> Chờ nộp proof
+---------------------------------------------------
+LỊCH SỬ GIAO DỊCH
+- 25/05/2026 | +7.600.000đ (Đã giải ngân - Live Beauty Mega)
+- 24/05/2026 | +8.000.000đ (Khóa đặt cọc từ Glow Beauty)
+- 20/05/2026 | -5.000.000đ (Đã rút về tài khoản VCB)
+```
+
+### 11.3. UX quan trọng
+- Hiển thị biểu tượng 🔒 Khóa an toàn bên cạnh số tiền Escrow để tăng cảm giác tin cậy.
+- Giải thích rõ ràng ý nghĩa của "Tiền đang khóa": KOL nhìn thấy tiền này đã được Brand cọc trên sàn, chắc chắn sẽ không bị bùng tiền sau khi diễn xong.
 
 ---
 # PHẦN C — INFORMATION ARCHITECTURE

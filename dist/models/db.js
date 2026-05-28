@@ -291,7 +291,7 @@ let bookings = [
             { status: 'Draft', timestamp: '2026-05-25T10:00:00Z', note: 'Chiến dịch được tạo nháp' },
             { status: 'Invited', timestamp: '2026-05-25T11:00:00Z', note: 'Gửi lời mời book Nguyễn Mai Anh' },
             { status: 'Accepted', timestamp: '2026-05-25T14:30:00Z', note: 'Nguyễn Mai Anh đã chấp nhận lời mời' },
-            { status: 'Escrowed', timestamp: '2026-05-26T09:15:00Z', note: 'Glow Beauty đã thanh toán ký quỹ 8,000,000đ thành công. Tiền đang được bảo vệ.' }
+            { status: 'Escrowed', timestamp: '2026-05-26T09:15:00Z', note: 'Glow Beauty đã thanh toán đặt cọc 8,000,000đ thành công. Tiền đang được bảo vệ.' }
         ]
     },
     {
@@ -308,7 +308,7 @@ let bookings = [
             { status: 'Draft', timestamp: '2026-05-24T09:00:00Z' },
             { status: 'Invited', timestamp: '2026-05-24T10:00:00Z' },
             { status: 'Accepted', timestamp: '2026-05-24T11:20:00Z' },
-            { status: 'Escrowed', timestamp: '2026-05-24T15:00:00Z', note: 'Đã ký quỹ.' },
+            { status: 'Escrowed', timestamp: '2026-05-24T15:00:00Z', note: 'Đã đặt cọc.' },
             { status: 'In Progress', timestamp: '2026-05-25T20:00:00Z', note: 'Đang tiến hành livestream.' },
             { status: 'Pending Review', timestamp: '2026-05-25T22:30:00Z', note: 'Talent đã upload link video livestream nghiệm thu.' }
         ],

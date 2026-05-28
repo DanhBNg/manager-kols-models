@@ -88,7 +88,7 @@ Module Agency là nguồn thu chính của nền tảng vì:
 
 ### **4.2. Mô hình Hoa hồng (Commission Structure) - Phương án thay thế**
 
-**Áp dụng cho agency sử dụng hệ thống Escrow (Ký quỹ):**
+**Áp dụng cho agency sử dụng hệ thống Escrow (Đặt cọc):**
 
 Thay vì trả phí cố định hàng tháng, agency có thể chọn mô hình hoa hồng - nền tảng chỉ thu phí khi có giao dịch thành công.
 
@@ -685,7 +685,7 @@ Ví Agency
 ├── Số dư Đang chờ: 15.000.000đ
 │   └── Job đang thực hiện, chưa hoàn thành
 │
-├── Số dư Ký quỹ: 30.000.000đ
+├── Số dư Đặt cọc: 30.000.000đ
 │   └── Job đã xác nhận, đợi hoàn thành
 │
 └── Tổng cộng: 90.000.000đ
@@ -705,7 +705,7 @@ Ví Agency
 - Nếu job bị hủy giữa chừng, số tiền này sẽ được điều chỉnh
 - Ví dụ: Job "Photoshoot" đang diễn ra hôm nay, 8M đang ở trạng thái pending
 
-**3. Số dư Ký quỹ (Escrow Balance) - 30M:**
+**3. Số dư Đặt cọc (Escrow Balance) - 30M:**
 - Tiền client đã đặt cọc cho job được xác nhận
 - Bị "khóa" cho đến khi job hoàn thành
 - Đảm bảo client không bùng tiền, agency không bùng show
@@ -717,7 +717,7 @@ Ví Agency
 |------|------|-------------|--------|---------|
 | 25/05 16:00 | Nhận tiền | Job hoàn thành: iPhone Launch | +15.000.000đ | 45M |
 | 25/05 14:00 | Trừ phí | Phí nền tảng (10%) | -1.500.000đ | 30M |
-| 24/05 10:00 | Ký quỹ | Job xác nhận: Photoshoot | -8.000.000đ | 31.5M |
+| 24/05 10:00 | Đặt cọc | Job xác nhận: Photoshoot | -8.000.000đ | 31.5M |
 | 23/05 09:00 | Rút tiền | Về tài khoản ngân hàng | -20.000.000đ | 39.5M |
 
 **Quy trình Rút tiền:**

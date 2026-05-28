@@ -37,10 +37,10 @@ const INITIAL_CONVERSATIONS = [
     unread: false,
     bookingId: "BKG-3892",
     bookingRate: "15.000.000đ",
-    bookingStatus: "Đang Ký Quỹ",
+    bookingStatus: "Đang Đặt Cọc",
     messages: [
       { sender: "talent", text: "Dạ chị ơi, em đã nhận được lời mời tham gia Summer Runway Phú Quốc rồi.", time: "Hôm qua" },
-      { sender: "brand", text: "Chào Linh, bên chị đã cọc ký quỹ 15M cho lịch diễn của em rồi nhé.", time: "Hôm qua" },
+      { sender: "brand", text: "Chào Linh, bên chị đã đặt cọc 15M cho lịch diễn của em rồi nhé.", time: "Hôm qua" },
       { sender: "talent", text: "Ok chị, lịch bay của em là 19/06 đúng không ạ?", time: "Hôm qua" }
     ]
   },
@@ -54,7 +54,7 @@ const INITIAL_CONVERSATIONS = [
     unread: false,
     bookingId: "BKG-3893",
     bookingRate: "12.000.000đ",
-    bookingStatus: "Chờ Ký Quỹ",
+    bookingStatus: "Chờ Đặt Cọc",
     messages: [
       { sender: "brand", text: "Chào Ngọc Hân, bên mình đang muốn mời bạn làm đại sứ cho chiến dịch Organic Glow. Bạn tham khảo brief đính kèm nhé.", time: "25/05" }
     ]
@@ -98,7 +98,7 @@ export default function MessagesPage() {
   const handleAttachBrief = () => {
     const briefMsg = {
       sender: "brand",
-      text: "📎 Đã đính kèm Guidelines_Campaign_Brief.pdf (Nhấp để mở chi tiết tài liệu và cọc ký quỹ).",
+      text: "📎 Đã đính kèm Guidelines_Campaign_Brief.pdf (Nhấp để mở chi tiết tài liệu và đặt cọc).",
       time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })
     };
 
@@ -277,7 +277,7 @@ export default function MessagesPage() {
               <span className={cn(
                 "rounded px-1.5 py-0.2 text-[8px] font-extrabold",
                 activeConv.bookingStatus === "Chờ Nghiệm Thu" ? "bg-cyan-500/10 text-cyan-400" :
-                activeConv.bookingStatus === "Chờ Ký Quỹ" ? "bg-amber-500/10 text-amber-400" :
+                activeConv.bookingStatus === "Chờ Đặt Cọc" ? "bg-amber-500/10 text-amber-400" :
                 "bg-emerald-500/10 text-emerald-400"
               )}>
                 {activeConv.bookingStatus}
@@ -296,7 +296,7 @@ export default function MessagesPage() {
             </div>
 
             <div className="border-t border-white/5 pt-2.5 space-y-1.5">
-              <span className="block text-[8px] font-bold text-slate-500 uppercase">Bảo hiểm ký quỹ:</span>
+              <span className="block text-[8px] font-bold text-slate-500 uppercase">Bảo hiểm đặt cọc:</span>
               <div className="flex items-center gap-1.5 text-[9px] text-slate-400">
                 <Shield className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
                 <span>Ví Escrow đã khóa cọc an toàn.</span>

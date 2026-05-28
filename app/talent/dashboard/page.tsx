@@ -346,6 +346,29 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Warning/Prompt Banner if Potential/Not Surveyed */}
+      {profile.tier === "Potential" && (
+        <div className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 backdrop-blur-md shadow-[0_0_15px_rgba(244,63,94,0.05)]">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400">
+              <AlertTriangle className="h-5 w-5 animate-pulse" />
+            </div>
+            <div>
+              <h4 className="text-xs font-black text-white uppercase tracking-wider">Hồ sơ của bạn đang ở trạng thái Dự Bị</h4>
+              <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                Bạn chưa thực hiện bài khảo sát định hướng hoặc tổng điểm khảo sát dưới 20. Vui lòng làm khảo sát để tự động xếp hạng Tier (S/A/B/C) và kích hoạt đề xuất việc làm chuẩn xác nhất.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => router.push("/talent/survey?start=true")}
+            className="shrink-0 h-9 rounded-lg bg-gradient-to-r from-rose-400 to-rose-600 px-4 text-[10px] font-black text-white hover:brightness-105 shadow-md active:scale-98 transition-all uppercase tracking-wider cursor-pointer"
+          >
+            Làm Khảo Sát Ngay
+          </button>
+        </div>
+      )}
+
       {/* Quick Stats Grid - replica of dashboard.htm card styles */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
@@ -422,108 +445,128 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Radar Chart Summary Column */}
-          <div className="lg:col-span-5 flex flex-col justify-between p-5 rounded-xl border border-white/5 bg-slate-950/40">
+        {profile.tier === "Potential" ? (
+          <div className="flex flex-col items-center justify-center text-center p-8 py-12 rounded-xl border border-white/5 bg-slate-950/40 max-w-xl mx-auto space-y-5">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400">
+              <Sparkles className="h-6 w-6 animate-pulse" />
+            </div>
             <div className="space-y-2">
-              <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black">Đề xuất phù hợp nhất</span>
-              <h4 className="text-sm font-black text-white leading-relaxed">
-                {profile.mainCategory || "Người mẫu Runway chuyên nghiệp"}
-              </h4>
-              <p className="text-[10.5px] text-slate-400 leading-relaxed mt-1">
-                Hệ thống đề xuất hướng đi chuyên nghiệp dựa trên nhân trắc học và phản hồi khảo sát định tính.
+              <h4 className="text-sm font-black text-white uppercase tracking-wider">Kích Hoạt Định Hướng Sự Nghiệp AI</h4>
+              <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+                Thực hiện bài khảo sát định hướng gồm 20 câu hỏi định tính để mở khóa bản đồ năng lực AI, biểu đồ radar & danh sách 20 vị trí tương thích nhất với bạn.
               </p>
             </div>
-
-            {/* SVG Radar */}
-            <div className="h-36 w-36 mx-auto my-5 shrink-0 rounded-xl border border-white/5 bg-slate-950 p-2 shadow-inner flex items-center justify-center">
-              <RadarChart
-                scores={profile.surveyScores}
-                fillColor="rgba(168,85,247,0.18)"
-                strokeColor="#a855f7"
-                strokeWidth={2.5}
-                labelFontSize={12}
-                labelFontWeight="black"
-              />
-            </div>
-
-            <div className="flex justify-between items-center text-[10px] text-slate-500 border-t border-white/5 pt-2 mt-2 font-bold">
-              <span>P: Pageant ({(profile.surveyScores?.pageant || 15)}%)</span>
-              <span>R: Runway ({(profile.surveyScores?.runway || 80)}%)</span>
-              <span>K: KOL ({(profile.surveyScores?.kol || 10)}%)</span>
-            </div>
+            <button
+              onClick={() => router.push("/talent/survey?start=true")}
+              className="h-10 px-6 rounded-xl bg-gradient-to-r from-purple-400 to-purple-600 text-xs font-black text-white hover:brightness-105 shadow-lg shadow-purple-500/15 hover:shadow-purple-500/25 active:scale-98 transition-all uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
+            >
+              Làm Khảo Sát Ngay <ArrowUpRight className="h-4.5 w-4.5" />
+            </button>
           </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            {/* Radar Chart Summary Column */}
+            <div className="lg:col-span-5 flex flex-col justify-between p-5 rounded-xl border border-white/5 bg-slate-950/40">
+              <div className="space-y-2">
+                <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black">Đề xuất phù hợp nhất</span>
+                <h4 className="text-sm font-black text-white leading-relaxed">
+                  {profile.mainCategory || "Người mẫu Runway chuyên nghiệp"}
+                </h4>
+                <p className="text-[10.5px] text-slate-400 leading-relaxed mt-1">
+                  Hệ thống đề xuất hướng đi chuyên nghiệp dựa trên nhân trắc học và phản hồi khảo sát định tính.
+                </p>
+              </div>
 
-          {/* 20 Recommended Roles Column */}
-          <div className="lg:col-span-7 flex flex-col justify-between">
-            <div>
-              <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black text-left mb-3">Bảng xếp hạng 20 vị trí tương thích</span>
+              {/* SVG Radar */}
+              <div className="h-36 w-36 mx-auto my-5 shrink-0 rounded-xl border border-white/5 bg-slate-950 p-2 shadow-inner flex items-center justify-center">
+                <RadarChart
+                  scores={profile.surveyScores}
+                  fillColor="rgba(168,85,247,0.18)"
+                  strokeColor="#a855f7"
+                  strokeWidth={2.5}
+                  labelFontSize={12}
+                  labelFontWeight="black"
+                />
+              </div>
 
-              <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
-                {(() => {
-                  const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
-                  const calculatedJobs = JOBS_LIST.map((job) => {
-                    const matchScore = Math.round(
-                      scores.pageant * job.weights.pageant +
-                      scores.runway * job.weights.runway +
-                      scores.kol * job.weights.kol
-                    );
-                    return { ...job, matchScore };
-                  }).sort((a, b) => b.matchScore - a.matchScore);
+              <div className="flex justify-between items-center text-[10px] text-slate-500 border-t border-white/5 pt-2 mt-2 font-bold">
+                <span>P: Pageant ({(profile.surveyScores?.pageant || 15)}%)</span>
+                <span>R: Runway ({(profile.surveyScores?.runway || 80)}%)</span>
+                <span>K: KOL ({(profile.surveyScores?.kol || 10)}%)</span>
+              </div>
+            </div>
 
-                  return calculatedJobs.map((job, idx) => {
-                    let barColor = "bg-purple-500";
-                    let textColor = "text-purple-400";
-                    if (job.matchScore >= 80) {
-                      barColor = "bg-amber-400";
-                      textColor = "text-amber-400";
-                    } else if (job.matchScore >= 70) {
-                      barColor = "bg-fuchsia-500";
-                      textColor = "text-fuchsia-400";
-                    } else if (job.matchScore >= 60) {
-                      barColor = "bg-cyan-500";
-                      textColor = "text-cyan-400";
-                    } else {
-                      barColor = "bg-slate-600";
-                      textColor = "text-slate-400";
-                    }
+            {/* 20 Recommended Roles Column */}
+            <div className="lg:col-span-7 flex flex-col justify-between">
+              <div>
+                <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black text-left mb-3">Bảng xếp hạng 20 vị trí tương thích</span>
 
-                    return (
-                      <div
-                        key={job.id}
-                        className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
-                      >
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[10px] font-black text-slate-400 group-hover:bg-purple-500/15 group-hover:text-purple-400 transition-colors">
-                          {idx + 1}
-                        </div>
+                <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+                  {(() => {
+                    const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
+                    const calculatedJobs = JOBS_LIST.map((job) => {
+                      const matchScore = Math.round(
+                        scores.pageant * job.weights.pageant +
+                        scores.runway * job.weights.runway +
+                        scores.kol * job.weights.kol
+                      );
+                      return { ...job, matchScore };
+                    }).sort((a, b) => b.matchScore - a.matchScore);
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-center mb-1">
-                            <h4 className="text-[11.5px] font-extrabold text-white truncate group-hover:text-purple-300 transition-colors">
-                              {job.title}
-                            </h4>
-                            <span className={cn("font-display font-black text-[11px] shrink-0 ml-2", textColor)}>
-                              {job.matchScore}% Match
-                            </span>
+                    return calculatedJobs.map((job, idx) => {
+                      let barColor = "bg-purple-500";
+                      let textColor = "text-purple-400";
+                      if (job.matchScore >= 80) {
+                        barColor = "bg-amber-400";
+                        textColor = "text-amber-400";
+                      } else if (job.matchScore >= 70) {
+                        barColor = "bg-fuchsia-500";
+                        textColor = "text-fuchsia-400";
+                      } else if (job.matchScore >= 60) {
+                        barColor = "bg-cyan-500";
+                        textColor = "text-cyan-400";
+                      } else {
+                        barColor = "bg-slate-600";
+                        textColor = "text-slate-400";
+                      }
+
+                      return (
+                        <div
+                          key={job.id}
+                          className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                        >
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[10px] font-black text-slate-400 group-hover:bg-purple-500/15 group-hover:text-purple-400 transition-colors">
+                            {idx + 1}
                           </div>
 
-                          {/* Progress bar container */}
-                          <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                            <div
-                              className={cn("h-full rounded-full transition-all duration-500", barColor)}
-                              style={{ width: `${job.matchScore}%` }}
-                            />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-center mb-1">
+                              <h4 className="text-[11.5px] font-extrabold text-white truncate group-hover:text-purple-300 transition-colors">
+                                {job.title}
+                              </h4>
+                              <span className={cn("font-display font-black text-[11px] shrink-0 ml-2", textColor)}>
+                                {job.matchScore}% Match
+                              </span>
+                            </div>
+
+                            {/* Progress bar container */}
+                            <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                              <div
+                                className={cn("h-full rounded-full transition-all duration-500", barColor)}
+                                style={{ width: `${job.matchScore}%` }}
+                              />
+                            </div>
+                            <span className="block text-[9px] text-slate-500 truncate mt-0.5">{job.desc}</span>
                           </div>
-                          <span className="block text-[9px] text-slate-500 truncate mt-0.5">{job.desc}</span>
                         </div>
-                      </div>
-                    );
-                  });
-                })()}
+                      );
+                    });
+                  })()}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Matched Jobs Grid - 2 columns style but using dashboard.htm luxury theme card styles */}
@@ -608,7 +651,7 @@ export default function DashboardPage() {
             <div className="flex gap-3 rounded-xl border border-white/5 bg-white/[0.025] p-3 text-xs leading-relaxed">
               <div className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
               <div>
-                <p className="font-semibold text-slate-300">Đã nhận thanh toán ký quỹ: 28.000.000 VND từ nhãn hàng Maison Design.</p>
+                <p className="font-semibold text-slate-300">Đã nhận thanh toán đặt cọc: 28.000.000 VND từ nhãn hàng Maison Design.</p>
                 <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-600">5 phút trước</span>
               </div>
             </div>

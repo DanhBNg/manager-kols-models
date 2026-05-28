@@ -102,7 +102,7 @@ So sánh Talent
         ↓
 Gửi lời mời / Book ngay
         ↓
-Ký hợp đồng / Ký quỹ
+Ký hợp đồng / Đặt cọc
         ↓
 Theo dõi thực hiện
         ↓
@@ -408,7 +408,7 @@ Gửi lời mời
         ↓
 Talent chấp nhận
         ↓
-Brand ký quỹ
+Brand đặt cọc
         ↓
 Job bắt đầu
         ↓
@@ -430,8 +430,8 @@ Nên chuẩn hóa status:
 | Draft | Brand mới tạo job |
 | Invited | Đã gửi lời mời Talent |
 | Accepted | Talent đã chấp nhận |
-| Escrow Pending | Chờ Brand ký quỹ |
-| Escrowed | Đã ký quỹ |
+| Escrow Pending | Chờ Brand đặt cọc |
+| Escrowed | Đã đặt cọc |
 | In Progress | Đang thực hiện |
 | Pending Review | Chờ nghiệm thu |
 | Completed | Hoàn tất |
@@ -448,7 +448,7 @@ Booking Created → Talent Accepted → Escrow Paid → Job Done → Released
 
 Thông tin cần hiển thị:
 
-- Số tiền ký quỹ.
+- Số tiền đặt cọc.
 - Phí nền tảng.
 - Số tiền Talent nhận.
 - Điều kiện giải ngân.
@@ -527,7 +527,7 @@ Mỗi conversation nên gắn với một job/campaign cụ thể, tránh chat r
 
 - Có job mới phù hợp.
 - Brand gửi lời mời.
-- Brand đã ký quỹ.
+- Brand đã đặt cọc.
 - Sắp đến lịch job.
 - Brand đã nghiệm thu.
 - Tiền đã giải ngân.
@@ -538,7 +538,7 @@ Mỗi conversation nên gắn với một job/campaign cụ thể, tránh chat r
 
 - Talent đã chấp nhận lời mời.
 - Talent từ chối lời mời.
-- Đến hạn ký quỹ.
+- Đến hạn đặt cọc.
 - Job sắp diễn ra.
 - Talent đã check-in.
 - Job chờ nghiệm thu.

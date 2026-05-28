@@ -137,7 +137,7 @@ export default function JobsPage() {
                     </span>
                     {camp.escrowed && (
                       <span className="flex items-center gap-1 rounded bg-emerald-500/10 px-2.5 py-0.5 text-[8px] text-emerald-400 font-extrabold border border-emerald-500/20 uppercase tracking-wider">
-                        <ShieldCheck className="h-3 w-3" /> Đã ký quỹ
+                        <ShieldCheck className="h-3 w-3" /> Đã đặt cọc
                       </span>
                     )}
                   </div>

@@ -467,7 +467,7 @@ export default function PortfolioPage() {
               })}
             </div>
             <p className="text-[9px] text-slate-500 leading-normal">
-              * Nhãn hàng có thể chọn ngày trống trên và ấn "Book" để gửi đề nghị ký quỹ.
+              * Nhãn hàng có thể chọn ngày trống trên và ấn "Book" để gửi đề nghị đặt cọc.
             </p>
           </div>
 
@@ -490,96 +490,116 @@ export default function PortfolioPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
-              {/* Radar Chart Summary Column */}
-              <div className="md:col-span-5 flex flex-col justify-between p-4 rounded-xl border border-white/2 bg-slate-950/40">
+            {profile.tier === "Potential" ? (
+              <div className="flex flex-col items-center justify-center text-center p-8 py-12 rounded-xl border border-white/5 bg-slate-950/40 max-w-xl mx-auto space-y-5">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400">
+                  <Sparkles className="h-6 w-6 animate-pulse" />
+                </div>
                 <div className="space-y-2">
-                  <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black">Đề xuất phù hợp nhất</span>
-                  <h4 className="text-xs font-bold text-white leading-relaxed">
-                    {profile.mainCategory}
-                  </h4>
-                  <p className="text-[9px] text-slate-400 leading-normal">
-                    Hệ thống đề xuất hướng đi chuyên nghiệp dựa trên nhân trắc học và phản hồi khảo sát định tính.
+                  <h4 className="text-sm font-black text-white uppercase tracking-wider">Kích Hoạt Định Hướng Sự Nghiệp AI</h4>
+                  <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+                    Thực hiện bài khảo sát định hướng gồm 20 câu hỏi định tính để mở khóa bản đồ năng lực AI, biểu đồ radar & danh sách 20 vị trí tương thích nhất với bạn.
                   </p>
                 </div>
+                <button
+                  onClick={() => router.push("/talent/survey?start=true")}
+                  className="h-10 px-6 rounded-xl bg-gradient-to-r from-purple-400 to-purple-600 text-xs font-black text-white hover:brightness-105 shadow-lg shadow-purple-500/15 hover:shadow-purple-500/25 active:scale-98 transition-all uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
+                >
+                  Làm Khảo Sát Ngay <ArrowUpRight className="h-4.5 w-4.5" />
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+                {/* Radar Chart Summary Column */}
+                <div className="md:col-span-5 flex flex-col justify-between p-4 rounded-xl border border-white/2 bg-slate-950/40">
+                  <div className="space-y-2">
+                    <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black">Đề xuất phù hợp nhất</span>
+                    <h4 className="text-xs font-bold text-white leading-relaxed">
+                      {profile.mainCategory}
+                    </h4>
+                    <p className="text-[9px] text-slate-400 leading-normal">
+                      Hệ thống đề xuất hướng đi chuyên nghiệp dựa trên nhân trắc học và phản hồi khảo sát định tính.
+                    </p>
+                  </div>
 
-                {/* SVG Radar */}
-                <div className="h-32 w-32 mx-auto my-4 shrink-0 rounded-xl border border-[#151b2d] bg-slate-950 p-2 shadow-inner">
-                  <RadarChart
-                    scores={profile.surveyScores}
-                    fillColor="rgba(244,196,48,0.2)"
-                    strokeColor="#f4c430"
-                    strokeWidth={2.5}
-                    labelFontSize={11}
-                    labelFontWeight="bold"
-                  />
+                  {/* SVG Radar */}
+                  <div className="h-32 w-32 mx-auto my-4 shrink-0 rounded-xl border border-[#151b2d] bg-slate-950 p-2 shadow-inner">
+                    <RadarChart
+                      scores={profile.surveyScores}
+                      fillColor="rgba(244,196,48,0.2)"
+                      strokeColor="#f4c430"
+                      strokeWidth={2.5}
+                      labelFontSize={11}
+                      labelFontWeight="bold"
+                    />
+                  </div>
+
+                  <div className="flex justify-between items-center text-[9px] text-slate-500 border-t border-white/5 pt-2 mt-2">
+                    <span>P: Pageant</span>
+                    <span>R: Runway</span>
+                    <span>K: KOL</span>
+                  </div>
                 </div>
 
-                <div className="flex justify-between items-center text-[9px] text-slate-500 border-t border-white/5 pt-2 mt-2">
-                  <span>P: Pageant</span>
-                  <span>R: Runway</span>
-                  <span>K: KOL</span>
+                {/* 20 Recommended Roles Column */}
+                <div className="md:col-span-7 space-y-3">
+                  <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black text-left">Bảng xếp hạng 20 vị trí tương thích</span>
+
+                  <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                    {(() => {
+                      const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
+                      const calculatedJobs = JOBS_LIST.map((job) => {
+                        const matchScore = Math.round(
+                          scores.pageant * job.weights.pageant +
+                          scores.runway * job.weights.runway +
+                          scores.kol * job.weights.kol
+                        );
+                        return { ...job, matchScore };
+                      }).sort((a, b) => b.matchScore - a.matchScore);
+
+                      return calculatedJobs.map((job, idx) => {
+                        const isHigh = job.matchScore >= 80;
+                        const isMid = job.matchScore >= 50 && job.matchScore < 80;
+
+                        return (
+                          <div
+                            key={job.id}
+                            className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                          >
+                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[9px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
+                              {idx + 1}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex justify-between items-center">
+                                <h4 className="text-[11px] font-bold text-white truncate group-hover:text-amber-400 transition-colors">
+                                  {job.title}
+                                </h4>
+                                <span className={cn(
+                                  "font-display text-[9px] font-extrabold",
+                                  isHigh ? "text-amber-400" : isMid ? "text-purple-400" : "text-slate-500"
+                                )}>
+                                  {job.matchScore}% Match
+                                </span>
+                              </div>
+                              <p className="text-[8px] text-slate-500 truncate mt-0.5">{job.desc}</p>
+                              <div className="h-1 w-full bg-slate-900 rounded-full overflow-hidden mt-1.5">
+                                <div
+                                  className={cn(
+                                    "h-full rounded-full transition-all duration-500",
+                                    isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-700"
+                                  )}
+                                  style={{ width: `${job.matchScore}%` }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
                 </div>
               </div>
-
-              {/* 20 Recommended Roles Column */}
-              <div className="md:col-span-7 space-y-3">
-                <span className="block text-[8px] text-slate-500 uppercase tracking-widest font-black text-left">Bảng xếp hạng 20 vị trí tương thích</span>
-
-                <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                  {(() => {
-                    const scores = profile.surveyScores || { pageant: 50, runway: 50, kol: 50 };
-                    const calculatedJobs = JOBS_LIST.map((job) => {
-                      const matchScore = Math.round(
-                        scores.pageant * job.weights.pageant +
-                        scores.runway * job.weights.runway +
-                        scores.kol * job.weights.kol
-                      );
-                      return { ...job, matchScore };
-                    }).sort((a, b) => b.matchScore - a.matchScore);
-
-                    return calculatedJobs.map((job, idx) => {
-                      const isHigh = job.matchScore >= 80;
-                      const isMid = job.matchScore >= 50 && job.matchScore < 80;
-
-                      return (
-                        <div
-                          key={job.id}
-                          className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
-                        >
-                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[9px] font-bold text-slate-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-colors">
-                            {idx + 1}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-center">
-                              <h4 className="text-[11px] font-bold text-white truncate group-hover:text-amber-400 transition-colors">
-                                {job.title}
-                              </h4>
-                              <span className={cn(
-                                "font-display text-[9px] font-extrabold",
-                                isHigh ? "text-amber-400" : isMid ? "text-purple-400" : "text-slate-500"
-                              )}>
-                                {job.matchScore}% Match
-                              </span>
-                            </div>
-                            <p className="text-[8px] text-slate-500 truncate mt-0.5">{job.desc}</p>
-                            <div className="h-1 w-full bg-slate-900 rounded-full overflow-hidden mt-1.5">
-                              <div
-                                className={cn(
-                                  "h-full rounded-full transition-all duration-500",
-                                  isHigh ? "bg-gradient-to-r from-amber-200 to-amber-500" : isMid ? "bg-purple-500" : "bg-slate-700"
-                                )}
-                                style={{ width: `${job.matchScore}%` }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    });
-                  })()}
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
         </div>

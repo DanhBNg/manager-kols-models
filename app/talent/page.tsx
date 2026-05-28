@@ -77,7 +77,7 @@ export default function LandingPage() {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-white">Bảo Vệ Giao Dịch</h3>
-            <p className="text-xs text-slate-400">Tiền cát-xê ký quỹ an toàn, thanh toán minh bạch 24h.</p>
+            <p className="text-xs text-slate-400">Tiền cát-xê đặt cọc an toàn, thanh toán minh bạch 48h.</p>
           </div>
         </div>
       </div>

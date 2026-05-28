@@ -11,8 +11,8 @@ export default function Header() {
           <span className="text-xl">👑</span>
         </div>
         <div>
-          <h1 className="font-display font-black text-sm tracking-widest text-white uppercase leading-none">
-            BEAUTY<span className="text-gradient-gold">TALENT</span>
+          <h1 className="text-xl font-display font-black tracking-widest leading-none text-white">
+            <span className="text-gradient-gold">Onstage</span>VN
           </h1>
         </div>
       </div>
