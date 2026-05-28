@@ -6,7 +6,7 @@ import { FormEvent, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Crown, Loader2, Lock, Mail, User, Users } from "lucide-react";
 
 type AuthMode = "login" | "register";
-type AccountType = "talent" | "brand" | "agency";
+type AccountType = "talent" | "brand";
 
 type AuthResponse = {
   token: string;
@@ -22,7 +22,6 @@ type AuthResponse = {
 const accountTypes: Array<{ value: AccountType; label: string }> = [
   { value: "talent", label: "Talent" },
   { value: "brand", label: "Brand" },
-  { value: "agency", label: "Agency" },
 ];
 
 function getApiBaseUrl() {
@@ -136,7 +135,7 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-slate-400">
             {isRegister
-              ? "Bắt đầu với tài khoản Talent, Brand hoặc Agency."
+              ? "Bắt đầu với tài khoản Talent hoặc Brand."
               : "Truy cập không gian quản lý hồ sơ và chiến dịch của bạn."}
           </p>
         </div>
@@ -173,10 +172,26 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
             </div>
           </label>
 
+          <label className="block">
+            <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">Mật khẩu</span>
+            <div className="flex h-12 items-center gap-3 rounded-xl border border-white/10 bg-slate-950/50 px-4 focus-within:border-amber-400/50">
+              <Lock className="h-4 w-4 text-amber-300" />
+              <input
+                required
+                minLength={8}
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                className="h-full flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-600"
+                placeholder="Tối thiểu 8 ký tự"
+              />
+            </div>
+          </label>
+
           {isRegister && (
             <div>
               <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">Loại tài khoản</span>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {accountTypes.map((item) => (
                   <button
                     key={item.value}
@@ -195,22 +210,6 @@ export default function AuthForm({ mode }: { mode: AuthMode }) {
               </div>
             </div>
           )}
-
-          <label className="block">
-            <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-400">Mật khẩu</span>
-            <div className="flex h-12 items-center gap-3 rounded-xl border border-white/10 bg-slate-950/50 px-4 focus-within:border-amber-400/50">
-              <Lock className="h-4 w-4 text-amber-300" />
-              <input
-                required
-                minLength={8}
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                className="h-full flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-600"
-                placeholder="Tối thiểu 8 ký tự"
-              />
-            </div>
-          </label>
 
           {error && (
             <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">

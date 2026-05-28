@@ -24,7 +24,7 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['nullable', 'string', 'max:20', 'unique:users,phone'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'type' => ['required', 'string', Rule::in(['talent', 'brand', 'agency'])],
+            'type' => ['required', 'string', Rule::in(['talent', 'brand'])],
         ]);
 
         $user = User::create([
@@ -160,6 +160,6 @@ class AuthController extends Controller
 
     private function validatedAccountType(mixed $type): string
     {
-        return in_array($type, ['talent', 'brand', 'agency'], true) ? $type : 'talent';
+        return in_array($type, ['talent', 'brand'], true) ? $type : 'talent';
     }
 }

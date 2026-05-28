@@ -54,6 +54,18 @@ class AuthApiTest extends TestCase
         ]);
     }
 
+    public function test_register_rejects_unsupported_user_type(): void
+    {
+        $this->postJson('/api/auth/register', [
+            'name' => 'Unsupported User',
+            'email' => 'unsupported-register@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'type' => 'admin',
+        ])->assertUnprocessable()
+            ->assertJsonValidationErrors(['type']);
+    }
+
     public function test_user_can_login_and_fetch_profile_with_token(): void
     {
         $user = User::factory()->create([
@@ -84,12 +96,12 @@ class AuthApiTest extends TestCase
     public function test_login_rejects_wrong_password(): void
     {
         User::factory()->create([
-            'email' => 'agency@example.com',
+            'email' => 'wrong-password@example.com',
             'password' => Hash::make('password123'),
         ]);
 
         $this->postJson('/api/auth/login', [
-            'email' => 'agency@example.com',
+            'email' => 'wrong-password@example.com',
             'password' => 'wrong-password',
         ])->assertUnprocessable()
             ->assertJsonValidationErrors(['email']);

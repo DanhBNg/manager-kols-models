@@ -3,14 +3,14 @@
 1. Chạy backend Laravel:
 
 ```bash
-cd C:\Users\AMLT\Downloads\manager-kols-models\backend
+cd backend
 php artisan serve --host=127.0.0.1 --port=8000
 ```
 
 2. Chạy frontend Next.js:
 
 ```bash
-cd C:\Users\AMLT\Downloads\manager-kols-models
+Tại thư mục gốc
 npm run dev -- --port 3000
 ```
 
@@ -95,7 +95,7 @@ Bảng `users` hiện có các trường nền:
 - `created_at`
 - `updated_at`
 
-Các bảng như `profiles`, `photos`, `videos`, `social_accounts`, `bookings`, `agencies`, `agency_members` chưa tạo ở bước auth này.
+Các bảng như `profiles`, `photos`, `videos`, `social_accounts`, `bookings` chưa tạo ở bước auth này.
 
 ## Đăng nhập Google/Facebook
 

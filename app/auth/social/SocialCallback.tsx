@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 
-type AccountType = "talent" | "brand" | "agency";
+type AccountType = "talent" | "brand";
 
 type MeResponse = {
   user: {
