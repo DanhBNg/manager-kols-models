@@ -249,9 +249,10 @@ const JOBS_LIST = [
 
 interface SurveyFormProps {
   resetCounter?: number;
+  onActiveChange?: (active: boolean) => void;
 }
 
-export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
+export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormProps = {}) {
   const router = useRouter();
   const [step, setStep] = useState(1);
   
@@ -333,6 +334,12 @@ export default function SurveyForm({ resetCounter }: SurveyFormProps = {}) {
       setSurveyAnswers({});
     }
   }, [resetCounter]);
+
+  React.useEffect(() => {
+    if (onActiveChange) {
+      onActiveChange(!showHistoryDashboard);
+    }
+  }, [showHistoryDashboard, onActiveChange]);
 
   React.useEffect(() => {
     let existingHistory = localStorage.getItem("vnp_talent_survey_history");
