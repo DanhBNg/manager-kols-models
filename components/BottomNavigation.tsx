@@ -2,18 +2,44 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Briefcase, Crown, MessageSquare, User } from "lucide-react";
+import { Home, Briefcase, BookmarkCheck, Crown, Search, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function BottomNavigation() {
   const pathname = usePathname();
 
-  // Guard: only render the bottom nav when the user is inside the talent portal
-  if (!pathname.startsWith("/talent")) {
+  // Guard: only render the bottom nav inside the app portals.
+  if (!pathname.startsWith("/talent") && !pathname.startsWith("/brand")) {
     return null;
   }
 
-  const navItems = [
+  const navItems = pathname.startsWith("/brand") ? [
+    {
+      label: "Tổng quan",
+      icon: Home,
+      href: "/brand/dashboard",
+    },
+    {
+      label: "Tìm kiếm",
+      icon: Search,
+      href: "/brand/discover",
+    },
+    {
+      label: "Shortlist",
+      icon: BookmarkCheck,
+      href: "/brand/shortlists",
+    },
+    {
+      label: "Campaign",
+      icon: Briefcase,
+      href: "/brand/campaigns",
+    },
+    {
+      label: "Hồ sơ",
+      icon: User,
+      href: "/brand/settings",
+    },
+  ] : [
     {
       label: "Home",
       icon: Home,
@@ -28,11 +54,6 @@ export default function BottomNavigation() {
       label: "Quỹ Vương Miện",
       icon: Crown,
       href: "/talent/crown",
-    },
-    {
-      label: "Messages",
-      icon: MessageSquare,
-      href: "/talent/messages",
     },
     {
       label: "Profile",

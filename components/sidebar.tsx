@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Home, User, Briefcase, Crown, MessageSquare, Calendar, Wallet, Settings,
-  Sparkles, Shield, LogOut, LayoutDashboard, ChevronRight, Trophy
+  Sparkles, BookmarkCheck, LogOut, LayoutDashboard, ChevronRight, Trophy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -22,11 +22,10 @@ const talentMenuItems = [
 
 const brandMenuItems = [
   { label: "Tổng quan", icon: LayoutDashboard, href: "/brand/dashboard" },
-  { label: "Chiến dịch", icon: Briefcase, href: "/brand/campaigns" },
   { label: "Tìm tài năng", icon: Sparkles, href: "/brand/discover" },
-  { label: "Đặt cọc & Booking", icon: Shield, href: "/brand/bookings" },
-  { label: "Tin nhắn", icon: MessageSquare, href: "/brand/messages" },
-  { label: "Cài đặt", icon: Settings, href: "/brand/settings" },
+  { label: "Shortlist", icon: BookmarkCheck, href: "/brand/shortlists" },
+  { label: "Campaign", icon: Briefcase, href: "/brand/campaigns" },
+  { label: "Hồ sơ đối tác", icon: Settings, href: "/brand/settings" },
 ];
 
 export default function Sidebar() {

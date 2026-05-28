@@ -7,7 +7,7 @@ import { Bell, ChevronDown, Crown, LogOut, Search, UserCircle } from "lucide-rea
 type AuthUser = {
   name: string;
   email: string;
-  type: "talent" | "brand" | "agency";
+  type: "talent" | "brand";
   status: string;
 };
 
@@ -25,7 +25,7 @@ function getUserLabel(user: AuthUser | null) {
 
   return {
     name: user.name,
-    subtitle: user.type === "talent" ? "Talent" : user.type === "agency" ? "Agency" : "Brand",
+    subtitle: user.type === "talent" ? "Talent" : "Brand",
   };
 }
 
