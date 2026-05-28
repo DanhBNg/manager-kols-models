@@ -1,32 +1,11 @@
 stages:
   - deploy
 
-deploy_preview:
-  stage: deploy
-  image: node:20-alpine
-  only:
-    - cuong
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
-      - node_modules/
-      - .next/cache/
-  script:
-    - npm config set cache .npm/
-    - npm install -g vercel
-    - "[ -z \"$VERCEL_TOKEN\" ] && { echo \"ERROR: VERCEL_TOKEN is empty in GitLab Variables!\"; exit 1; }"
-    - "[ -z \"$VERCEL_ORG_ID\" ] && { echo \"ERROR: VERCEL_ORG_ID is empty in GitLab Variables!\"; exit 1; }"
-    - "[ -z \"$VERCEL_PROJECT_ID\" ] && { echo \"ERROR: VERCEL_PROJECT_ID is empty in GitLab Variables!\"; exit 1; }"
-    - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
-    - vercel build --token=$VERCEL_TOKEN
-    - vercel deploy --prebuilt --token=$VERCEL_TOKEN
-
 deploy_production:
   stage: deploy
   image: node:20-alpine
   only:
-    - main
+    - cuong
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
