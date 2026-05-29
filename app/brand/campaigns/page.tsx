@@ -21,7 +21,7 @@ type CampaignStatusTab = "all" | Campaign["status"];
 
 const stageLabels: Record<CampaignStage, string> = {
   new: "Mới",
-  shortlisted: "Shortlist",
+  shortlisted: "Đã chọn sơ bộ",
   interview: "Phỏng vấn",
   accepted: "Đã chọn",
   confirmed: "Đã xác nhận",
@@ -197,7 +197,7 @@ export default function CampaignsPage() {
                 <p className="mt-1 leading-relaxed text-slate-300">{selectedCampaign.benefits}</p>
               </div>
               <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3 text-xs leading-relaxed text-slate-500">
-                ATS MVP dùng stage cơ bản: Mới, Shortlist, Phỏng vấn, Đã chọn, Đã xác nhận. Chat, email/SMS automation và payment để phase sau.
+                ATS MVP dùng stage cơ bản: Mới, Đã chọn sơ bộ, Phỏng vấn, Đã chọn, Đã xác nhận. Chat, email/SMS automation và payment để phase sau.
               </div>
             </div>
           </aside>
@@ -325,7 +325,7 @@ export default function CampaignsPage() {
                   <span className="font-bold text-white">{campaign.applicants.length}</span>
                 </div>
                 <div>
-                  <span className="block text-[8px] font-bold uppercase text-slate-500">Shortlist</span>
+                  <span className="block text-[8px] font-bold uppercase text-slate-500">Đã lưu</span>
                   <span className="font-bold text-amber-300">{campaign.shortlistedTalentIds.length}</span>
                 </div>
                 <div>

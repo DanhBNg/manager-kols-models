@@ -1,0 +1,23 @@
+[phases.setup]
+nixPkgs = ["php83", "php83Packages.composer", "nodejs_22", "npm-10_x"]
+
+[phases.install]
+cmds = [
+  "composer install --ignore-platform-reqs",
+  "npm install --include=optional"
+]
+
+[phases.build]
+cmds = [
+  "composer install --no-dev --optimize-autoloader",
+  "npm run build",
+  "php artisan filament:assets",
+  "php artisan filament:upgrade",
+  "php artisan storage:link || true",
+  "php artisan config:clear",
+  "php artisan route:clear",
+  "php artisan view:clear"
+]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"

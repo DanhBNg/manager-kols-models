@@ -287,7 +287,7 @@ export default function DiscoverTalentsPage() {
                               "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition",
                               isSaved ? "border-amber-400 bg-amber-400 text-slate-950" : "border-white/5 bg-white/[0.03] text-slate-400 hover:text-white"
                             )}
-                            title={isSaved ? "Đã lưu shortlist" : "Lưu shortlist"}
+                            title={isSaved ? "Đã lưu talent" : "Lưu talent"}
                           >
                             <Heart className={cn("h-4 w-4", isSaved && "fill-current")} />
                           </button>

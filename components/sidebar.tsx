@@ -23,7 +23,7 @@ const talentMenuItems = [
 const brandMenuItems = [
   { label: "Tổng quan", icon: LayoutDashboard, href: "/brand/dashboard" },
   { label: "Tìm tài năng", icon: Sparkles, href: "/brand/discover" },
-  { label: "Shortlist", icon: BookmarkCheck, href: "/brand/shortlists" },
+  { label: "Talent đã lưu", icon: BookmarkCheck, href: "/brand/shortlists" },
   { label: "Campaign", icon: Briefcase, href: "/brand/campaigns" },
   { label: "Hồ sơ đối tác", icon: Settings, href: "/brand/settings" },
 ];

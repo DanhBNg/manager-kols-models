@@ -6,6 +6,7 @@
 cd backend
 php artisan serve --host=127.0.0.1 --port=8000
 ```
+Trang admin sau khi chạy: http://127.0.0.1:8000/admin
 
 2. Chạy frontend Next.js:
 
@@ -150,4 +151,12 @@ Frontend:
 ```bash
 cd C:\Users\AMLT\Downloads\manager-kols-models
 npm run build
+```
+
+## Deploy backend
+
+Hướng dẫn deploy backend Laravel lên Railway:
+
+```text
+docs/Danh_Docs/Huong_Dan_Deploy_Backend_Railway.md
 ```

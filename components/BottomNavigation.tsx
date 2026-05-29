@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -10,16 +10,16 @@ import {
 import { cn } from "@/lib/utils";
 
 const talentAllItems = [
-  { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
-  { label: "Khám phá", icon: Sparkles, href: "/talent/survey" },
-  { label: "Hồ sơ số", icon: User, href: "/talent/portfolio" },
-  { label: "Cuộc thi", icon: Trophy, href: "/talent/contests" },
-  { label: "Chợ việc làm", icon: Briefcase, href: "/talent/jobs" },
-  { label: "Quỹ", icon: Crown, href: "/talent/crown" },
-  { label: "Lịch trình", icon: Calendar, href: "/talent/calendar" },
-  { label: "Tin nhắn", icon: MessageSquare, href: "/talent/messages" },
-  { label: "Thu nhập", icon: Wallet, href: "/talent/wallet" },
-  { label: "Đăng xuất", icon: LogOut, href: "/" },
+  { label: "Tß╗òng quan", icon: Home, href: "/talent/dashboard" },
+  { label: "Kh├ím ph├í", icon: Sparkles, href: "/talent/survey" },
+  { label: "Hß╗ô s╞í sß╗æ", icon: User, href: "/talent/portfolio" },
+  { label: "Cuß╗Öc thi", icon: Trophy, href: "/talent/contests" },
+  { label: "Chß╗ú viß╗çc l├ám", icon: Briefcase, href: "/talent/jobs" },
+  { label: "Quß╗╣", icon: Crown, href: "/talent/crown" },
+  { label: "Lß╗ïch tr├¼nh", icon: Calendar, href: "/talent/calendar" },
+  { label: "Tin nhß║»n", icon: MessageSquare, href: "/talent/messages" },
+  { label: "Thu nhß║¡p", icon: Wallet, href: "/talent/wallet" },
+  { label: "─É─âng xuß║Ñt", icon: LogOut, href: "/" },
 ];
 
 export default function BottomNavigation() {
@@ -34,19 +34,19 @@ export default function BottomNavigation() {
   const isBrand = pathname.startsWith("/brand");
 
   const brandItems = [
-    { label: "Tổng quan", icon: Home, href: "/brand/dashboard" },
-    { label: "Tìm kiếm", icon: Search, href: "/brand/discover" },
+    { label: "Tß╗òng quan", icon: Home, href: "/brand/dashboard" },
+    { label: "T├¼m kiß║┐m", icon: Search, href: "/brand/discover" },
     { label: "Shortlist", icon: BookmarkCheck, href: "/brand/shortlists" },
     { label: "Campaign", icon: Briefcase, href: "/brand/campaigns" },
-    { label: "Hồ sơ", icon: User, href: "/brand/settings" },
+    { label: "Hß╗ô s╞í", icon: User, href: "/brand/settings" },
   ];
 
   // Active items for the primary bottom row (4 core items + More menu button)
   const talentPrimaryItems = [
-    { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
-    { label: "Khám phá", icon: Sparkles, href: "/talent/survey" },
-    { label: "Hồ sơ", icon: User, href: "/talent/portfolio" },
-    { label: "Cuộc thi", icon: Trophy, href: "/talent/contests" },
+    { label: "Tß╗òng quan", icon: Home, href: "/talent/dashboard" },
+    { label: "Kh├ím ph├í", icon: Sparkles, href: "/talent/survey" },
+    { label: "Hß╗ô s╞í", icon: User, href: "/talent/portfolio" },
+    { label: "Cuß╗Öc thi", icon: Trophy, href: "/talent/contests" },
   ];
 
   return (
@@ -73,7 +73,7 @@ export default function BottomNavigation() {
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/5 mb-5">
           <h3 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
-            <Menu className="h-4 w-4 text-amber-400" /> Danh mục tiện ích
+            <Menu className="h-4 w-4 text-amber-400" /> Danh mß╗Ñc tiß╗çn ├¡ch
           </h3>
           <button
             onClick={() => setShowMoreMenu(false)}
@@ -208,7 +208,7 @@ export default function BottomNavigation() {
                     showMoreMenu ? "text-amber-400 font-black" : "text-slate-500"
                   )}
                 >
-                  Thêm
+                  Th├¬m
                 </span>
               </button>
             </>

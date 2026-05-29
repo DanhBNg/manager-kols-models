@@ -37,6 +37,7 @@ class AuthController extends Controller
             'is_verified' => false,
             'is_ghost' => false,
         ]);
+        $this->ensureDefaultBusinessProfile($user);
 
         return response()->json([
             'user' => $user,
@@ -125,8 +126,11 @@ class AuthController extends Controller
             ->where('social_id', $socialUser->getId())
             ->first();
 
+        $isNewUser = false;
+
         if (! $user) {
             $user = User::firstOrNew(['email' => $email]);
+            $isNewUser = ! $user->exists;
         }
 
         $user->fill([
@@ -143,6 +147,10 @@ class AuthController extends Controller
             'avatar' => $socialUser->getAvatar(),
         ]);
         $user->save();
+
+        if ($isNewUser) {
+            $this->ensureDefaultBusinessProfile($user);
+        }
 
         $token = $user->createToken('auth-token')->plainTextToken;
         $frontendUrl = rtrim((string) config('app.frontend_url'), '/');
@@ -161,5 +169,38 @@ class AuthController extends Controller
     private function validatedAccountType(mixed $type): string
     {
         return in_array($type, ['talent', 'brand'], true) ? $type : 'talent';
+    }
+
+    private function ensureDefaultBusinessProfile(User $user): void
+    {
+        if ($user->type === 'talent') {
+            $user->profile()->firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'full_name' => $user->name,
+                    'display_name' => $user->name,
+                    'slug' => Str::slug($user->name).'-'.$user->id,
+                    'talent_types' => ['model'],
+                    'city' => 'Chua cap nhat',
+                    'profile_completion' => 10,
+                    'verification_status' => 'pending',
+                    'is_public' => false,
+                ]
+            );
+        }
+
+        if ($user->type === 'brand') {
+            $user->partnerProfile()->firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'organization_name' => $user->name,
+                    'organization_type' => 'brand',
+                    'contact_name' => $user->name,
+                    'contact_email' => $user->email,
+                    'city' => 'Chua cap nhat',
+                    'verification_status' => 'pending',
+                ]
+            );
+        }
     }
 }
