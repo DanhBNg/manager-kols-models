@@ -1,5 +1,17 @@
 stages:
+  - mirror
   - deploy
+
+mirror_danh_to_github_main:
+  stage: mirror
+  image: alpine/git:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "danh"'
+  script:
+    - '[ -z "$GITHUB_TOKEN" ] && { echo "ERROR: GITHUB_TOKEN is empty in GitLab Variables!"; exit 1; }'
+    - '[ -z "$GITHUB_MIRROR_REPO" ] && { echo "ERROR: GITHUB_MIRROR_REPO is empty in GitLab Variables!"; exit 1; }'
+    - git remote add github "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_MIRROR_REPO}.git"
+    - git push --force github "HEAD:refs/heads/main"
 
 deploy_production:
   stage: deploy

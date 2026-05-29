@@ -52,6 +52,34 @@ class AuthApiTest extends TestCase
             'is_verified' => false,
             'is_ghost' => false,
         ]);
+
+        $this->assertDatabaseHas('profiles', [
+            'display_name' => 'Nguyen Van A',
+            'city' => 'Chua cap nhat',
+            'verification_status' => 'pending',
+            'is_public' => false,
+        ]);
+    }
+
+    public function test_brand_register_creates_partner_profile_placeholder(): void
+    {
+        $this->postJson('/api/auth/register', [
+            'name' => 'Brand Demo',
+            'email' => 'brand-register@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'type' => 'brand',
+        ])->assertCreated()
+            ->assertJsonPath('user.type', 'brand');
+
+        $this->assertDatabaseHas('partner_profiles', [
+            'organization_name' => 'Brand Demo',
+            'organization_type' => 'brand',
+            'contact_name' => 'Brand Demo',
+            'contact_email' => 'brand-register@example.com',
+            'city' => 'Chua cap nhat',
+            'verification_status' => 'pending',
+        ]);
     }
 
     public function test_register_rejects_unsupported_user_type(): void

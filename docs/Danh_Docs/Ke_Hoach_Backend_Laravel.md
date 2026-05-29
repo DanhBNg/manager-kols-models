@@ -1,566 +1,581 @@
-# Káº¿ Hoáº¡ch Triá»ƒn Khai Backend Laravel
+# Kế Hoạch Backend Laravel
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+## 1. Mục tiêu hiện tại
 
-**Goal:** XÃ¢y dá»±ng backend Laravel cho ná»n táº£ng quáº£n lÃ½ KOLs/Models theo cÃ¡c tÃ i liá»‡u ká»¹ thuáº­t trong `docs/for-tech/plans`, Æ°u tiÃªn pháº§n lÃµi, Agency, booking, tÃ i chÃ­nh, admin vÃ  kiá»ƒm thá»­.
+Backend chính của dự án nằm trong thư mục `backend/` và dùng Laravel để cung cấp REST API cho frontend Next.js ở thư mục gốc.
 
-**Architecture:** DÃ¹ng app Laravel hiá»‡n cÃ³ trong thÆ° má»¥c `backend` lÃ m backend chÃ­nh. Backend nÃªn Ä‘i theo hÆ°á»›ng Laravel 12 + Eloquent + Form Request + Policy/Gate + Sanctum + Filament, khÃ´ng triá»ƒn khai láº¡i theo Node/Express trong spec cÅ©. Frontend Next.js/Inertia cÃ³ thá»ƒ Ä‘Æ°á»£c ngÆ°á»i khÃ¡c chá»‰nh sau, nÃªn pháº§n backend cáº§n cÃ³ API/route rÃµ rÃ ng, dá»¯ liá»‡u á»•n Ä‘á»‹nh vÃ  test Ä‘Æ°á»£c Ä‘á»™c láº­p.
+Mục tiêu giai đoạn hiện tại là hoàn thiện nền backend cho Phase 1 MVP:
 
-**Tech Stack:** PHP 8.2+, Laravel 12, Composer, XAMPP/MySQL hoáº·c SQLite local, Laravel Sanctum, Laravel Breeze, Filament 3, PHPUnit, Eloquent ORM.
+- Đăng ký, đăng nhập, đăng xuất bằng Laravel Sanctum.
+- Phân loại tài khoản theo `talent`, `brand`, `admin`.
+- Tự tạo hồ sơ nghiệp vụ ban đầu sau khi đăng ký.
+- Quản lý hồ sơ talent.
+- Quản lý hồ sơ đối tác/brand.
+- Quản lý media, social metrics, lịch rảnh.
+- Quản lý talent đã lưu, campaign, yêu cầu liên hệ, booking sơ bộ.
+- Quản lý khảo sát xếp hạng talent/tier.
+- Có trang admin nội bộ bằng Filament.
 
----
+Frontend hiện tại vẫn còn nhiều dữ liệu demo/mock. Backend đã có API để nhận dữ liệu thật, nhưng các màn frontend chưa nối hết vào API.
 
-## 1. TÃ³m táº¯t hiá»‡n tráº¡ng project
+## 2. Kiến trúc đã chốt
 
-Project hiá»‡n cÃ³ hai pháº§n:
+Kiến trúc đang áp dụng:
 
-- Root project lÃ  frontend Next.js/TypeScript vá»›i cÃ¡c trang `app/talent`, `app/brand`, component UI vÃ  tÃ i liá»‡u sáº£n pháº©m.
-- ThÆ° má»¥c `backend` lÃ  Laravel 12 Ä‘Ã£ cÃ i Breeze, Sanctum, Filament, Inertia, React, Tailwind vÃ  Vite.
+- Frontend: Next.js App Router ở thư mục gốc.
+- Backend: Laravel 12 API ở thư mục `backend/`.
+- Auth API: Laravel Sanctum token.
+- Database local: SQLite.
+- Admin panel: Filament 3 tại `/admin`.
+- Social login: Laravel Socialite đã được cài, hiện có route Google/Facebook nhưng cần cấu hình OAuth thật trong `.env` nếu muốn dùng.
 
-Trong Laravel backend Ä‘Ã£ cÃ³:
+Không dùng XAMPP/MySQL cho local ở giai đoạn hiện tại. SQLite đủ nhẹ và tiện để chạy máy cá nhân.
 
-- Auth cÆ¡ báº£n cá»§a Breeze.
-- Filament Admin Panel á»Ÿ `/admin`.
-- API survey qua `backend/routes/api.php`.
-- Module Talent Tiering Survey Ä‘Ã£ cÃ³ migration, model, service vÃ  controller:
-  - `survey_responses`
-  - `talent_scores`
-  - `pageant_recommendations`
-  - cá»™t `tier`, `tier_updated_at` trÃªn báº£ng `users`
-  - `SurveyController`
-  - `TalentScoringService`
-  - `PageantRecommendationService`
+File database local:
 
-Äiá»ƒm cáº§n lÆ°u Ã½: tÃ i liá»‡u `Core-Features-Technical-Specs.md` ban Ä‘áº§u mÃ´ táº£ Node.js + Express + PostgreSQL, nhÆ°ng tÃ i liá»‡u README ká»¹ thuáº­t vÃ  repo thá»±c táº¿ Ä‘Ã£ chuyá»ƒn hÆ°á»›ng sang Laravel. Khi lÃ m backend, nÃªn dá»‹ch cÃ¡c schema/API trong spec sang Laravel, khÃ´ng quay láº¡i Node.js.
+```text
+backend/database/database.sqlite
+```
 
-## 2. TÃ i liá»‡u Ä‘Ã£ Ä‘á»c vÃ  nguá»“n yÃªu cáº§u chÃ­nh
+Chạy backend:
 
-CÃ¡c tÃ i liá»‡u ká»¹ thuáº­t quan trá»ng:
+```bash
+cd backend
+php artisan serve
+```
 
-- `docs/for-tech/plans/Core-Features-Technical-Specs.md`
-- `docs/for-tech/plans/Agency-Module-Technical-Specs.md`
-- `docs/for-tech/plans/Talent-Tiering-Survey-System-Technical-Specs.md`
-- `docs/for-tech/README.md`
+Admin:
 
-CÃ¡c tÃ i liá»‡u nghiá»‡p vá»¥ trong `docs/for-bussinees` chá»‰ dÃ¹ng Ä‘á»ƒ tham kháº£o bá»‘i cáº£nh sáº£n pháº©m, khÃ´ng pháº£i nguá»“n chá»‘t ká»¹ thuáº­t cho backend:
+```text
+http://127.0.0.1:8000/admin
+```
 
-- `docs/for-bussinees/overview/Luá»“ng 1_ Vá» luá»“ng váº­n hÃ nh & TÃ­nh nÄƒng chÃ­nh.md`
-- `docs/for-bussinees/overview/Luá»“ng 2_ MÃ´ hÃ¬nh kinh doanh (Monetization Model) .md`
-- `docs/for-bussinees/overview/Luá»“ng 3_ Quáº£n trá»‹ Admin.md`
-- `docs/for-bussinees/overview/Pháº§n 4_ MÃ´ hÃ¬nh Quáº£n lÃ½ linh hoáº¡t (Hybrid Management)..md`
-- `docs/for-bussinees/overview/Pháº§n 4.2_ TÃ i khoáº£n cáº¥p CÃ´ng ty quáº£n lÃ½ (Agency_Manager).md`
-- `docs/for-bussinees/overview/Chi-tiet-ky-thuat-va-van-hanh.md`
+## 3. Module đã triển khai
 
-Quyáº¿t Ä‘á»‹nh ká»¹ thuáº­t Ä‘Ã£ chá»‘t: backend triá»ƒn khai báº±ng Laravel trong thÆ° má»¥c `backend`. KhÃ´ng triá»ƒn khai backend Node/Express cho giai Ä‘oáº¡n nÃ y.
+### 3.1. Authentication
 
-## 3. NguyÃªn táº¯c lÃ m backend
+API đã có:
 
-- Æ¯u tiÃªn Laravel native: migration, model, relationship, Form Request, policy, service class, job/queue, event/listener.
-- KhÃ´ng nhá»“i logic nghiá»‡p vá»¥ vÃ o controller. Controller chá»‰ nháº­n request, gá»i service, tráº£ response.
-- Má»—i migration cáº§n cÃ³ index Ä‘Ãºng vá»›i query trong spec.
-- CÃ¡c báº£ng tiá»n, vÃ­, giao dá»‹ch, escrow pháº£i dÃ¹ng `decimal`, transaction database vÃ  audit log.
-- Má»i endpoint quan trá»ng cáº§n test feature. Má»i service tÃ­nh toÃ¡n tiá»n/Ä‘iá»ƒm/ranking cáº§n test unit.
-- Má»i quyá»n agency/admin/brand/talent pháº£i kiá»ƒm tra báº±ng policy hoáº·c middleware, khÃ´ng kiá»ƒm tra ráº£i rÃ¡c trong controller.
-- TÃ i liá»‡u tá»« giá» viáº¿t báº±ng tiáº¿ng Viá»‡t cÃ³ dáº¥u.
+```text
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+POST /api/auth/logout
+GET  /api/auth/social/{provider}/redirect
+GET  /api/auth/social/{provider}/callback
+```
 
-## 4. Thá»© tá»± Æ°u tiÃªn nÃªn lÃ m
+Khi đăng ký:
 
-### Giai Ä‘oáº¡n 0: Chuáº©n hÃ³a mÃ´i trÆ°á»ng local
+- Nếu `type = talent`, backend tự tạo bản ghi ban đầu trong `profiles`.
+- Nếu `type = brand`, backend tự tạo bản ghi ban đầu trong `partner_profiles`.
+- Không cho đăng ký `agency` như một actor auth riêng.
+- `admin` chỉ tạo qua seed/admin, không cho đăng ký public.
 
-- [ ] Kiá»ƒm tra PHP, Composer, MySQL trong XAMPP.
-- [ ] VÃ o thÆ° má»¥c `backend`.
-- [ ] Táº¡o/cáº­p nháº­t `.env`.
-- [ ] Chá»n database local:
-  - Náº¿u muá»‘n Ä‘Æ¡n giáº£n: SQLite.
-  - Náº¿u bÃ¡m gáº§n production hÆ¡n: MySQL tá»« XAMPP.
-- [ ] Cháº¡y migration vÃ  test hiá»‡n cÃ³.
+Actor hiện tại:
 
-Lá»‡nh dá»± kiáº¿n:
+```text
+talent
+brand
+admin
+```
+
+Lưu ý: agency hiện chưa phải loại tài khoản đăng nhập riêng. Nếu cần phân biệt agency ở phía đối tác, dùng `partner_profiles.organization_type = agency`.
+
+### 3.2. Talent profile
+
+Bảng chính:
+
+```text
+profiles
+photos
+videos
+social_accounts
+social_metrics_history
+calendar_events
+```
+
+API đã có:
+
+```text
+PUT  /api/my/profile
+GET  /api/profiles/{profile}
+GET  /api/profiles/{profile}/completion
+POST /api/profiles/{profile}/photos
+POST /api/profiles/{profile}/videos
+POST /api/social/accounts
+POST /api/social/accounts/{socialAccount}/metrics
+GET  /api/calendar/events
+POST /api/calendar/events
+PUT  /api/calendar/events/{event}
+DELETE /api/calendar/events/{event}
+```
+
+Ý nghĩa:
+
+- Talent cập nhật hồ sơ thật qua `PUT /api/my/profile`.
+- Ảnh/video/social/lịch rảnh đã có API nền.
+- Upload ảnh hiện lưu local qua disk `public`.
+- Chưa có xử lý AI moderation, nén ảnh WebP, CDN hoặc S3 thật.
+
+### 3.3. Partner/Brand profile
+
+Bảng chính:
+
+```text
+partner_profiles
+```
+
+API đã có:
+
+```text
+GET /api/partner/profile
+PUT /api/partner/profile
+```
+
+Brand dùng API này để hoàn thiện thông tin tổ chức:
+
+- Tên tổ chức.
+- Loại tổ chức: `brand`, `agency`, `recruiter`, `event_organizer`.
+- Ngành hàng.
+- Website/fanpage.
+- Người phụ trách.
+- Số điện thoại.
+- Email liên hệ.
+- Thành phố.
+- Mô tả.
+- Trạng thái duyệt.
+
+### 3.4. Talent discovery
+
+API đã có:
+
+```text
+GET /api/talents
+GET /api/talents/{profile}
+```
+
+Filter hiện hỗ trợ:
+
+```text
+q
+city
+type
+gender
+min_age
+max_age
+min_height
+max_height
+verified
+tier
+sort
+```
+
+Hiện search dùng SQL/Eloquent, chưa dùng Elasticsearch.
+
+### 3.5. Talent đã lưu
+
+Bảng chính:
+
+```text
+wishlists
+wishlist_items
+```
+
+API đã có:
+
+```text
+GET    /api/wishlists
+POST   /api/wishlists
+GET    /api/wishlists/{wishlist}
+POST   /api/wishlists/{wishlist}/items
+DELETE /api/wishlists/{wishlist}/items/{item}
+```
+
+Mục tiêu:
+
+- Brand lưu talent để xem lại.
+- Có ghi chú nội bộ.
+- Không cho lưu trùng cùng một talent trong cùng một wishlist.
+
+### 3.6. Campaign
+
+Bảng chính:
+
+```text
+campaigns
+campaign_talents
+```
+
+API đã có:
+
+```text
+GET  /api/campaigns
+POST /api/campaigns
+GET  /api/campaigns/{campaign}
+PUT  /api/campaigns/{campaign}
+POST /api/campaigns/{campaign}/publish
+POST /api/campaigns/{campaign}/close
+
+GET    /api/campaigns/{campaign}/talents
+POST   /api/campaigns/{campaign}/talents
+PUT    /api/campaigns/{campaign}/talents/{campaignTalent}
+DELETE /api/campaigns/{campaign}/talents/{campaignTalent}
+```
+
+Campaign dùng thay cho bảng `jobs` nghiệp vụ để tránh trùng với bảng `jobs` mặc định của Laravel queue.
+
+Trạng thái campaign:
+
+```text
+draft
+published
+closed
+```
+
+Trạng thái talent trong campaign:
+
+```text
+new
+shortlisted
+interview
+accepted
+confirmed
+rejected
+```
+
+### 3.7. Contact request
+
+Bảng chính:
+
+```text
+contact_requests
+```
+
+API đã có:
+
+```text
+GET  /api/contact-requests
+POST /api/contact-requests
+GET  /api/contact-requests/{contactRequest}
+POST /api/contact-requests/{contactRequest}/cancel
+```
+
+Mục tiêu:
+
+- Brand gửi yêu cầu liên hệ/booking sơ bộ cho talent.
+- Admin theo dõi demand thật.
+- Chưa có chat realtime.
+- Chưa mở thông tin liên hệ riêng tư tự động.
+
+### 3.8. Booking sơ bộ
+
+Bảng chính:
+
+```text
+bookings
+```
+
+API đã có:
+
+```text
+GET  /api/bookings
+POST /api/bookings
+```
+
+Booking hiện ở mức MVP:
+
+- Brand tạo booking request với talent.
+- Có thời gian bắt đầu/kết thúc.
+- Có địa điểm.
+- Có thù lao.
+- Có commission tạm tính.
+- Có `status` và `payment_status`.
+
+Chưa có escrow thật, payment gateway, hợp đồng, dispute workflow đầy đủ.
+
+### 3.9. Survey tiering
+
+Bảng chính:
+
+```text
+survey_responses
+talent_scores
+pageant_recommendations
+```
+
+API đã có:
+
+```text
+POST /api/survey/submit
+GET  /api/survey/progress
+POST /api/survey/calculate
+GET  /api/recommendations
+```
+
+Hiện thuật toán tính tier đang ở mức MVP:
+
+- Nhận câu trả lời khảo sát.
+- Tính điểm theo một số tiêu chí chính.
+- Gán tier `S/A/B/C`.
+- Lưu điểm vào `talent_scores`.
+- Sinh gợi ý cuộc thi vào `pageant_recommendations`.
+
+Cần làm tiếp:
+
+- Đồng bộ đầy đủ với bộ 30 câu hỏi thật trong tài liệu business.
+- Tách scoring logic ra service riêng nếu thuật toán phức tạp hơn.
+- Viết thêm unit test cho các hard rules.
+
+## 4. Admin panel Filament
+
+Admin chạy tại:
+
+```text
+http://127.0.0.1:8000/admin
+```
+
+Các resource đã tạo:
+
+```text
+Người dùng
+Hồ sơ talent
+Hồ sơ đối tác
+Campaign
+Booking
+Yêu cầu liên hệ
+Khảo sát talent
+Điểm tier
+```
+
+Chỉ user có `type = admin` mới vào được admin panel.
+
+Admin hiện dùng để:
+
+- Xem và sửa user.
+- Duyệt/sửa hồ sơ talent.
+- Duyệt/sửa hồ sơ đối tác.
+- Xem campaign.
+- Xem booking.
+- Xem contact request.
+- Xem khảo sát và điểm tier.
+
+Chưa có:
+
+- Dashboard thống kê sâu.
+- Role/permission admin chi tiết.
+- Audit log thao tác admin.
+- KYC workflow.
+- Moderation workflow.
+- Wallet/transaction/escrow resources.
+
+## 5. Dữ liệu demo
+
+Seeder hiện tạo dữ liệu demo để admin không bị trống:
+
+Dữ liệu demo gồm:
+
+- 1 admin.
+- 1 brand có partner profile.
+- 2 talent có profile.
+- Social account và metrics.
+- Calendar event.
+- Campaign demo.
+- Talent trong campaign.
+- Wishlist/talent đã lưu.
+- Contact request.
+- Booking.
+- Survey response.
+- Talent score.
+- Pageant recommendation.
+
+Chạy seed:
+
+```bash
+cd backend
+php artisan db:seed --class=DatabaseSeeder
+```
+
+Reset database local nếu cần:
+
+```bash
+cd backend
+php artisan migrate:fresh --seed
+```
+
+## 6. Lưu ý quan trọng về frontend
+
+Backend đã có API, nhưng frontend hiện chưa nối hết.
+
+Hiện trạng cần hiểu rõ:
+
+- Giao diện Brand/Talent ở Next.js hiện còn nhiều dữ liệu mock/demo.
+- Nếu frontend không gọi API Laravel thì admin sẽ không thấy dữ liệu mới.
+- Campaign trên giao diện Brand hiện chưa chắc đã ghi vào bảng `campaigns`.
+- Talent profile trên giao diện Talent hiện chưa chắc đã ghi vào bảng `profiles`.
+
+Luồng đúng sau khi nối frontend:
+
+1. User đăng ký talent/brand.
+2. Backend tạo `users` và profile placeholder.
+3. Talent hoàn thiện hồ sơ, frontend gọi `PUT /api/my/profile`.
+4. Talent upload ảnh/video/social/lịch, frontend gọi API tương ứng.
+5. Brand hoàn thiện hồ sơ đối tác, frontend gọi `PUT /api/partner/profile`.
+6. Brand tạo campaign, frontend gọi `POST /api/campaigns`.
+7. Brand lưu talent, frontend gọi wishlist API.
+8. Brand gửi yêu cầu liên hệ/booking, frontend gọi contact request hoặc booking API.
+9. Admin sẽ thấy dữ liệu thật trong Filament.
+
+## 7. Việc đã kiểm thử
+
+Backend hiện có feature tests cho:
+
+- Auth API.
+- Tự tạo profile sau register.
+- Partner profile.
+- Talent discovery.
+- Wishlist.
+- Campaign.
+- Campaign talent stage.
+- Contact request.
+- Talent profile/media.
+- Social metrics.
+- Calendar.
+- Booking.
+- Survey tiering.
+
+Lệnh kiểm thử:
+
+```bash
+cd backend
+php artisan test
+```
+
+Kết quả gần nhất:
+
+```text
+22 passed, 110 assertions
+```
+
+## 8. Việc nên làm tiếp theo
+
+### Ưu tiên 1: Nối frontend vào API thật
+
+Các màn nên nối trước:
+
+- Đăng ký/đăng nhập.
+- Talent profile form.
+- Brand partner profile.
+- Brand campaign form.
+- Brand talent đã lưu.
+- Contact request.
+- Booking request.
+
+Mục tiêu:
+
+- Thao tác trên giao diện tạo dữ liệu thật trong SQLite.
+- Admin thấy được dữ liệu mới ngay.
+
+### Ưu tiên 2: Tách service cho logic phức tạp
+
+Hiện một số logic còn nằm trong controller để đi nhanh MVP. Nên tách dần:
+
+```text
+ProfileCompletionService
+TalentScoringService
+PageantRecommendationService
+BookingService
+CampaignService
+MediaUploadService
+```
+
+### Ưu tiên 3: Hoàn thiện admin
+
+Cần bổ sung:
+
+- Dashboard thống kê số user, talent, brand, campaign, booking.
+- Action duyệt/từ chối profile.
+- Action duyệt/từ chối partner profile.
+- Action cập nhật trạng thái booking/contact request.
+- Audit log thao tác admin.
+
+### Ưu tiên 4: KYC, moderation, payment
+
+Các phần này chưa nên làm quá sâu ngay:
+
+- KYC manual trước, AI/OCR sau.
+- Moderation ảnh/video manual trước, AI moderation sau.
+- Ledger/transaction trước, VNPay/Momo/Stripe sau.
+- Local storage trước, S3/MinIO sau.
+- SQL search trước, Elasticsearch sau.
+
+## 9. Các phần chưa triển khai production thật
+
+Chưa có:
+
+- Elasticsearch.
+- Redis queue production.
+- S3/MinIO thật.
+- CDN.
+- AI moderation.
+- Google Calendar sync thật.
+- Payment gateway.
+- Escrow thật.
+- Wallet/ledger.
+- KYC.
+- Audit log.
+- Chat realtime.
+- Agency RBAC phức tạp.
+
+Các phần này nên làm sau khi frontend đã nối được các luồng Phase 1 căn bản.
+
+## 10. Cách chạy nhanh
+
+Cài dependency nếu máy mới clone:
 
 ```bash
 cd backend
 composer install
-copy .env.example .env
 php artisan key:generate
-php artisan migrate
+php artisan migrate --seed
 php artisan test
+php artisan serve
 ```
 
-Hiện tại local development dùng SQLite, không cần bật XAMPP hoặc cấu hình MySQL trong `.env`:
-
-```env
-DB_CONNECTION=sqlite
-```
-
-### Giai Ä‘oáº¡n 1: Sá»­a ná»n dá»¯ liá»‡u ngÆ°á»i dÃ¹ng vÃ  phÃ¢n vai
-
-Hiá»‡n báº£ng `users` cá»§a Breeze cÃ²n quÃ¡ Ä‘Æ¡n giáº£n, trong khi spec yÃªu cáº§u cÃ¡c loáº¡i user: talent/KOL, brand/partner, agency, admin.
-
-Viá»‡c cáº§n lÃ m:
-
-- [ ] ThÃªm cÃ¡c cá»™t ná»n cho `users`: `phone`, `type`, `status`, `is_verified`, `is_ghost`, `last_login_at`.
-- [ ] Cáº­p nháº­t `User` model: fillable, casts, relationship.
-- [ ] Chuáº©n hÃ³a enum báº±ng class hoáº·c config:
-  - user type: `talent`, `brand`, `agency`, `admin`
-  - user status: `pending`, `active`, `suspended`, `banned`
-- [ ] Viáº¿t migration riÃªng, khÃ´ng sá»­a migration cÅ© náº¿u database Ä‘Ã£ cÃ³ thá»ƒ Ä‘ang dÃ¹ng.
-- [ ] Viáº¿t test cho Ä‘Äƒng kÃ½/login vÃ  phÃ¢n loáº¡i user.
-
-Káº¿t quáº£ mong muá»‘n:
-
-- Backend phÃ¢n biá»‡t Ä‘Æ°á»£c ngÆ°á»i dÃ¹ng cÃ¡ nhÃ¢n, brand, agency vÃ  admin.
-- CÃ³ ná»n Ä‘á»ƒ policy/middleware kiá»ƒm tra quyá»n vá» sau.
-
-### Giai Ä‘oáº¡n 2: HoÃ n thiá»‡n Talent Profile core
-
-Spec core yÃªu cáº§u há»“ sÆ¡ talent cÃ³ thÃ´ng tin nhÃ¢n tráº¯c, portfolio, social, lá»‹ch ráº£nh vÃ  completion score.
-
-Táº¡o cÃ¡c model/migration chÃ­nh:
-
-- [ ] `Profile`
-- [ ] `Photo`
-- [ ] `Video`
-- [ ] `SocialAccount`
-- [ ] `SocialMetricHistory`
-- [ ] `CalendarEvent`
-
-API nÃªn cÃ³:
-
-- [ ] `GET /api/profiles/{profile}`
-- [ ] `PUT /api/profiles/{profile}`
-- [ ] `POST /api/profiles/{profile}/photos`
-- [ ] `DELETE /api/profiles/{profile}/photos/{photo}`
-- [ ] `POST /api/profiles/{profile}/videos`
-- [ ] `GET /api/profiles/{profile}/completion`
-
-Service nÃªn cÃ³:
-
-- [ ] `ProfileCompletionService`: tÃ­nh % hoÃ n thiá»‡n há»“ sÆ¡.
-- [ ] `MediaUploadService`: validate file, lÆ°u local trÆ°á»›c; S3 Ä‘á»ƒ phase sau.
-- [ ] `CalendarService`: quáº£n lÃ½ lá»‹ch ráº£nh/báº­n.
-
-Test cáº§n cÃ³:
-
-- [ ] Talent chá»‰ sá»­a Ä‘Æ°á»£c profile cá»§a mÃ¬nh.
-- [ ] Agency chá»‰ sá»­a Ä‘Æ°á»£c profile talent thuá»™c roster cá»§a agency.
-- [ ] Brand chá»‰ xem Ä‘Æ°á»£c pháº§n public.
-- [ ] Upload áº£nh sai Ä‘á»‹nh dáº¡ng bá»‹ cháº·n.
-
-### Giai Ä‘oáº¡n 3: RÃ  soÃ¡t vÃ  nÃ¢ng cáº¥p Talent Tiering Survey hiá»‡n cÃ³
-
-Module survey Ä‘Ã£ cÃ³ nhÆ°ng cáº§n lÃ m cháº¯c hÆ¡n trÆ°á»›c khi ná»‘i vÃ o cÃ¡c luá»“ng khÃ¡c.
-
-Viá»‡c cáº§n lÃ m:
-
-- [ ] Kiá»ƒm tra `TalentScoringService` vá»›i 30 cÃ¢u há»i tháº­t trong `Plan-intop-models.md`.
-- [ ] Äá»“ng bá»™ mÃ£ cÃ¢u há»i vá»›i tÃ i liá»‡u nghiá»‡p vá»¥. Hiá»‡n service dÃ¹ng A1-D6, trong tÃ i liá»‡u business cÃ³ 30 cÃ¢u Ä‘Ã¡nh sá»‘ 1-30 vÃ  nhÃ³m A/B/C Ä‘á»‹nh hÆ°á»›ng.
-- [ ] Quyáº¿t Ä‘á»‹nh output chÃ­nh:
-  - Tier S/A/B/C cho marketplace.
-  - NhÃ³m Ä‘á»‹nh hÆ°á»›ng Hoa háº­u/Runway/KOL náº¿u váº«n cáº§n theo tÃ i liá»‡u 30 cÃ¢u há»i.
-- [ ] Bá»• sung test unit cho hard rules:
-  - chiá»u cao tháº¥p,
-  - khÃ´ng cÃ³ social,
-  - khÃ´ng cÃ³ kinh nghiá»‡m,
-  - Ä‘iá»ƒm tá»•ng tÆ°Æ¡ng á»©ng S/A/B/C.
-- [ ] Sá»­a `User` model Ä‘á»ƒ cast/fillable cÃ³ `tier`, `tier_updated_at`.
-- [ ] CÃ¢n nháº¯c chuyá»ƒn tier sang `profiles` náº¿u profile lÃ  thá»±c thá»ƒ chÃ­nh cá»§a talent.
-
-Káº¿t quáº£ mong muá»‘n:
-
-- Thuáº­t toÃ¡n tiering cÃ³ test, cháº¡y á»•n vÃ  cÃ³ thá»ƒ dÃ¹ng cho search/matching.
-- KhÃ´ng cÃ²n phá»¥ thuá»™c vÃ o dá»¯ liá»‡u giáº£ hoáº·c mapping mÆ¡ há»“.
-
-### Giai Ä‘oáº¡n 4: Search, Discovery vÃ  Wishlist
-
-ÄÃ¢y lÃ  pháº§n brand cáº§n Ä‘á»ƒ tÃ¬m talent. MVP nÃªn dÃ¹ng SQL/Eloquent trÆ°á»›c, chÆ°a cáº§n Elasticsearch ngay.
-
-Táº¡o model/migration:
-
-- [ ] `Wishlist`
-- [ ] `WishlistItem`
-
-API nÃªn cÃ³:
-
-- [ ] `GET /api/search/profiles`
-- [ ] `POST /api/search/profiles/advanced`
-- [ ] `GET /api/profiles/{profile}/similar`
-- [ ] `POST /api/wishlists`
-- [ ] `GET /api/wishlists`
-
-Logic cáº§n cÃ³:
-
-- [ ] Filter theo thÃ nh phá»‘, giá»›i tÃ­nh, chiá»u cao, tier, ká»¹ nÄƒng, follower tá»‘i thiá»ƒu, tráº¡ng thÃ¡i verified.
-- [ ] Sort theo Ä‘iá»ƒm phÃ¹ há»£p, Ä‘á»™ hoÃ n thiá»‡n profile, tier, thá»i gian cáº­p nháº­t.
-- [ ] KhÃ´ng tráº£ thÃ´ng tin nháº¡y cáº£m nhÆ° sá»‘ Ä‘iá»‡n thoáº¡i náº¿u brand chÆ°a Ä‘Æ°á»£c phÃ©p xem.
-
-Test cáº§n cÃ³:
-
-- [ ] Search tráº£ Ä‘Ãºng filter.
-- [ ] Brand khÃ´ng tháº¥y dá»¯ liá»‡u private.
-- [ ] Wishlist khÃ´ng cho lÆ°u trÃ¹ng profile.
-
-### Giai Ä‘oáº¡n 5: Job, Application vÃ  Booking
-
-ÄÃ¢y lÃ  lÃµi marketplace giá»¯a brand vÃ  talent/agency.
-
-Táº¡o model/migration:
-
-- [ ] `Job`
-- [ ] `Application`
-- [ ] `Booking`
-- [ ] `BookingTimeline`
-
-API nÃªn cÃ³:
-
-- [ ] `POST /api/jobs`
-- [ ] `GET /api/jobs/{job}`
-- [ ] `PUT /api/jobs/{job}`
-- [ ] `DELETE /api/jobs/{job}`
-- [ ] `GET /api/jobs/{job}/applications`
-- [ ] `POST /api/jobs/{job}/applications`
-- [ ] `PUT /api/jobs/{job}/applications/{application}`
-- [ ] `POST /api/bookings`
-- [ ] `PUT /api/bookings/{booking}/status`
-
-Logic cáº§n cÃ³:
-
-- [ ] Brand táº¡o job.
-- [ ] Talent á»©ng tuyá»ƒn job.
-- [ ] Agency á»©ng tuyá»ƒn báº±ng nhiá»u talent thuá»™c roster.
-- [ ] Brand duyá»‡t application thÃ nh booking.
-- [ ] Booking kiá»ƒm tra lá»‹ch trÃ¹ng.
-- [ ] Má»i thay Ä‘á»•i tráº¡ng thÃ¡i booking ghi vÃ o timeline.
-
-Test cáº§n cÃ³:
-
-- [ ] Brand chá»‰ sá»­a job cá»§a mÃ¬nh.
-- [ ] Talent khÃ´ng á»©ng tuyá»ƒn trÃ¹ng.
-- [ ] KhÃ´ng táº¡o booking náº¿u lá»‹ch bá»‹ trÃ¹ng.
-- [ ] Agency khÃ´ng Ä‘Æ°á»£c submit talent khÃ´ng thuá»™c agency.
-
-### Giai Ä‘oáº¡n 6: Agency Management
-
-ÄÃ¢y lÃ  pháº§n user Ä‘ang Ä‘Æ°á»£c yÃªu cáº§u lÃ m nhiá»u kháº£ nÄƒng nháº¥t vÃ¬ file Ä‘ang má»Ÿ lÃ  `Agency-Module-Technical-Specs.md`.
-
-Táº¡o model/migration:
-
-- [ ] `Agency`
-- [ ] `AgencyMember`
-- [ ] `AgencyTalent`
-- [ ] `AgencyWallet`
-- [ ] `AgencyTransaction`
-- [ ] `ProfilePermission` hoáº·c cÆ¡ cháº¿ tÆ°Æ¡ng Ä‘Æ°Æ¡ng Ä‘á»ƒ quáº£n lÃ½ quyá»n profile.
-
-API nÃªn cÃ³:
-
-- [ ] `POST /api/agencies`
-- [ ] `GET /api/agencies/{agency}`
-- [ ] `PUT /api/agencies/{agency}`
-- [ ] `DELETE /api/agencies/{agency}`
-- [ ] `GET /api/agencies/{agency}/talents`
-- [ ] `POST /api/agencies/{agency}/talents`
-- [ ] `PUT /api/agencies/{agency}/talents/{agencyTalent}`
-- [ ] `DELETE /api/agencies/{agency}/talents/{agencyTalent}`
-- [ ] `POST /api/agencies/{agency}/talents/import`
-- [ ] `POST /api/agencies/{agency}/talents/{talent}/separate`
-
-Quyá»n agency:
-
-- owner: toÃ n quyá»n.
-- admin: quáº£n lÃ½ talent/booking, xem tÃ i chÃ­nh.
-- coordinator: quáº£n lÃ½ booking, xem/sá»­a giá»›i háº¡n talent.
-- viewer: chá»‰ xem.
-
-Service cáº§n cÃ³:
-
-- [ ] `AgencyPermissionService`
-- [ ] `AgencyTalentService`
-- [ ] `GhostProfileService`
-- [ ] `AgencySeparationService`
-- [ ] `CsvTalentImportService`
-
-Luá»“ng báº¯t buá»™c:
-
-- [ ] Agency táº¡o ghost profile.
-- [ ] Talent Ä‘á»™c láº­p xin gia nháº­p agency.
-- [ ] Agency cháº¥p nháº­n/tá»« chá»‘i.
-- [ ] Khi talent vÃ o agency, profile bá»‹ chuyá»ƒn quyá»n quáº£n lÃ½ theo policy.
-- [ ] Khi tÃ¡ch khá»i agency, kiá»ƒm tra booking Ä‘ang cháº¡y, lÆ°u settlement, tráº£ quyá»n profile.
-
-Test cáº§n cÃ³:
-
-- [ ] Owner thÃªm/sá»­a/xÃ³a talent.
-- [ ] Viewer khÃ´ng sá»­a Ä‘Æ°á»£c talent.
-- [ ] Ghost profile táº¡o user `is_ghost = true`.
-- [ ] Talent khÃ´ng thá»ƒ thuá»™c hai agency active náº¿u Ä‘ang dÃ¹ng mÃ´ hÃ¬nh Ä‘á»™c quyá»n.
-- [ ] Separation khÃ´ng lÃ m máº¥t booking history.
-
-### Giai Ä‘oáº¡n 7: Wallet, Transaction, Payment vÃ  Escrow
-
-TÃ i liá»‡u business cÃ³ nhiá»u mÃ´ hÃ¬nh tiá»n: subscription, pay-per-lead, boost, verified, commission, escrow. MVP nÃªn lÃ m ledger trÆ°á»›c, tÃ­ch há»£p cá»•ng thanh toÃ¡n sau.
-
-Táº¡o model/migration:
-
-- [ ] `Wallet`
-- [ ] `Transaction`
-- [ ] `EscrowAccount`
-- [ ] `Withdrawal`
-- [ ] `PaymentMethod`
-- [ ] `SubscriptionPlan`
-- [ ] `Subscription`
-- [ ] `Invoice`
-
-Service cáº§n cÃ³:
-
-- [ ] `WalletService`
-- [ ] `LedgerService`
-- [ ] `EscrowService`
-- [ ] `CommissionService`
-- [ ] `WithdrawalService`
-
-NguyÃªn táº¯c báº¯t buá»™c:
-
-- [ ] Má»i thay Ä‘á»•i sá»‘ dÆ° cháº¡y trong `DB::transaction`.
-- [ ] KhÃ´ng sá»­a sá»‘ dÆ° trá»±c tiáº¿p trong controller.
-- [ ] Má»—i giao dá»‹ch tiá»n pháº£i cÃ³ `reference_type`, `reference_id`, `description`, `balance_after`.
-- [ ] KhÃ´ng xÃ³a transaction.
-- [ ] Escrow cÃ³ tráº¡ng thÃ¡i: `locked`, `released`, `refunded`, `disputed`.
-
-Test cáº§n cÃ³:
-
-- [ ] Náº¡p tiá»n táº¡o transaction credit.
-- [ ] Lock escrow trá»« available balance, tÄƒng escrow balance.
-- [ ] Release escrow chia tiá»n Ä‘Ãºng theo commission.
-- [ ] Refund tráº£ tiá»n Ä‘Ãºng.
-- [ ] KhÃ´ng thá»ƒ rÃºt quÃ¡ sá»‘ dÆ°.
-
-### Giai Ä‘oáº¡n 8: Admin vÃ  Filament
-
-Repo Ä‘Ã£ cÃ³ Filament nÃªn dÃ¹ng Filament Ä‘á»ƒ lÃ m admin trÆ°á»›c, khÃ´ng cáº§n tá»± viáº¿t dashboard tá»« Ä‘áº§u.
-
-Resource cáº§n táº¡o:
-
-- [ ] UserResource
-- [ ] ProfileResource
-- [ ] AgencyResource
-- [ ] JobResource
-- [ ] BookingResource
-- [ ] TransactionResource
-- [ ] WithdrawalResource
-- [ ] KycSubmissionResource
-- [ ] ContentModerationResource
-- [ ] DisputeResource
-
-Admin workflow cáº§n cÃ³:
-
-- [ ] Duyá»‡t KYC.
-- [ ] Duyá»‡t agency.
-- [ ] Duyá»‡t job nháº¡y cáº£m.
-- [ ] Xem transaction/wallet.
-- [ ] Duyá»‡t withdrawal.
-- [ ] Xá»­ lÃ½ dispute.
-- [ ] KhÃ³a/má»Ÿ khÃ³a user.
-
-Test cáº§n cÃ³:
-
-- [ ] User thÆ°á»ng khÃ´ng vÃ o Ä‘Æ°á»£c admin.
-- [ ] Admin vÃ o Ä‘Æ°á»£c Filament.
-- [ ] Action duyá»‡t/rÃºt tiá»n táº¡o audit log.
-
-### Giai Ä‘oáº¡n 9: KYC, kiá»ƒm duyá»‡t ná»™i dung vÃ  audit log
-
-Táº¡o model/migration:
-
-- [ ] `KycSubmission`
-- [ ] `ModerationItem`
-- [ ] `Report`
-- [ ] `AuditLog`
-
-Service cáº§n cÃ³:
-
-- [ ] `KycService`
-- [ ] `ModerationService`
-- [ ] `AuditLogService`
-
-MVP nÃªn lÃ m manual trÆ°á»›c:
-
-- [ ] User upload CCCD/selfie.
-- [ ] Admin approve/reject.
-- [ ] Profile/job/photo cÃ³ tráº¡ng thÃ¡i pending/approved/rejected.
-- [ ] LÃ½ do reject lÆ°u rÃµ Ä‘á»ƒ frontend hiá»ƒn thá»‹.
-
-AI moderation, OCR, face matching Ä‘á»ƒ phase sau.
-
-### Giai Ä‘oáº¡n 10: Notifications, queue vÃ  background jobs
-
-Táº¡o cÃ¡c notification/event:
-
-- [ ] Talent Ä‘Æ°á»£c má»i booking.
-- [ ] Application Ä‘Æ°á»£c duyá»‡t/tá»« chá»‘i.
-- [ ] Agency nháº­n yÃªu cáº§u gia nháº­p.
-- [ ] Booking Ä‘á»•i tráº¡ng thÃ¡i.
-- [ ] Escrow Ä‘Æ°á»£c release/refund.
-- [ ] KYC Ä‘Æ°á»£c approve/reject.
-
-Ká»¹ thuáº­t:
-
-- [ ] DÃ¹ng Laravel Notifications.
-- [ ] DÃ¹ng queue cho email, import CSV, xá»­ lÃ½ áº£nh/video.
-- [ ] Vá»›i XAMPP local, cÃ³ thá»ƒ cháº¡y queue báº±ng `php artisan queue:work`.
-
-## 5. Cáº¥u trÃºc file Laravel nÃªn hÆ°á»›ng tá»›i
+Mở admin:
 
 ```text
-backend/
-  app/
-    Http/
-      Controllers/
-        Api/
-          ProfileController.php
-          SearchController.php
-          JobController.php
-          BookingController.php
-          AgencyController.php
-          AgencyTalentController.php
-          WalletController.php
-      Requests/
-        Profile/
-        Agency/
-        Booking/
-        Wallet/
-      Resources/
-        ProfileResource.php
-        AgencyResource.php
-        BookingResource.php
-    Models/
-      Profile.php
-      Photo.php
-      Video.php
-      SocialAccount.php
-      CalendarEvent.php
-      Job.php
-      Application.php
-      Booking.php
-      Agency.php
-      AgencyMember.php
-      AgencyTalent.php
-      Wallet.php
-      Transaction.php
-      EscrowAccount.php
-    Policies/
-      ProfilePolicy.php
-      AgencyPolicy.php
-      JobPolicy.php
-      BookingPolicy.php
-      WalletPolicy.php
-    Services/
-      ProfileCompletionService.php
-      TalentScoringService.php
-      SearchService.php
-      BookingService.php
-      AgencyTalentService.php
-      AgencyPermissionService.php
-      WalletService.php
-      EscrowService.php
-      CommissionService.php
-      AuditLogService.php
-  database/
-    migrations/
-    seeders/
-  tests/
-    Feature/
-    Unit/
+http://127.0.0.1:8000/admin
 ```
 
-## 6. Checklist kiá»ƒm thá»­ trÆ°á»›c má»—i láº§n bÃ n giao
+Mở API base:
 
-- [ ] `php artisan migrate:fresh --seed` cháº¡y sáº¡ch trÃªn database local.
-- [ ] `php artisan test` pass.
-- [ ] CÃ¡c API chÃ­nh Ä‘Æ°á»£c test báº±ng Feature Test.
-- [ ] CÃ¡c service tÃ­nh Ä‘iá»ƒm, tiá»n, quyá»n Ä‘Æ°á»£c test báº±ng Unit Test.
-- [ ] KhÃ´ng cÃ³ controller chá»©a logic tiá»n hoáº·c logic quyá»n phá»©c táº¡p.
-- [ ] KhÃ´ng tráº£ dá»¯ liá»‡u nháº¡y cáº£m ra API náº¿u khÃ´ng cÃ³ quyá»n.
-- [ ] Migration cÃ³ rollback Ä‘Æ°á»£c.
-- [ ] CÃ¡c enum/status Ä‘Æ°á»£c thá»‘ng nháº¥t trong toÃ n backend.
+```text
+http://127.0.0.1:8000/api
+```
 
-## 7. Lá»™ trÃ¬nh lÃ m viá»‡c Ä‘á» xuáº¥t cho cÃ¡ nhÃ¢n backend
+Nếu muốn xem dữ liệu SQLite bằng giao diện:
 
-### Tuáº§n 1: Ná»n táº£ng
+- Dùng extension SQLite Viewer trong VS Code.
+- Hoặc dùng DB Browser for SQLite.
+- File cần mở: `backend/database/database.sqlite`.
 
-- [ ] Cháº¡y Ä‘Æ°á»£c backend local báº±ng XAMPP/Composer.
-- [ ] Cháº¡y Ä‘Æ°á»£c test hiá»‡n cÃ³.
-- [ ] Chuáº©n hÃ³a `users` vÃ  phÃ¢n vai.
-- [ ] HoÃ n thiá»‡n profile core migration/model cÆ¡ báº£n.
-- [ ] Viáº¿t test auth/profile/role.
+## 11. Kết luận
 
-### Tuáº§n 2: Talent profile vÃ  survey
+Backend Laravel hiện đã có nền Phase 1 đủ để bắt đầu nối frontend thật:
 
-- [ ] LÃ m profile CRUD API.
-- [ ] LÃ m photo/video upload local.
-- [ ] RÃ  láº¡i survey scoring.
-- [ ] Viáº¿t test cho survey scoring.
-- [ ] LÃ m profile completion.
+```text
+Auth -> Profile -> Search -> Wishlist -> Campaign -> Contact Request -> Booking -> Admin
+```
 
-### Tuáº§n 3: Search, job vÃ  booking
+Trọng tâm tiếp theo không phải tạo thêm nhiều bảng mới, mà là nối các màn frontend hiện có vào API Laravel, sau đó admin sẽ có dữ liệu thật thay vì chỉ dữ liệu seed/demo.
 
-- [ ] LÃ m search profile báº±ng SQL.
-- [ ] LÃ m job/application.
-- [ ] LÃ m booking vÃ  booking timeline.
-- [ ] Cháº·n booking trÃ¹ng lá»‹ch.
-- [ ] Viáº¿t test job/booking.
+## 12. Deploy
 
-### Tuáº§n 4: Agency MVP
+Backend đã có tài liệu deploy riêng:
 
-- [ ] LÃ m agency CRUD.
-- [ ] LÃ m agency member/role/permission.
-- [ ] LÃ m agency talent roster.
-- [ ] LÃ m ghost profile.
-- [ ] LÃ m talent join/separate agency.
-- [ ] Viáº¿t test agency permission.
+```text
+docs/Danh_Docs/Huong_Dan_Deploy_Backend_Railway.md
+```
 
-### Tuáº§n 5: Wallet vÃ  admin
-
-- [ ] LÃ m wallet/transaction ledger.
-- [ ] LÃ m escrow lock/release/refund cÆ¡ báº£n.
-- [ ] LÃ m Filament resource cho user/profile/agency/job/booking/transaction.
-- [ ] Viáº¿t test wallet/escrow.
-
-### Tuáº§n 6: HoÃ n thiá»‡n MVP backend
-
-- [ ] LÃ m KYC manual.
-- [ ] LÃ m moderation manual.
-- [ ] LÃ m audit log.
-- [ ] LÃ m notification cÆ¡ báº£n.
-- [ ] Cháº¡y toÃ n bá»™ test.
-- [ ] Viáº¿t tÃ i liá»‡u API ngáº¯n cho frontend.
-
-## 8. Viá»‡c chÆ°a nÃªn lÃ m ngay
-
-- ChÆ°a cáº§n Elasticsearch á»Ÿ MVP; dÃ¹ng SQL trÆ°á»›c.
-- ChÆ°a cáº§n AWS S3/CDN ngay; dÃ¹ng local storage trÆ°á»›c rá»“i trá»«u tÆ°á»£ng hÃ³a service Ä‘á»ƒ Ä‘á»•i sau.
-- ChÆ°a cáº§n AI moderation/OCR/face matching ngay; lÃ m manual workflow trÆ°á»›c.
-- ChÆ°a cáº§n VNPay/Momo tháº­t ngay; lÃ m ledger vÃ  payment abstraction trÆ°á»›c.
-- ChÆ°a cáº§n microservices; Laravel monolith modular lÃ  Ä‘á»§ cho giai Ä‘oáº¡n Ä‘áº§u.
-- ChÆ°a cáº§n mobile app backend riÃªng; API hiá»‡n táº¡i nÃªn Ä‘á»§ cho web/mobile dÃ¹ng chung.
-
-## 9. Rá»§i ro cáº§n bÃ¡o sá»›m
-
-- Spec ká»¹ thuáº­t Ä‘ang cÃ³ chá»— khÃ´ng Ä‘á»“ng nháº¥t: tÃ i liá»‡u core nÃ³i Node/Express, repo dÃ¹ng Laravel.
-- CÃ³ hai frontend: Next.js á»Ÿ root vÃ  Inertia React trong `backend`. Cáº§n thá»‘ng nháº¥t frontend nÃ o sáº½ gá»i backend chÃ­nh.
-- Survey hiá»‡n cÃ³ chÆ°a cháº¯c khá»›p 100% vá»›i báº£ng 30 cÃ¢u há»i trong tÃ i liá»‡u business.
-- CÃ¡c tÃ i liá»‡u tÃ i chÃ­nh/escrow cÃ³ nhiá»u mÃ´ hÃ¬nh tÃ­nh phÃ­; cáº§n chá»‘t MVP dÃ¹ng mÃ´ hÃ¬nh nÃ o trÆ°á»›c khi code payment tháº­t.
-- Dá»¯ liá»‡u tiá»n vÃ  quyá»n agency náº¿u lÃ m sai sáº½ khÃ³ sá»­a, nÃªn pháº£i cÃ³ test trÆ°á»›c khi má»Ÿ rá»™ng UI.
-
-## 10. Káº¿t luáº­n Ä‘á»‹nh hÆ°á»›ng
-
-HÆ°á»›ng lÃ m há»£p lÃ½ nháº¥t lÃ  coi `backend` Laravel hiá»‡n táº¡i lÃ  nguá»“n backend chÃ­nh, sau Ä‘Ã³ triá»ƒn khai theo thá»© tá»±:
-
-1. Chuáº©n hÃ³a user/role/profile.
-2. LÃ m cháº¯c Talent Tiering Survey Ä‘Ã£ cÃ³.
-3. XÃ¢y Search, Job, Application, Booking.
-4. XÃ¢y Agency Management theo `Agency-Module-Technical-Specs.md`.
-5. XÃ¢y Wallet/Escrow/Transaction ledger.
-6. DÃ¹ng Filament cho Admin.
-7. Sau khi backend á»•n má»›i Ä‘á»ƒ frontend ná»‘i giao diá»‡n chi tiáº¿t.
-
-Táº¥t cáº£ tÃ i liá»‡u tiáº¿p theo trong thÆ° má»¥c `docs/Danh_Docs` nÃªn viáº¿t báº±ng tiáº¿ng Viá»‡t cÃ³ dáº¥u.
+Khuyến nghị deploy backend Laravel lên Railway với PostgreSQL. Local vẫn có thể dùng SQLite để phát triển nhanh, nhưng môi trường public/test nhiều người nên dùng database cloud ổn định hơn.
