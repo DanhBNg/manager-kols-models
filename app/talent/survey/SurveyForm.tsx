@@ -533,17 +533,20 @@ export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: S
 
         {/* Back to history button row */}
         {onBackToDashboard && (
-          <div className="flex justify-between items-center pb-4 border-b border-white/5 mb-6">
+          <div className="flex justify-between items-start pb-4 border-b border-white/5 mb-6">
+            <div className="flex h-11 items-center">
+              <div className="text-[9px] font-bold text-slate-500 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 leading-none">
+                Thời gian: {results.date || "Vừa thực hiện"}
+              </div>
+            </div>
+            
             <button
               type="button"
               onClick={onBackToDashboard}
-              className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[#070913] bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 hover:brightness-105 hover:scale-[1.02] active:scale-98 transition-all cursor-pointer px-4 py-2.5 rounded-xl border border-amber-400/30 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
             >
-              <ArrowLeft className="h-3.5 w-3.5" /> Quay lại lịch sử khảo sát
+              <ArrowLeft className="h-3.5 w-3.5 stroke-[3]" /> Quay lại
             </button>
-            <div className="text-[9px] font-bold text-slate-500 bg-white/5 px-2 py-0.5 rounded">
-              Thời gian: {results.date || "Vừa thực hiện"}
-            </div>
           </div>
         )}
 

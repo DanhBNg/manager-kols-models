@@ -168,10 +168,10 @@ export default function DashboardPage() {
 
           <div className="max-w-3xl">
             <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-cyan-400/25 bg-cyan-400/10 text-cyan-300">
+              <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-amber-400/40 bg-amber-400/10 text-amber-300">
                 Talent Control Center
               </span>
-              <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-emerald-400/25 bg-emerald-400/10 text-emerald-300">
+              <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-yellow-400/30 bg-yellow-400/10 text-yellow-200">
                 Profile Active
               </span>
               <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
@@ -362,12 +362,12 @@ export default function DashboardPage() {
       {/* Quick Stats Grid - replica of dashboard.htm card styles */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-        {/* Thẻ 1: Job Phù Hợp - Cyan */}
-        <div className="group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-[#111421]/88 to-[#070913]/96 p-5 transition-all duration-300 hover:-translate-y-0.5 border-cyan-400/25 shadow-[0_0_22px_rgba(34,211,238,0.12)]">
-          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-10 blur-2xl bg-gradient-to-br from-cyan-300 to-blue-500"></div>
+        {/* Thẻ 1: Job Phù Hợp - Gold */}
+        <div className="group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-[#1a1305]/88 to-[#070913]/96 p-5 transition-all duration-300 hover:-translate-y-0.5 border-amber-400/35 shadow-[0_0_22px_rgba(245,158,11,0.18)]">
+          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-15 blur-2xl bg-gradient-to-br from-amber-300 to-yellow-600"></div>
           <div className="flex items-start justify-between gap-4">
             <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Job Phù Hợp</span>
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-400/25 bg-cyan-400/10 text-cyan-300">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-amber-400/35 bg-amber-400/15 text-amber-300">
               <Briefcase className="h-4.5 w-4.5" />
             </div>
           </div>
@@ -375,12 +375,12 @@ export default function DashboardPage() {
           <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">AI Matching</span>
         </div>
 
-        {/* Thẻ 2: Lịch Trình - Purple */}
-        <div className="group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-[#111421]/88 to-[#070913]/96 p-5 transition-all duration-300 hover:-translate-y-0.5 border-purple-400/25 shadow-[0_0_22px_rgba(168,85,247,0.12)]">
-          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-10 blur-2xl bg-gradient-to-br from-purple-300 to-fuchsia-500"></div>
+        {/* Thẻ 2: Lịch Trình - Gold-Deep */}
+        <div className="group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-[#14100a]/88 to-[#070913]/96 p-5 transition-all duration-300 hover:-translate-y-0.5 border-yellow-500/30 shadow-[0_0_22px_rgba(234,179,8,0.14)]">
+          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-12 blur-2xl bg-gradient-to-br from-yellow-300 to-amber-600"></div>
           <div className="flex items-start justify-between gap-4">
             <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Lịch Trình Show</span>
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-purple-400/25 bg-purple-400/10 text-purple-300">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-yellow-500/30 bg-yellow-500/10 text-yellow-300">
               <Calendar className="h-4.5 w-4.5" />
             </div>
           </div>
@@ -401,12 +401,12 @@ export default function DashboardPage() {
           <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">Tổng thu nhập hiện tại</span>
         </div>
 
-        {/* Thẻ 4: Độ tin cậy - Emerald */}
-        <div className="group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-[#111421]/88 to-[#070913]/96 p-5 transition-all duration-300 hover:-translate-y-0.5 border-emerald-400/25 shadow-[0_0_22px_rgba(52,211,153,0.12)]">
-          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-10 blur-2xl bg-gradient-to-br from-emerald-300 to-teal-500"></div>
+        {/* Thẻ 4: Độ tin cậy - Gold-Light */}
+        <div className="group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-[#1a1508]/88 to-[#070913]/96 p-5 transition-all duration-300 hover:-translate-y-0.5 border-amber-300/30 shadow-[0_0_22px_rgba(253,230,138,0.12)]">
+          <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-10 blur-2xl bg-gradient-to-br from-amber-100 to-amber-500"></div>
           <div className="flex items-start justify-between gap-4">
             <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Độ tin cậy</span>
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-400/10 text-emerald-300">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-amber-300/30 bg-amber-300/10 text-amber-200">
               <Award className="h-4.5 w-4.5" />
             </div>
           </div>
@@ -417,10 +417,10 @@ export default function DashboardPage() {
       </div>
 
       {/* AI Career Diagnostics Component */}
-      <div className="rounded-2xl border border-purple-500/25 bg-gradient-to-b from-[#0e111f]/90 to-[#050712]/95 shadow-[0_0_30px_rgba(168,85,247,0.06)] p-6 space-y-6">
-        <div className="flex items-center gap-2.5 border-b border-white/5 pb-4 justify-between">
+      <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-b from-[#150f02]/90 to-[#050712]/95 shadow-[0_0_30px_rgba(245,158,11,0.08)] p-6 space-y-6">
+        <div className="flex items-center gap-2.5 border-b border-amber-400/10 pb-4 justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-purple-400 animate-pulse" />
+            <Sparkles className="h-5 w-5 text-amber-400 animate-pulse" />
             <div>
               <h3 className="font-display font-extrabold text-xs text-white uppercase tracking-wider">
                 Định Hướng Sự Nghiệp
@@ -430,14 +430,14 @@ export default function DashboardPage() {
               </span>
             </div>
           </div>
-          <div className="text-[9px] font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20 uppercase tracking-wider">
+          <div className="text-[9px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 uppercase tracking-wider">
             AI Powered
           </div>
         </div>
 
         {profile.tier === "Potential" ? (
-          <div className="flex flex-col items-center justify-center text-center p-8 py-12 rounded-xl border border-white/5 bg-slate-950/40 max-w-xl mx-auto space-y-5">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400">
+          <div className="flex flex-col items-center justify-center text-center p-8 py-12 rounded-xl border border-amber-500/15 bg-slate-950/40 max-w-xl mx-auto space-y-5">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400">
               <Sparkles className="h-6 w-6 animate-pulse" />
             </div>
             <div className="space-y-2">
@@ -448,7 +448,7 @@ export default function DashboardPage() {
             </div>
             <button
               onClick={() => router.push("/talent/survey?start=true")}
-              className="h-10 px-6 rounded-xl bg-gradient-to-r from-purple-400 to-purple-600 text-xs font-black text-white hover:brightness-105 shadow-lg shadow-purple-500/15 hover:shadow-purple-500/25 active:scale-98 transition-all uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
+              className="h-10 px-6 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-600 text-xs font-black text-black hover:brightness-105 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 active:scale-98 transition-all uppercase tracking-wider cursor-pointer flex items-center gap-1.5"
             >
               Làm Khảo Sát Ngay <ArrowUpRight className="h-4.5 w-4.5" />
             </button>
@@ -471,8 +471,8 @@ export default function DashboardPage() {
               <div className="h-36 w-36 mx-auto my-5 shrink-0 rounded-xl border border-white/5 bg-slate-950 p-2 shadow-inner flex items-center justify-center">
                 <RadarChart
                   scores={profile.surveyScores}
-                  fillColor="rgba(168,85,247,0.18)"
-                  strokeColor="#a855f7"
+                  fillColor="rgba(245,158,11,0.22)"
+                  strokeColor="#f59e0b"
                   strokeWidth={2.5}
                   labelFontSize={12}
                   labelFontWeight="black"
@@ -504,34 +504,34 @@ export default function DashboardPage() {
                     }).sort((a, b) => b.matchScore - a.matchScore);
 
                     return calculatedJobs.map((job, idx) => {
-                      let barColor = "bg-purple-500";
-                      let textColor = "text-purple-400";
+                      let barColor = "bg-amber-700";
+                      let textColor = "text-amber-600";
                       if (job.matchScore >= 80) {
                         barColor = "bg-amber-400";
                         textColor = "text-amber-400";
                       } else if (job.matchScore >= 70) {
-                        barColor = "bg-fuchsia-500";
-                        textColor = "text-fuchsia-400";
+                        barColor = "bg-amber-500";
+                        textColor = "text-amber-400";
                       } else if (job.matchScore >= 60) {
-                        barColor = "bg-cyan-500";
-                        textColor = "text-cyan-400";
+                        barColor = "bg-yellow-600";
+                        textColor = "text-yellow-500";
                       } else {
-                        barColor = "bg-slate-600";
-                        textColor = "text-slate-400";
+                        barColor = "bg-yellow-800";
+                        textColor = "text-yellow-700";
                       }
 
                       return (
                         <div
                           key={job.id}
-                          className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3 hover:bg-slate-900/20 hover:border-white/10 transition-all duration-300 group"
+                          className="flex items-center gap-3.5 rounded-xl border border-white/5 bg-slate-950 p-3 hover:bg-amber-400/5 hover:border-amber-400/15 transition-all duration-300 group"
                         >
-                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[10px] font-black text-slate-400 group-hover:bg-purple-500/15 group-hover:text-purple-400 transition-colors">
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/5 text-[10px] font-black text-slate-400 group-hover:bg-amber-500/15 group-hover:text-amber-400 transition-colors">
                             {idx + 1}
                           </div>
 
                           <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-center mb-1">
-                              <h4 className="text-[11.5px] font-extrabold text-white truncate group-hover:text-purple-300 transition-colors">
+                              <h4 className="text-[11.5px] font-extrabold text-white truncate group-hover:text-amber-300 transition-colors">
                                 {job.title}
                               </h4>
                               <span className={cn("font-display font-black text-[11px] shrink-0 ml-2", textColor)}>
@@ -618,35 +618,35 @@ export default function DashboardPage() {
 
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Hoạt Động Gần Đây</h2>
-            <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-emerald-400/25 bg-emerald-400/10 text-emerald-300">
+            <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-amber-400/30 bg-amber-400/10 text-amber-300">
               Thời Gian Thực
             </span>
           </div>
 
           <div className="space-y-3">
-            <div className="flex gap-3 rounded-xl border border-white/5 bg-white/[0.025] p-3 text-xs leading-relaxed">
-              <div className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
+            <div className="flex gap-3 rounded-xl border border-amber-400/10 bg-amber-400/[0.03] p-3 text-xs leading-relaxed">
+              <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
               <div>
                 <p className="font-semibold text-slate-300">Nhãn hàng Glow Beauty Cosmetics đã tạo chiến dịch mới Mega Beauty Live.</p>
                 <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-600">3 phút trước</span>
               </div>
             </div>
-            <div className="flex gap-3 rounded-xl border border-white/5 bg-white/[0.025] p-3 text-xs leading-relaxed">
-              <div className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
+            <div className="flex gap-3 rounded-xl border border-amber-400/10 bg-amber-400/[0.03] p-3 text-xs leading-relaxed">
+              <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
               <div>
                 <p className="font-semibold text-slate-300">Bạn đã đồng ý ứng tuyển vào chiến dịch #BK12082 (Glow Beauty).</p>
                 <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-600">4 phút trước</span>
               </div>
             </div>
-            <div className="flex gap-3 rounded-xl border border-white/5 bg-white/[0.025] p-3 text-xs leading-relaxed">
-              <div className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
+            <div className="flex gap-3 rounded-xl border border-amber-400/10 bg-amber-400/[0.03] p-3 text-xs leading-relaxed">
+              <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
               <div>
                 <p className="font-semibold text-slate-300">Đã nhận thanh toán đặt cọc: 28.000.000 VND từ nhãn hàng Maison Design.</p>
                 <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-600">5 phút trước</span>
               </div>
             </div>
-            <div className="flex gap-3 rounded-xl border border-white/5 bg-white/[0.025] p-3 text-xs leading-relaxed">
-              <div className="mt-1 h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></div>
+            <div className="flex gap-3 rounded-xl border border-amber-400/10 bg-amber-400/[0.03] p-3 text-xs leading-relaxed">
+              <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]"></div>
               <div>
                 <p className="font-semibold text-slate-300">Quản trị viên đã phê duyệt tích xanh xác minh của thương hiệu Diamond Luxury.</p>
                 <span className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-slate-600">12 phút trước</span>
@@ -661,7 +661,7 @@ export default function DashboardPage() {
 
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Định Hướng Sự Nghiệp & Cảnh Báo AI</h2>
-            <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-purple-400/25 bg-purple-400/10 text-purple-300">
+            <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-amber-500/25 bg-amber-500/10 text-amber-300">
               Thông Tin Hệ Thống
             </span>
           </div>
@@ -675,18 +675,18 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* AI Recommendation: Purple */}
-            <div className="rounded-xl border p-3 border-purple-400/25 bg-purple-400/10 text-xs">
+            {/* AI Recommendation: Gold */}
+            <div className="rounded-xl border p-3 border-amber-400/25 bg-amber-400/8 text-xs">
               <div className="flex items-start gap-3">
-                <Sparkles className="mt-0.5 h-4 w-4 text-purple-300 shrink-0" />
-                <p className="font-bold leading-5 text-slate-200">Liên kết tài khoản mạng xã hội (TikTok, Instagram) để nâng thứ hạng lên <b className="text-purple-300">Tier S</b> và tăng tỷ lệ được duyệt job.</p>
+                <Sparkles className="mt-0.5 h-4 w-4 text-amber-300 shrink-0" />
+                <p className="font-bold leading-5 text-slate-200">Liên kết tài khoản mạng xã hội (TikTok, Instagram) để nâng thứ hạng lên <b className="text-amber-300">Tier S</b> và tăng tỷ lệ được duyệt job.</p>
               </div>
             </div>
 
-            {/* Verified: Cyan */}
-            <div className="rounded-xl border p-3 border-cyan-400/25 bg-cyan-400/10 text-xs">
+            {/* Verified: Gold */}
+            <div className="rounded-xl border p-3 border-yellow-500/25 bg-yellow-500/8 text-xs">
               <div className="flex items-start gap-3">
-                <ShieldCheck className="mt-0.5 h-4 w-4 text-cyan-300 shrink-0" />
+                <ShieldCheck className="mt-0.5 h-4 w-4 text-yellow-300 shrink-0" />
                 <p className="font-bold leading-5 text-slate-200">Tài khoản của bạn đã được kiểm định và cấp tích xanh xác thực bởi Ban quản trị VNP.</p>
               </div>
             </div>
