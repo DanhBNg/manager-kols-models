@@ -73,21 +73,25 @@ Nếu chưa nối frontend public thì có thể để trống `FRONTEND_URL` t�
 
 ### Bước 4: Build và migrate
 
-Trong phần cấu hình deploy của service backend:
+Project đã có file:
 
-Build command:
-
-```bash
-npm run build
+```text
+backend/nixpacks.toml
 ```
 
-Pre-deploy command:
+File này cấu hình Railway build Laravel và chạy migration trước khi start server:
 
 ```bash
-chmod +x ./railway/init-app.sh && sh ./railway/init-app.sh
+php artisan migrate --force
 ```
 
-File `backend/railway/init-app.sh` sẽ tự chạy migrate database và optimize Laravel trước khi service public.
+Nếu Railway yêu cầu cấu hình Root Directory, chọn:
+
+```text
+backend
+```
+
+Nếu Railway đọc được `backend/nixpacks.toml` thì không cần nhập thủ công Build command hoặc Pre-deploy command.
 
 ### Bước 5: Generate domain
 
@@ -117,4 +121,28 @@ https://domain-railway-cua-ban/api/auth/social/facebook/callback
 
 Railway có thể tự deploy lại khi bạn push code mới lên GitHub.
 
-Mỗi lần deploy, migration sẽ chạy tự động qua script `railway/init-app.sh`.
+Mỗi lần deploy, migration sẽ chạy tự động qua start command trong `backend/nixpacks.toml`.
+
+## 6. Debug lỗi 500
+
+Nếu mở domain hoặc `/admin` bị lỗi 500, kiểm tra theo thứ tự:
+
+1. Vào Railway service backend, mở tab `Logs`.
+2. Xem log runtime gần thời điểm mở trang.
+3. Kiểm tra các biến môi trường bắt buộc:
+
+```text
+APP_ENV=production
+APP_KEY=base64:...
+APP_DEBUG=false
+APP_URL=https://domain-railway-cua-ban
+DB_CONNECTION=pgsql
+DB_URL=${{Postgres.DATABASE_URL}}
+SESSION_DRIVER=database
+CACHE_STORE=database
+QUEUE_CONNECTION=database
+```
+
+4. Nếu log báo thiếu bảng như `sessions`, `cache`, `users`, `migrations`, nghĩa là migration chưa chạy. File `backend/nixpacks.toml` hiện đã có lệnh `php artisan migrate --force` ở start command.
+5. Nếu log báo `No application encryption key has been specified`, nghĩa là thiếu `APP_KEY`.
+6. Nếu log báo không kết nối được database, kiểm tra PostgreSQL service đã được thêm vào cùng Railway project và biến `DB_URL` đã trỏ đúng `${{Postgres.DATABASE_URL}}`.
