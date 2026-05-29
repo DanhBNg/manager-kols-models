@@ -162,16 +162,6 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
 
-      {/* Mobile Page Header (Hidden on Desktop) */}
-      <div className="flex md:hidden items-center justify-between border-b border-[#151b2d] pb-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-400/10 border border-amber-400/30">
-            <span className="text-xs">👑</span>
-          </div>
-          <h1 className="font-display font-bold text-white text-xs tracking-wider uppercase">VNP BEAUTYTALENT</h1>
-        </div>
-      </div>
-
       {/* Welcome Title / Header Banner - exact replica of dashboard.htm banner styling */}
       <div className="relative overflow-hidden rounded-3xl border border-white/7 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.14),transparent_34%),linear-gradient(135deg,rgba(15,23,42,0.94),rgba(2,6,23,0.98))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">

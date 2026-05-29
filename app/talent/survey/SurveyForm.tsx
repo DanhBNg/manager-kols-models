@@ -61,14 +61,20 @@ const JOBS_LIST = [
 ];
 
 interface SurveyFormProps {
-  resetCounter?: number;
-  onActiveChange?: (active: boolean) => void;
+  initialHistoryEntry?: any;
+  onBackToDashboard?: () => void;
 }
 
-export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormProps = {}) {
+export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: SurveyFormProps = {}) {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [maxStep, setMaxStep] = useState(1);
   
+  // Track max step reached to allow click-to-navigation on header stepper
+  React.useEffect(() => {
+    setMaxStep((prev) => Math.max(prev, step));
+  }, [step]);
+
   // Outer Step 5 (Orientation survey) inner question tracker (0 to 19)
   const [activeSurveyQIdx, setActiveSurveyQIdx] = useState(0);
 
@@ -135,134 +141,31 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
     }
   });
 
-  const [showHistoryDashboard, setShowHistoryDashboard] = useState(false);
-  const [historyList, setHistoryList] = useState<any[]>([]);
-
   React.useEffect(() => {
-    if (resetCounter && resetCounter > 0) {
-      setShowHistoryDashboard(false);
+    if (initialHistoryEntry) {
+      setResults({
+        pageant: initialHistoryEntry.pageant,
+        runway: initialHistoryEntry.runway,
+        kol: initialHistoryEntry.kol,
+        mainCategory: initialHistoryEntry.mainCategory,
+        tier: initialHistoryEntry.tier,
+        profileScore: initialHistoryEntry.profileScore,
+        date: initialHistoryEntry.date,
+        hardRules: {
+          strictPageantAllowed: true,
+          runwayAllowed: initialHistoryEntry.runway >= 50,
+          hasLanguagePriority: initialHistoryEntry.pageant >= 70
+        }
+      });
+      setIsSubmitted(true);
+    } else {
       setIsSubmitted(false);
       setStep(1);
+      setMaxStep(1);
       setActiveSurveyQIdx(0);
       setSurveyAnswers({});
     }
-  }, [resetCounter]);
-
-  React.useEffect(() => {
-    if (onActiveChange) {
-      onActiveChange(!showHistoryDashboard);
-    }
-  }, [showHistoryDashboard, onActiveChange]);
-
-  React.useEffect(() => {
-    let existingHistory = localStorage.getItem("vnp_talent_survey_history");
-    let parsedHistory = [];
-    if (existingHistory) {
-      try {
-        parsedHistory = JSON.parse(existingHistory);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    
-    // Always seed a mock history entry if empty, so the user sees it immediately on startup
-    if (!Array.isArray(parsedHistory) || parsedHistory.length === 0) {
-      parsedHistory = [{
-        id: 1779889600000,
-        date: "20:27:06 27/05/2026",
-        mainCategory: "Người mẫu Runway chuyên nghiệp",
-        tier: "A",
-        pageant: 15,
-        runway: 80,
-        kol: 10,
-        profileScore: 100
-      }];
-      localStorage.setItem("vnp_talent_survey_history", JSON.stringify(parsedHistory));
-      
-      // Also seed the matching profile so it matches
-      const existingProfile = localStorage.getItem("vnp_talent_profile");
-      if (!existingProfile) {
-        const defaultProfile = {
-          name: "Nguyễn Mai Anh",
-          birthYear: "2002",
-          location: "Hà Nội",
-          hometown: "Nam Định",
-          phone: "0912345678",
-          email: "maianh@gmail.com",
-          height: "172",
-          weight: "51",
-          bust: "85",
-          waist: "60",
-          hips: "90",
-          plasticSurgery: "Vẻ đẹp hoàn toàn tự nhiên, chưa từng can thiệp",
-          maritalStatus: "Độc thân, chưa từng sinh con",
-          education: "Cao đẳng / Đại học",
-          languages: "Thành thạo / Lưu loát (Tương đương IELTS 6.5 trở lên)",
-          skills: "Catwalk, Diễn xuất trước ống kính, Thuyết trình",
-          experience: "Đại sứ thương hiệu VNP 2026, Top 10 Face of Vietnam",
-          tiktokUrl: "https://tiktok.com/@maianh",
-          instagramUrl: "https://instagram.com/maianh",
-          facebookUrl: "https://facebook.com/maianh",
-          youtubeUrl: "https://youtube.com/maianh",
-          tiktokFollowers: "80000",
-          instagramFollowers: "30000",
-          facebookFollowers: "10000",
-          youtubeFollowers: "0",
-          followersCount: "120000",
-          surveyScores: {
-            pageant: 15,
-            runway: 80,
-            kol: 10
-          },
-          mainCategory: "Người mẫu Runway chuyên nghiệp",
-          profileScore: 100,
-          tier: "A",
-          isOnboarded: true,
-          avatar: "/avatar.png",
-          skillsList: ["Catwalk", "Diễn xuất trước ống kính", "Thuyết trình"],
-          languagesList: ["Tiếng Việt", "Tiếng Anh (IELTS 7.5)"],
-          mediaUploads: {
-            avatar: "maianh_avatar.jpg",
-            portfolio: "portfolio_cv_maianh.pdf",
-            introVideo: "video_introduction.mp4"
-          }
-        };
-        localStorage.setItem("vnp_talent_profile", JSON.stringify(defaultProfile));
-      } else {
-        try {
-          const parsed = JSON.parse(existingProfile);
-          if (parsed && (parsed.avatar?.includes("unsplash.com") || !parsed.avatar)) {
-            parsed.avatar = "/avatar.png";
-            localStorage.setItem("vnp_talent_profile", JSON.stringify(parsed));
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-    
-    setHistoryList(parsedHistory);
-    setShowHistoryDashboard(true);
-  }, []);
-
-  const handleViewHistoryDetail = (entry: any) => {
-    setResults({
-      pageant: entry.pageant,
-      runway: entry.runway,
-      kol: entry.kol,
-      mainCategory: entry.mainCategory,
-      tier: entry.tier,
-      profileScore: entry.profileScore,
-      date: entry.date,
-      hardRules: {
-        strictPageantAllowed: true,
-        runwayAllowed: entry.runway >= 50,
-        hasLanguagePriority: entry.pageant >= 70
-      }
-    });
-    setIsSubmitted(true);
-    setShowHistoryDashboard(false);
-  };
+  }, [initialHistoryEntry]);
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -488,7 +391,6 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
     }
     updatedHistory.unshift(newHistoryEntry);
     localStorage.setItem("vnp_talent_survey_history", JSON.stringify(updatedHistory));
-    setHistoryList(updatedHistory);
 
     // Save to local storage for other views in the application
     const userProfile = {
@@ -630,14 +532,11 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
         <div className="absolute -bottom-12 -left-12 h-64 w-64 rounded-full blur-[100px] -z-10 bg-slate-900 pointer-events-none" />
 
         {/* Back to history button row */}
-        {historyList.length > 0 && (
+        {onBackToDashboard && (
           <div className="flex justify-between items-center pb-4 border-b border-white/5 mb-6">
             <button
               type="button"
-              onClick={() => {
-                setIsSubmitted(false);
-                setShowHistoryDashboard(true);
-              }}
+              onClick={onBackToDashboard}
               className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               <ArrowLeft className="h-3.5 w-3.5" /> Quay lại lịch sử khảo sát
@@ -771,9 +670,9 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
                   onClick={() => {
                     setIsSubmitted(false);
                     setStep(1);
+                    setMaxStep(1);
                     setActiveSurveyQIdx(0);
                     setSurveyAnswers({});
-                    setShowHistoryDashboard(false);
                   }}
                   className="flex h-11 w-full items-center justify-center rounded-xl border border-white/10 bg-transparent hover:bg-white/5 hover:text-white font-display text-xs font-bold text-slate-300 transition-all cursor-pointer"
                 >
@@ -902,124 +801,6 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
     );
   }
 
-  if (showHistoryDashboard) {
-    return (
-      <div className="w-full max-w-6xl mx-auto space-y-6 animate-in fade-in duration-500">
-        
-        {/* CARD 2: Lịch Sử Khảo Sát & Định Hướng */}
-        <div className="bg-[#070913]/95 p-6 md:p-8 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden transition-all duration-500">
-          <div className="absolute top-0 right-0 -z-10 h-32 w-32 bg-amber-400/5 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 -z-10 h-32 w-32 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
-
-          <div className="border-b border-white/5 pb-4 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <h2 className="font-display text-xl font-black text-white uppercase tracking-tight">
-                Lịch Sử Khảo Sát & Định Hướng
-              </h2>
-              <p className="text-[11px] text-slate-400 mt-1 leading-relaxed text-left">
-                Xem lại kết quả chẩn đoán năng lực sắc đẹp và lịch sử làm khảo sát của bạn.
-              </p>
-            </div>
-            
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => router.push("/talent/portfolio")}
-                className="h-9 px-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white text-[10px] font-bold text-slate-300 transition-all cursor-pointer"
-              >
-                Hồ Sơ Cá Nhân
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowHistoryDashboard(false);
-                  setIsSubmitted(false);
-                  setStep(1);
-                  setActiveSurveyQIdx(0);
-                  setSurveyAnswers({});
-                }}
-                className="h-9 px-4 rounded-lg bg-gradient-to-r from-amber-200 to-amber-500 text-[10px] font-bold text-[#070913] hover:brightness-105 transition-all cursor-pointer"
-              >
-                Làm Khảo Sát Mới
-              </button>
-            </div>
-          </div>
-
-          {/* History Log list */}
-          <div className="space-y-4">
-            <span className="block text-[10px] text-slate-500 uppercase tracking-widest font-black text-left">Các lượt khảo sát đã thực hiện</span>
-            
-            <div className="rounded-2xl border border-white/5 bg-[#03050c]/60 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-white/5 bg-white/2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                      <th className="py-3 px-4">Thời gian</th>
-                      <th className="py-3 px-4">Định hướng cốt lõi</th>
-                      <th className="py-3 px-4 text-center">Phân hạng (Tier)</th>
-                      <th className="py-3 px-4 text-center">Tương thích</th>
-                      <th className="py-3 px-4 text-center">Độ hoàn thiện</th>
-                      <th className="py-3 px-4 text-right">Hành động</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 text-[11px]">
-                    {historyList.map((entry: any) => (
-                      <tr key={entry.id} className="hover:bg-white/2 transition-colors group">
-                        <td className="py-3.5 px-4 font-medium text-slate-300">{entry.date}</td>
-                        <td className="py-3.5 px-4 text-slate-200">
-                          <span className="flex items-center gap-1.5 font-bold">
-                            <Star className="h-3 w-3 text-amber-400 fill-amber-400" />
-                            {entry.mainCategory}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 text-center">
-                          <span className={cn(
-                            "inline-block px-2 py-0.5 rounded text-[9px] font-extrabold tracking-wider border",
-                            entry.tier === "S" ? "bg-amber-400/10 text-amber-300 border-amber-400/30" :
-                            entry.tier === "A" ? "bg-slate-300/10 text-slate-100 border-slate-300/30" :
-                            entry.tier === "B" ? "bg-purple-500/10 text-purple-300 border-purple-500/30" :
-                            entry.tier === "C" ? "bg-teal-500/10 text-teal-300 border-teal-500/30" :
-                            "bg-rose-500/10 text-rose-300 border-rose-500/30"
-                          )}>
-                            {entry.tier === "Potential" ? "Potential" : `Tier ${entry.tier}`}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 text-center text-[10px] text-slate-400">
-                          P: <strong className="text-amber-400 font-bold">{entry.pageant}%</strong> | 
-                          R: <strong className="text-purple-400 font-bold">{entry.runway}%</strong> | 
-                          K: <strong className="text-teal-400 font-bold">{entry.kol}%</strong>
-                        </td>
-                        <td className="py-3.5 px-4 text-center text-slate-300 font-bold">{entry.profileScore}/100</td>
-                        <td className="py-3.5 px-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => handleViewHistoryDetail(entry)}
-                            className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-400 hover:text-amber-300 transition-colors uppercase cursor-pointer"
-                          >
-                            Xem Lại <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          {/* Info advice box */}
-          <div className="mt-6 rounded-xl border border-amber-400/10 bg-amber-400/5 p-4 flex items-start gap-3">
-            <Info className="h-4.5 w-4.5 text-amber-400 shrink-0 mt-0.5" />
-            <div className="text-[10px] text-slate-400 leading-relaxed text-left">
-              <strong className="text-amber-300 font-bold">Lời khuyên từ AI:</strong> Định hướng nghề nghiệp của bạn có thể thay đổi dựa trên các số liệu nhân trắc hoặc mức độ phủ sóng truyền thông (Followers) cập nhật mới. Bạn nên làm lại bài khảo sát định kỳ 3 tháng một lần để cập nhật chẩn đoán chính xác nhất từ hệ thống.
-            </div>
-          </div>
-        </div>
-
-      </div>
-    );
-  }
-
   return (
     <div className="w-full max-w-6xl mx-auto rounded-3xl border border-white/5 bg-[#070913]/95 p-6 md:p-8 shadow-2xl relative overflow-hidden transition-all duration-500">
       
@@ -1028,48 +809,107 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
       <div className="absolute bottom-0 left-0 -z-10 h-32 w-32 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
 
       {/* Modern Stepper Header Progress */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-white/5">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">
-              Khảo Sát: Bước {step} / 5
-            </span>
-            <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-slate-400 font-medium">
-              {step === 1 && "Thông tin cơ bản"}
-              {step === 2 && "Nhân trắc học"}
-              {step === 3 && "Học vấn & Kỹ năng"}
-              {step === 4 && "Social & Portfolio"}
-              {step === 5 && "Khảo sát định hướng"}
-            </span>
+      <div className="mb-8 pb-6 border-b border-white/10 space-y-6">
+        <div className="flex items-center justify-between gap-3 w-full">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-amber-300 uppercase tracking-widest bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">
+                Bước {step} / 5
+              </span>
+              <span className="text-xs font-black text-white">
+                {step === 1 && "Thông tin cơ bản"}
+                {step === 2 && "Nhân trắc học"}
+                {step === 3 && "Học vấn & Kỹ năng"}
+                {step === 4 && "Social & Portfolio"}
+                {step === 5 && "Khảo sát định hướng"}
+              </span>
+            </div>
+            {/* Micro feedback text */}
+            <p className="text-[10px] text-slate-400 mt-1 font-medium">
+              Hồ sơ định hướng của bạn đã hoàn thiện <strong className="text-amber-300 font-bold">{completenessPercent}%</strong>
+            </p>
           </div>
-          {/* Micro feedback text */}
-          <p className="text-[10px] text-slate-500 mt-1">
-            Hồ sơ định hướng của bạn đã hoàn thiện <strong className="text-amber-400 font-bold">{completenessPercent}%</strong>
-          </p>
-        </div>
 
-        {/* Step indicators / History link */}
-        <div className="flex items-center gap-4">
-          {historyList.length > 0 && (
+          {onBackToDashboard && (
             <button
               type="button"
-              onClick={() => setShowHistoryDashboard(true)}
-              className="text-[10px] font-bold text-slate-400 hover:text-white transition-colors underline cursor-pointer"
+              onClick={onBackToDashboard}
+              className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[#070913] bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500 hover:brightness-105 hover:scale-[1.02] active:scale-98 transition-all cursor-pointer px-4 py-2.5 rounded-xl border border-amber-400/30 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
             >
-              Xem lịch sử khảo sát
+              <ArrowLeft className="h-3.5 w-3.5 stroke-[3]" /> Quay lại
             </button>
           )}
-          
-          <div className="flex items-center gap-1 w-full md:w-48">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <div
-                key={s}
-                className={cn(
-                  "h-1.5 flex-1 rounded-full transition-all duration-500",
-                  s <= step ? "bg-gradient-to-r from-amber-200 to-amber-500" : "bg-white/5"
-                )}
-              />
-            ))}
+        </div>
+
+        {/* The New Interactive Stepper */}
+        <div className="w-full relative py-4 px-4">
+          {/* Progress bar container (aligned to bubble centers) */}
+          <div className="absolute top-8 left-8 right-8 h-[2px] bg-white/10 -translate-y-1/2 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 transition-all duration-500" 
+              style={{ width: `${((step - 1) / 4) * 100}%` }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between w-full relative z-10">
+            {[1, 2, 3, 4, 5].map((s) => {
+              const isCurrent = s === step;
+              const isPast = s < step;
+              const isClickable = s <= maxStep;
+              
+              const stepNames = [
+                "Thông tin",
+                "Nhân trắc",
+                "Kỹ năng",
+                "Social & Media",
+                "Khảo sát AI"
+              ];
+
+              return (
+                <button
+                  type="button"
+                  key={s}
+                  disabled={!isClickable}
+                  onClick={() => setStep(s)}
+                  className={cn(
+                    "flex flex-col items-center transition-all duration-300 relative group focus:outline-none",
+                    isClickable ? "cursor-pointer" : "cursor-not-allowed opacity-60"
+                  )}
+                  style={{ width: "18%" }}
+                >
+                  {/* Step Bubble */}
+                  <div className={cn(
+                    "h-8 w-8 rounded-full border-2 flex items-center justify-center text-xs font-black transition-all duration-500 relative",
+                    isCurrent
+                      ? "bg-[#070913] border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.4)] scale-110"
+                      : isPast
+                      ? "bg-amber-400 border-amber-400 text-[#070913]"
+                      : isClickable
+                      ? "bg-[#070913] border-amber-400/50 text-amber-300/80 hover:border-amber-400 hover:text-amber-300 hover:scale-105 hover:shadow-[0_0_10px_rgba(245,158,11,0.2)]"
+                      : "bg-[#070913] border-white/10 text-slate-500"
+                  )}>
+                    {isPast ? <Check className="h-4 w-4 stroke-[3.5]" /> : s}
+                    
+                    {/* Ring highlight animation on active step */}
+                    {isCurrent && (
+                      <span className="absolute -inset-1 rounded-full border border-amber-400/30 animate-pulse pointer-events-none" />
+                    )}
+                  </div>
+
+                  {/* Step Labels */}
+                  <span className={cn(
+                    "mt-2 text-[9px] font-bold uppercase tracking-wider text-center transition-all duration-300 block truncate w-full px-0.5",
+                    isCurrent
+                      ? "text-amber-300 scale-105 font-extrabold"
+                      : isClickable
+                      ? "text-slate-300 group-hover:text-amber-300"
+                      : "text-slate-500"
+                  )}>
+                    {stepNames[s - 1]}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -1081,68 +921,68 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start animate-in fade-in duration-300">
             {/* Left: Avatar Dropzone */}
             <div className="md:col-span-4 flex flex-col items-center space-y-4">
-              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider self-start">Ảnh Đại Diện *</span>
+              <span className="block text-[10px] text-slate-300 font-extrabold uppercase tracking-wider self-start">Ảnh Đại Diện *</span>
               
               <div 
                 onClick={() => handleMockUpload("avatar", "maianh_avatar.jpg")}
                 className={cn(
                   "w-full aspect-square max-w-[200px] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 relative overflow-hidden group",
                   mediaUploads.avatar 
-                    ? "border-emerald-500/50 bg-[#03050c]/60" 
-                    : "border-white/10 bg-[#03050c]/40 hover:border-amber-400/40 hover:bg-[#03050c]/60"
+                    ? "border-emerald-400 bg-emerald-500/10" 
+                    : "border-white/20 bg-slate-900/60 hover:border-amber-400 hover:bg-slate-900"
                 )}
               >
                 {mediaUploads.avatar ? (
                   <div className="text-center p-4">
                     <CheckCircle2 className="h-8 w-8 text-emerald-400 mx-auto mb-2 animate-bounce" />
-                    <span className="block text-[10px] text-slate-300 font-bold truncate max-w-[150px]">{mediaUploads.avatar}</span>
+                    <span className="block text-[10px] text-slate-200 font-bold truncate max-w-[150px]">{mediaUploads.avatar}</span>
                     <span className="block text-[8px] text-emerald-400 font-bold mt-1 uppercase tracking-wide">Đã tải lên</span>
                   </div>
                 ) : (
                   <div className="text-center p-4">
-                    <Upload className="h-8 w-8 text-slate-500 group-hover:text-amber-400 transition-colors mx-auto mb-2" />
-                    <span className="block text-[10px] text-slate-300 font-bold">Kéo thả hoặc click</span>
-                    <span className="block text-[8px] text-slate-500 mt-1 leading-normal">PNG, JPG tối đa 5MB</span>
+                    <Upload className="h-8 w-8 text-slate-400 group-hover:text-amber-300 transition-colors mx-auto mb-2" />
+                    <span className="block text-[10px] text-slate-100 font-extrabold">Kéo thả hoặc click</span>
+                    <span className="block text-[8px] text-slate-400 mt-1 leading-normal">PNG, JPG tối đa 5MB</span>
                   </div>
                 )}
               </div>
-              <p className="text-[9px] text-slate-500 text-center">Chọn ảnh rõ mặt, biểu cảm tự nhiên</p>
+              <p className="text-[10px] text-slate-400 text-center font-medium">Chọn ảnh rõ mặt, biểu cảm tự nhiên</p>
             </div>
 
             {/* Right: Inputs */}
             <div className="md:col-span-8 grid grid-cols-2 gap-4">
               <div className="col-span-2 space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Họ và tên *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Họ và tên *</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                   placeholder="Nguyễn Mai Anh"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Năm sinh *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Năm sinh *</label>
                 <input
                   type="number"
                   name="birthYear"
                   value={formData.birthYear}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Khu vực sinh sống *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Khu vực sinh sống *</label>
                 <select
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-medium"
                 >
                   <option value="Hà Nội">Hà Nội</option>
                   <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
@@ -1152,39 +992,39 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Quê quán *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Quê quán *</label>
                 <input
                   type="text"
                   name="hometown"
                   value={formData.hometown}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                   placeholder="Ví dụ: Nam Định"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Số điện thoại *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Số điện thoại *</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                   placeholder="0912345678"
                   required
                 />
               </div>
 
               <div className="col-span-2 space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email liên hệ *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Email liên hệ *</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                   placeholder="maianh@gmail.com"
                   required
                 />
@@ -1197,13 +1037,13 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
         {step === 2 && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center animate-in fade-in duration-300">
             {/* Left Column: Visual mannequin statistics showcase */}
-            <div className="md:col-span-5 rounded-2xl border border-white/5 bg-[#03050c]/60 p-5 flex flex-col items-center justify-center space-y-4">
-              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider self-start">Ngoại hình</span>
+            <div className="md:col-span-5 rounded-2xl border border-white/10 bg-slate-900/60 p-5 flex flex-col items-center justify-center space-y-4">
+              <span className="block text-[10px] text-slate-300 font-extrabold uppercase tracking-wider self-start">Ngoại hình</span>
               
               {/* Silhouette diagram with lines and custom measurement nodes */}
-              <div className="relative w-full max-w-[160px] aspect-[1/2] border border-white/5 rounded-xl bg-[#070913]/80 flex items-center justify-center p-3">
+              <div className="relative w-full max-w-[160px] aspect-[1/2] border border-white/10 rounded-xl bg-[#070913]/80 flex items-center justify-center p-3">
                 {/* SVG Silhouette representation */}
-                <svg viewBox="0 0 100 200" className="h-full w-full opacity-45 text-slate-400">
+                <svg viewBox="0 0 100 200" className="h-full w-full opacity-65 text-slate-300">
                   {/* Elegant symmetric head */}
                   <circle cx="50" cy="18" r="6" fill="currentColor" />
                   {/* Elegant symmetric neck */}
@@ -1233,19 +1073,19 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
                 </svg>
                 
                 {/* Measuring labels with direct values */}
-                <div className="absolute top-[28%] left-[-24px] bg-[#03050c] px-2 py-0.5 rounded border border-white/10 text-[8px] font-bold text-slate-300 shadow-md">
+                <div className="absolute top-[28%] left-[-24px] bg-slate-900 px-2 py-1 rounded-lg border border-white/20 text-[9px] font-extrabold text-white shadow-lg">
                   Vòng 1: {formData.bust} cm
                 </div>
-                <div className="absolute top-[40%] right-[-24px] bg-[#03050c] px-2 py-0.5 rounded border border-white/10 text-[8px] font-bold text-slate-300 shadow-md">
+                <div className="absolute top-[40%] right-[-24px] bg-slate-900 px-2 py-1 rounded-lg border border-white/20 text-[9px] font-extrabold text-white shadow-lg">
                   Vòng 2: {formData.waist} cm
                 </div>
-                <div className="absolute top-[52%] left-[-24px] bg-[#03050c] px-2 py-0.5 rounded border border-white/10 text-[8px] font-bold text-slate-300 shadow-md">
+                <div className="absolute top-[52%] left-[-24px] bg-slate-900 px-2 py-1 rounded-lg border border-white/20 text-[9px] font-extrabold text-white shadow-lg">
                   Vòng 3: {formData.hips} cm
                 </div>
               </div>
 
               {/* Height & Weight centered directly below the silhouette body */}
-              <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-amber-400/10 border border-amber-400/25 text-[9.5px] font-bold text-amber-300 shadow-sm mt-1">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-400/10 border border-amber-400/25 text-[10px] font-black text-amber-300 shadow-sm mt-1">
                 <span>Chiều cao: <strong className="text-white">{formData.height} cm</strong></span>
                 <span className="text-amber-500/40">|</span>
                 <span>Cân nặng: <strong className="text-white">{formData.weight} kg</strong></span>
@@ -1256,24 +1096,24 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
             <div className="md:col-span-7 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Chiều cao (cm) *</label>
+                  <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Chiều cao (cm) *</label>
                   <input
                     type="number"
                     name="height"
                     value={formData.height}
                     onChange={handleInputChange}
-                    className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                    className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                     required
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Cân nặng (kg) *</label>
+                  <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Cân nặng (kg) *</label>
                   <input
                     type="number"
                     name="weight"
                     value={formData.weight}
                     onChange={handleInputChange}
-                    className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                    className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                     required
                   />
                 </div>
@@ -1281,38 +1121,38 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
 
               {/* Three rings measurement laid out horizontally */}
               <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Số đo 3 vòng (cm) *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider block">Số đo 3 vòng (cm) *</label>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="relative">
-                    <span className="absolute right-3 top-3 text-[9px] font-bold text-slate-500">V1</span>
+                    <span className="absolute right-3 top-3 text-[10px] font-extrabold text-slate-400">V1</span>
                     <input
                       type="number"
                       name="bust"
                       value={formData.bust}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-4 pr-8 py-3 text-xs text-white text-left focus:border-amber-400 focus:outline-none transition-all font-bold"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-4 pr-8 py-3 text-xs text-white text-left focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-bold"
                       required
                     />
                   </div>
                   <div className="relative">
-                    <span className="absolute right-3 top-3 text-[9px] font-bold text-slate-500">V2</span>
+                    <span className="absolute right-3 top-3 text-[10px] font-extrabold text-slate-400">V2</span>
                     <input
                       type="number"
                       name="waist"
                       value={formData.waist}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-4 pr-8 py-3 text-xs text-white text-left focus:border-amber-400 focus:outline-none transition-all font-bold"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-4 pr-8 py-3 text-xs text-white text-left focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-bold"
                       required
                     />
                   </div>
                   <div className="relative">
-                    <span className="absolute right-3 top-3 text-[9px] font-bold text-slate-500">V3</span>
+                    <span className="absolute right-3 top-3 text-[10px] font-extrabold text-slate-400">V3</span>
                     <input
                       type="number"
                       name="hips"
                       value={formData.hips}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-4 pr-8 py-3 text-xs text-white text-left focus:border-amber-400 focus:outline-none transition-all font-bold"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-4 pr-8 py-3 text-xs text-white text-left focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-bold"
                       required
                     />
                   </div>
@@ -1320,12 +1160,12 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tình trạng thẩm mỹ *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Tình trạng thẩm mỹ *</label>
                 <select
                   name="plasticSurgery"
                   value={formData.plasticSurgery}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-medium"
                 >
                   <option value="Vẻ đẹp hoàn toàn tự nhiên, chưa từng can thiệp">Vẻ đẹp tự nhiên (chưa can thiệp)</option>
                   <option value="Đã can thiệp nhẹ (Làm răng, tiêm filler...)">Can thiệp nhẹ (Răng, filler...)</option>
@@ -1334,12 +1174,12 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tình trạng kết hôn & Con cái *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Tình trạng kết hôn & Con cái *</label>
                 <select
                   name="maritalStatus"
                   value={formData.maritalStatus}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-medium"
                 >
                   <option value="Độc thân, chưa từng sinh con">Độc thân, chưa từng sinh con</option>
                   <option value="Đã kết hôn / Đã sinh con">Đã kết hôn / Đã sinh con</option>
@@ -1355,25 +1195,25 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
             {/* Left side: Education & languages */}
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Trình độ học vấn hiện tại *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Trình độ học vấn hiện tại *</label>
                 <input
                   type="text"
                   name="education"
                   value={formData.education}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                   placeholder="Ví dụ: Cử nhân Học viện Ngoại giao"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider font-bold">Ngoại ngữ (Ngăn cách bằng dấu phẩy) *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider block">Ngoại ngữ (Ngăn cách bằng dấu phẩy) *</label>
                 <select
                   name="languages"
                   value={formData.languages}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-3.5 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-medium"
                 >
                   <option value="Giao tiếp cơ bản / Chưa có chứng chỉ">Giao tiếp cơ bản / Chưa có chứng chỉ</option>
                   <option value="Khá (Tương đương IELTS 5.0 - 6.0)">Khá (Tương đương IELTS 5.0 - 6.0)</option>
@@ -1385,26 +1225,26 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
             {/* Right side: Skills & experience */}
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kỹ năng nổi bật *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Kỹ năng nổi bật *</label>
                 <input
                   type="text"
                   name="skills"
                   value={formData.skills}
                   onChange={handleInputChange}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                   placeholder="Ví dụ: Catwalk, Diễn xuất trước ống kính, Livestream"
                   required
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kinh nghiệm cuộc thi / Công việc từng làm</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Kinh nghiệm cuộc thi / Công việc từng làm</label>
                 <textarea
                   name="experience"
                   value={formData.experience}
                   onChange={handleInputChange}
                   rows={2}
-                  className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 px-4 py-3 text-xs text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600 resize-none"
+                  className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 px-4 py-3 text-xs text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium resize-none"
                   placeholder="Ví dụ: Từng tham gia Miss Teen Việt Nam, làm người mẫu ảnh lookbook tự do 2 năm..."
                 />
               </div>
@@ -1418,13 +1258,13 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
             {/* Left: Social Media Profiles and Followers */}
             <div className="md:col-span-6 space-y-4">
               <div className="space-y-1">
-                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tổng số lượng Followers (Hệ thống tự tính) *</label>
+                <label className="text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Tổng số lượng Followers (Hệ thống tự tính) *</label>
                 <div className="relative">
                   <input
                     type="text"
                     value={getTotalFollowers().toLocaleString("vi-VN")}
                     disabled
-                    className="w-full rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-xs text-amber-400 font-bold focus:outline-none cursor-not-allowed opacity-90"
+                    className="w-full rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs text-amber-400 font-black focus:outline-none cursor-not-allowed opacity-95"
                   />
                   <span className="absolute right-3.5 top-3 flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -1434,31 +1274,31 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
               </div>
 
               <div className="space-y-2.5">
-                <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Liên kết nền tảng & Số lượng Followers</span>
+                <span className="block text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Liên kết nền tảng & Số lượng Followers</span>
                 
                 {/* TikTok Row */}
                 <div className="grid grid-cols-12 gap-2 items-center">
                   <div className="col-span-8 relative">
                     <span className="absolute left-3 top-3 text-slate-400">
-                      <TiktokIcon className="h-3.5 w-3.5 text-slate-400" />
+                      <TiktokIcon className="h-3.5 w-3.5 text-slate-300" />
                     </span>
                     <input
                       type="url"
                       name="tiktokUrl"
                       value={formData.tiktokUrl}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                       placeholder="TikTok Profile URL"
                     />
                   </div>
                   <div className="col-span-4 relative">
-                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-500 uppercase">Followers</span>
+                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-400 uppercase">Followers</span>
                     <input
                       type="number"
                       name="tiktokFollowers"
                       value={formData.tiktokFollowers}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all font-bold"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-bold"
                       placeholder="0"
                       min="0"
                     />
@@ -1469,25 +1309,25 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
                 <div className="grid grid-cols-12 gap-2 items-center">
                   <div className="col-span-8 relative">
                     <span className="absolute left-3 top-3 text-slate-400">
-                      <InstagramIcon className="h-3.5 w-3.5 text-slate-400" />
+                      <InstagramIcon className="h-3.5 w-3.5 text-slate-300" />
                     </span>
                     <input
                       type="url"
                       name="instagramUrl"
                       value={formData.instagramUrl}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                       placeholder="Instagram Profile URL"
                     />
                   </div>
                   <div className="col-span-4 relative">
-                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-500 uppercase">Followers</span>
+                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-400 uppercase">Followers</span>
                     <input
                       type="number"
                       name="instagramFollowers"
                       value={formData.instagramFollowers}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all font-bold"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-bold"
                       placeholder="0"
                       min="0"
                     />
@@ -1498,25 +1338,25 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
                 <div className="grid grid-cols-12 gap-2 items-center">
                   <div className="col-span-8 relative">
                     <span className="absolute left-3 top-3 text-slate-400">
-                      <FacebookIcon className="h-3.5 w-3.5 text-slate-400" />
+                      <FacebookIcon className="h-3.5 w-3.5 text-slate-300" />
                     </span>
                     <input
                       type="url"
                       name="facebookUrl"
                       value={formData.facebookUrl}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                       placeholder="Facebook Profile URL"
                     />
                   </div>
                   <div className="col-span-4 relative">
-                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-500 uppercase">Followers</span>
+                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-400 uppercase">Followers</span>
                     <input
                       type="number"
                       name="facebookFollowers"
                       value={formData.facebookFollowers}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all font-bold"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-bold"
                       placeholder="0"
                       min="0"
                     />
@@ -1527,25 +1367,25 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
                 <div className="grid grid-cols-12 gap-2 items-center">
                   <div className="col-span-8 relative">
                     <span className="absolute left-3 top-3 text-slate-400">
-                      <YoutubeIcon className="h-3.5 w-3.5 text-slate-400" />
+                      <YoutubeIcon className="h-3.5 w-3.5 text-slate-300" />
                     </span>
                     <input
                       type="url"
                       name="youtubeUrl"
                       value={formData.youtubeUrl}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all placeholder-slate-600"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-8 pr-3 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all placeholder-slate-400 font-medium"
                       placeholder="YouTube Channel URL"
                     />
                   </div>
                   <div className="col-span-4 relative">
-                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-500 uppercase">Followers</span>
+                    <span className="absolute right-2.5 top-3 text-[7px] font-bold text-slate-400 uppercase">Followers</span>
                     <input
                       type="number"
                       name="youtubeFollowers"
                       value={formData.youtubeFollowers}
                       onChange={handleInputChange}
-                      className="w-full rounded-xl border border-white/10 bg-[#03050c]/60 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:outline-none transition-all font-bold"
+                      className="w-full rounded-xl border border-white/20 bg-slate-900/60 hover:border-white/40 pl-2.5 pr-11 py-2.5 text-[10px] text-white focus:border-amber-400 focus:bg-[#0e122b] focus:outline-none transition-all font-bold"
                       placeholder="0"
                       min="0"
                     />
@@ -1556,7 +1396,7 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
 
             {/* Right: Media upload zones (Portfolio book, Intro video) */}
             <div className="md:col-span-6 space-y-3.5">
-              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Hồ Sơ Năng Lực (Media Uploads)</span>
+              <span className="block text-[10px] text-slate-300 font-extrabold uppercase tracking-wider">Hồ Sơ Năng Lực (Media Uploads)</span>
               
               <div className="grid grid-cols-2 gap-3.5">
                 {/* Portfolio images / CV zone */}
@@ -1564,12 +1404,12 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
                   onClick={() => handleMockUpload("portfolio", "portfolio_cv_maianh.pdf")}
                   className={cn(
                     "rounded-xl border border-dashed p-5 cursor-pointer text-center transition-all duration-300 relative overflow-hidden group min-h-[140px] flex flex-col justify-center items-center",
-                    mediaUploads.portfolio ? "border-emerald-500/50 bg-[#03050c]/60" : "border-white/10 bg-[#03050c]/40 hover:border-amber-400/40"
+                    mediaUploads.portfolio ? "border-emerald-400 bg-emerald-500/10" : "border-white/20 bg-slate-900/60 hover:border-amber-400 hover:bg-slate-900"
                   )}
                 >
-                  <FileText className={cn("h-7 w-7 mx-auto mb-2", mediaUploads.portfolio ? "text-emerald-400 animate-pulse" : "text-slate-500 group-hover:text-amber-400 transition-colors")} />
-                  <span className="block text-[10px] text-slate-300 font-bold truncate">Portfolio / CV *</span>
-                  <span className="block text-[7.5px] text-slate-500 mt-1">{mediaUploads.portfolio ? "Đã tải lên" : "Tải lên tệp PDF/ZIP/DOCX"}</span>
+                  <FileText className={cn("h-7 w-7 mx-auto mb-2", mediaUploads.portfolio ? "text-emerald-400 animate-pulse" : "text-slate-400 group-hover:text-amber-300 transition-colors")} />
+                  <span className="block text-[10px] text-slate-100 font-extrabold truncate">Portfolio / CV *</span>
+                  <span className="block text-[7.5px] text-slate-400 mt-1">{mediaUploads.portfolio ? "Đã tải lên" : "Tải lên tệp PDF/ZIP/DOCX"}</span>
                   {mediaUploads.portfolio && (
                     <span className="block text-[8px] text-emerald-400 font-mono mt-1 truncate max-w-[120px]">{mediaUploads.portfolio}</span>
                   )}
@@ -1580,12 +1420,12 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
                   onClick={() => handleMockUpload("introVideo", "video_introduction.mp4")}
                   className={cn(
                     "rounded-xl border border-dashed p-5 cursor-pointer text-center transition-all duration-300 relative overflow-hidden group min-h-[140px] flex flex-col justify-center items-center",
-                    mediaUploads.introVideo ? "border-emerald-500/50 bg-[#03050c]/60" : "border-white/10 bg-[#03050c]/40 hover:border-amber-400/40"
+                    mediaUploads.introVideo ? "border-emerald-400 bg-emerald-500/10" : "border-white/20 bg-slate-900/60 hover:border-amber-400 hover:bg-slate-900"
                   )}
                 >
                   <Video className={cn("h-7 w-7 mx-auto mb-2", mediaUploads.introVideo ? "text-emerald-400 animate-pulse" : "text-slate-500 group-hover:text-amber-400 transition-colors")} />
-                  <span className="block text-[10px] text-slate-300 font-bold truncate">Video Giới Thiệu</span>
-                  <span className="block text-[7.5px] text-slate-500 mt-1">{mediaUploads.introVideo ? "Đã tải lên (Tùy chọn)" : "Tải lên tệp MP4 (Không bắt buộc)"}</span>
+                  <span className="block text-[10px] text-slate-100 font-extrabold truncate">Video Giới Thiệu</span>
+                  <span className="block text-[7.5px] text-slate-400 mt-1">{mediaUploads.introVideo ? "Đã tải lên (Tùy chọn)" : "Tải lên tệp MP4 (Không bắt buộc)"}</span>
                   {mediaUploads.introVideo && (
                     <span className="block text-[8px] text-emerald-400 font-mono mt-1 truncate max-w-[120px]">{mediaUploads.introVideo}</span>
                   )}
@@ -1597,106 +1437,163 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
 
         {/* STEP 5: ORIENTATION SURVEY (Single Question Card UI, zero scroll) */}
         {step === 5 && (
-          <div className="space-y-6 animate-in fade-in duration-300 max-w-2xl mx-auto py-2">
-            
-            {/* Header: Question indicator & Inner survey progress */}
-            <div className="flex justify-between items-center pb-2 border-b border-white/5">
-              <div>
-                <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">
-                  Định Hướng AI
-                </span>
-                <h4 className="text-[12px] font-bold text-slate-300 mt-0.5">
-                  Câu hỏi {activeSurveyQIdx + 1} / {SURVEY_QUESTIONS.length}
-                </h4>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-5xl mx-auto py-2 animate-in fade-in duration-300">
+            {/* Left Column: The Question Block */}
+            <div className="lg:col-span-8 space-y-6 w-full">
+              {/* Header: Question indicator & Inner survey progress */}
+              <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                <div>
+                  <span className="text-[10px] font-black text-amber-300 uppercase tracking-widest">
+                    Định Hướng AI
+                  </span>
+                  <h4 className="text-[13px] font-black text-white mt-0.5">
+                    Câu hỏi {activeSurveyQIdx + 1} / {SURVEY_QUESTIONS.length}
+                  </h4>
+                </div>
+                <div className="text-[10px] font-extrabold text-slate-200 bg-white/10 border border-white/10 px-2.5 py-0.5 rounded-full">
+                  Đã trả lời: {Object.keys(surveyAnswers).length} / {SURVEY_QUESTIONS.length}
+                </div>
               </div>
-              <div className="text-[9px] font-bold text-slate-500 bg-white/5 px-2 py-0.5 rounded">
-                Đã trả lời: {Object.keys(surveyAnswers).length} / {SURVEY_QUESTIONS.length}
+
+              {/* Centered Question Box */}
+              <div className="rounded-2xl border border-white/10 bg-[#0c0f24]/50 p-6 space-y-5 text-center">
+                <span className="inline-block text-[10px] font-extrabold text-amber-300/80 uppercase tracking-wider">Năng lực ứng xử & Định hướng</span>
+                <h3 className="font-display font-extrabold text-base md:text-lg text-white leading-relaxed max-w-xl mx-auto">
+                  {activeQuestion.question}
+                </h3>
+
+                {/* Stacked Options */}
+                <div className="grid grid-cols-1 gap-2.5 max-w-xl mx-auto pt-2">
+                  {activeQuestion.options.map((opt, oIdx) => {
+                    const isSelected = surveyAnswers[activeQuestion.id] === oIdx;
+                    return (
+                      <button
+                        type="button"
+                        key={oIdx}
+                        onClick={() => handleSurveySelect(activeQuestion.id, oIdx)}
+                        className={cn(
+                          "flex items-center gap-3.5 rounded-xl border px-5 py-3.5 text-xs text-left cursor-pointer transition-all duration-300 w-full",
+                          isSelected
+                            ? "border-amber-400 bg-amber-400/20 text-amber-200 font-extrabold shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+                            : "border-white/10 bg-[#070913]/60 hover:bg-white/5 hover:border-white/20 text-slate-200 hover:text-white"
+                        )}
+                      >
+                        <div className={cn(
+                          "h-4 w-4 rounded-full border flex items-center justify-center shrink-0",
+                          isSelected ? "border-amber-400 bg-amber-400/10" : "border-slate-500"
+                        )}>
+                          {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />}
+                        </div>
+                        <span className="leading-tight">{opt.text}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Inner survey navigation */}
+              <div className="flex justify-between items-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (activeSurveyQIdx > 0) {
+                      setActiveSurveyQIdx(prev => prev - 1);
+                    } else {
+                      // Go back to Step 4
+                      setStep(4);
+                    }
+                  }}
+                  className="flex h-9 items-center justify-center rounded-lg border border-white/20 px-4 text-[10px] font-bold text-slate-200 hover:text-amber-300 hover:border-amber-400/50 hover:bg-white/5 transition-all gap-1 cursor-pointer"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5" /> Quay Lại
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (activeSurveyQIdx < SURVEY_QUESTIONS.length - 1) {
+                      setActiveSurveyQIdx(prev => prev + 1);
+                    }
+                  }}
+                  disabled={surveyAnswers[activeQuestion.id] === undefined}
+                  className={cn(
+                    "flex h-9 items-center justify-center rounded-lg px-4 text-[10px] font-black transition-all gap-1 cursor-pointer",
+                    surveyAnswers[activeQuestion.id] !== undefined
+                      ? "bg-gradient-to-r from-amber-300 to-yellow-500 text-slate-950 hover:brightness-110 shadow-[0_0_12px_rgba(245,158,11,0.25)]"
+                      : "bg-slate-800 text-slate-500 cursor-not-allowed opacity-40"
+                  )}
+                >
+                  Tiếp Theo <ArrowRight className="h-3.5 w-3.5" />
+                </button>
               </div>
             </div>
 
-            {/* Centered Question Box */}
-            <div className="rounded-2xl border border-white/5 bg-[#03050c]/40 p-6 space-y-5 text-center">
-              <span className="inline-block text-[9px] font-bold text-slate-500 uppercase tracking-wider">Năng lực ứng xử & Định hướng</span>
-              <h3 className="font-display font-extrabold text-sm md:text-base text-white leading-relaxed max-w-xl mx-auto">
-                {activeQuestion.question}
-              </h3>
+            {/* Right Column: Progress Grid (Tiến độ trả lời) */}
+            <div className="lg:col-span-4 w-full rounded-2xl border border-white/10 bg-[#0c0f24]/60 p-5 space-y-4">
+              <div className="flex justify-between items-center pb-2 border-b border-white/10 text-left">
+                <h4 className="text-[11px] font-black text-slate-200 uppercase tracking-wider">
+                  Tiến độ trả lời
+                </h4>
+                <span className="text-[10px] font-black text-amber-300 bg-amber-400/20 border border-amber-400/30 px-2 py-0.5 rounded-full">
+                  {Object.keys(surveyAnswers).length}/{SURVEY_QUESTIONS.length}
+                </span>
+              </div>
 
-              {/* Stacked Options */}
-              <div className="grid grid-cols-1 gap-2.5 max-w-xl mx-auto pt-2">
-                {activeQuestion.options.map((opt, oIdx) => {
-                  const isSelected = surveyAnswers[activeQuestion.id] === oIdx;
+              {/* Progress Grid */}
+              <div className="grid grid-cols-5 gap-2 pt-2">
+                {SURVEY_QUESTIONS.map((q, qIdx) => {
+                  const isAnswered = surveyAnswers[q.id] !== undefined;
+                  const isActive = qIdx === activeSurveyQIdx;
+
                   return (
                     <button
                       type="button"
-                      key={oIdx}
-                      onClick={() => handleSurveySelect(activeQuestion.id, oIdx)}
+                      key={q.id}
+                      onClick={() => setActiveSurveyQIdx(qIdx)}
                       className={cn(
-                        "flex items-center gap-3.5 rounded-xl border px-5 py-3.5 text-xs text-left cursor-pointer transition-all duration-300 w-full",
-                        isSelected
-                          ? "border-amber-400 bg-amber-400/10 text-amber-300 font-bold shadow-[0_0_15px_rgba(245,158,11,0.06)]"
-                          : "border-white/5 bg-[#070913]/30 hover:bg-white/5 text-slate-400 hover:text-slate-300"
+                        "aspect-square rounded-xl text-[11px] font-bold flex items-center justify-center border transition-all duration-300 cursor-pointer",
+                        isActive
+                          ? "border-transparent bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 text-slate-950 font-black shadow-[0_0_15px_rgba(245,158,11,0.35)] scale-105"
+                          : isAnswered
+                          ? "border-emerald-500/40 bg-emerald-500/20 text-emerald-200 font-extrabold hover:border-emerald-400 hover:bg-emerald-500/30"
+                          : "border-white/10 bg-[#070913]/40 text-slate-300 hover:border-white/20 hover:text-white"
                       )}
                     >
-                      <div className={cn(
-                        "h-4 w-4 rounded-full border flex items-center justify-center shrink-0",
-                        isSelected ? "border-amber-400" : "border-slate-600"
-                      )}>
-                        {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />}
-                      </div>
-                      <span className="leading-tight">{opt.text}</span>
+                      {qIdx + 1}
                     </button>
                   );
                 })}
               </div>
+
+              <div className="pt-2 border-t border-white/10 text-[10px] text-slate-300 leading-normal space-y-2 text-left font-medium">
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded bg-emerald-500/20 border border-emerald-500/40 inline-block shrink-0" />
+                  <span>Đã trả lời</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded bg-gradient-to-r from-amber-300 to-yellow-500 inline-block shrink-0" />
+                  <span>Đang trả lời</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded bg-[#070913]/40 border border-white/10 inline-block shrink-0" />
+                  <span>Chưa trả lời</span>
+                </div>
+                <div className="text-[9.5px] italic text-slate-400 mt-2 block leading-relaxed">
+                  * Bạn có thể bấm vào số câu bất kỳ để quay lại hoặc chuyển nhanh tới câu hỏi đó.
+                </div>
+              </div>
             </div>
-
-            {/* Inner survey navigation */}
-            <div className="flex justify-between items-center pt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (activeSurveyQIdx > 0) {
-                    setActiveSurveyQIdx(prev => prev - 1);
-                  } else {
-                    // Go back to Step 4
-                    setStep(4);
-                  }
-                }}
-                className="flex h-9 items-center justify-center rounded-lg border border-white/10 px-4 text-[10px] font-bold text-slate-400 hover:text-white transition-all gap-1"
-              >
-                <ArrowLeft className="h-3 w-3" /> Quay Lại
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (activeSurveyQIdx < SURVEY_QUESTIONS.length - 1) {
-                    setActiveSurveyQIdx(prev => prev + 1);
-                  }
-                }}
-                disabled={surveyAnswers[activeQuestion.id] === undefined}
-                className={cn(
-                  "flex h-9 items-center justify-center rounded-lg px-4 text-[10px] font-bold transition-all gap-1",
-                  surveyAnswers[activeQuestion.id] !== undefined
-                    ? "bg-white/10 hover:bg-white/15 text-white"
-                    : "bg-slate-800 text-slate-600 cursor-not-allowed opacity-40"
-                )}
-              >
-                Tiếp Theo <ArrowRight className="h-3 w-3" />
-              </button>
-            </div>
-
           </div>
         )}
 
         {/* Global Navigation Action Bar (Except Step 5 which has its own) */}
         {step < 5 && (
-          <div className="flex gap-3 pt-5 border-t border-white/5">
+          <div className="flex gap-3 pt-5 border-t border-white/10">
             {step > 1 && (
               <button
                 type="button"
                 onClick={prevStep}
-                className="flex h-11 flex-1 items-center justify-center rounded-xl border border-white/10 bg-transparent font-display text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+                className="flex h-11 flex-1 items-center justify-center rounded-xl border border-white/20 bg-transparent font-display text-[11px] font-bold text-slate-200 hover:text-amber-300 hover:border-amber-400/50 hover:bg-white/5 transition-all cursor-pointer"
               >
                 <ArrowLeft className="mr-1.5 h-3.5 w-3.5" /> Quay Lại
               </button>
@@ -1707,10 +1604,10 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
               onClick={nextStep}
               disabled={!isStepValid()}
               className={cn(
-                "flex h-11 flex-1 items-center justify-center rounded-xl font-display text-[11px] font-bold transition-all gap-1.5",
+                "flex h-11 flex-1 items-center justify-center rounded-xl font-display text-[11px] font-black transition-all gap-1.5 cursor-pointer shadow-md",
                 isStepValid()
-                  ? "bg-gradient-to-r from-amber-200 to-amber-500 text-slate-950 shadow-md hover:brightness-105"
-                  : "bg-slate-800 text-slate-500 cursor-not-allowed opacity-50"
+                  ? "bg-gradient-to-r from-amber-300 to-yellow-500 text-slate-950 hover:brightness-110"
+                  : "bg-[#131936] text-slate-450 border border-white/10 cursor-not-allowed"
               )}
             >
               Tiếp Tục <ArrowRight className="h-3.5 w-3.5" />
@@ -1725,10 +1622,10 @@ export default function SurveyForm({ resetCounter, onActiveChange }: SurveyFormP
               type="submit"
               disabled={!isStepValid()}
               className={cn(
-                "flex h-11 w-full max-w-xs items-center justify-center rounded-xl font-display text-[11px] font-bold transition-all gap-1.5 shadow-lg",
+                "flex h-11 w-full max-w-xs items-center justify-center rounded-xl font-display text-[11px] font-black transition-all gap-1.5 shadow-lg cursor-pointer",
                 isStepValid()
-                  ? "bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 text-slate-950 hover:brightness-105 active:scale-98"
-                  : "bg-slate-800 text-slate-500 cursor-not-allowed opacity-50"
+                  ? "bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-600 text-slate-950 hover:brightness-110 active:scale-98"
+                  : "bg-[#131936] text-slate-450 border border-white/10 cursor-not-allowed"
               )}
             >
               Hoàn Thành Khảo Sát & Xem Kết Quả <Sparkles className="h-3.5 w-3.5" />

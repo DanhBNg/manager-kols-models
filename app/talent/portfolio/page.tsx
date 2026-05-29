@@ -113,9 +113,6 @@ export default function PortfolioPage() {
             className="h-full w-full object-cover opacity-60"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80" />
-          <div className="absolute top-4 right-4 text-[9px] font-mono tracking-widest text-[#f4c430]/50 font-bold uppercase">
-            VNP BEAUTY SYSTEM PORTFOLIO
-          </div>
         </div>
 
         {/* Profile Info Row */}

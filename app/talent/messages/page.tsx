@@ -9,6 +9,7 @@ export default function MessagesPage() {
   const router = useRouter();
   const [activeThreadId, setActiveThreadId] = useState("t1");
   const [inputText, setInputText] = useState("");
+  const [showMobileChat, setShowMobileChat] = useState(false);
   const [threads, setThreads] = useState([
     {
       id: "t1",
@@ -91,7 +92,7 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-6 animate-in fade-in duration-500">
       
       {/* Page Header */}
       <div className="flex items-center gap-4">
@@ -109,10 +110,10 @@ export default function MessagesPage() {
 
       {/* Main chat window - styled like dashboard.htm */}
       <div className="flex h-[72vh] flex-col rounded-3xl border border-[#151b2d] bg-[#08090f] overflow-hidden shadow-2xl relative">
-        <div className="grid grid-cols-3 h-full divide-x divide-[#151b2d]">
+        <div className="grid grid-cols-1 md:grid-cols-3 h-full md:divide-x divide-[#151b2d]">
           
           {/* Conversations Column */}
-          <div className="col-span-1 flex flex-col h-full bg-[#08090f]">
+          <div className={cn("col-span-1 flex flex-col h-full bg-[#08090f]", showMobileChat ? "hidden md:flex" : "flex")}>
             <div className="p-4 border-b border-[#151b2d] flex gap-2">
               <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
@@ -130,7 +131,10 @@ export default function MessagesPage() {
                 return (
                   <div
                     key={thread.id}
-                    onClick={() => setActiveThreadId(thread.id)}
+                    onClick={() => {
+                      setActiveThreadId(thread.id);
+                      setShowMobileChat(true);
+                    }}
                     className={cn(
                       "p-4 cursor-pointer flex gap-3.5 transition-all duration-300 relative",
                       isActive ? "bg-slate-950/60 border-l-2 border-amber-400" : "hover:bg-slate-950/30"
@@ -155,12 +159,19 @@ export default function MessagesPage() {
           </div>
 
           {/* Chat thread details Column */}
-          <div className="col-span-2 flex flex-col h-full bg-[#08090f]/30">
+          <div className={cn("col-span-2 flex flex-col h-full bg-[#08090f]/30", showMobileChat ? "flex" : "hidden md:flex")}>
             {activeThread ? (
               <>
                 {/* Thread Header */}
                 <div className="p-4 border-b border-[#151b2d] flex items-center justify-between bg-slate-950/20">
                   <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowMobileChat(false)}
+                      className="flex md:hidden h-8 w-8 items-center justify-center rounded-xl border border-[#151b2d] bg-slate-950 text-slate-400 mr-1"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                    </button>
                     <img src={activeThread.avatar} alt={activeThread.brandName} className="h-10 w-10 rounded-full object-cover border border-[#151b2d]" />
                     <div>
                       <h4 className="text-xs font-bold text-white flex items-center gap-1.5">

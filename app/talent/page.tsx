@@ -35,15 +35,21 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center text-center animate-in fade-in duration-500">
-      {/* Golden Glowing Crown Logo */}
-      <div className="relative mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-slate-900 border border-amber-500/20 shadow-[0_0_50px_rgba(245,158,11,0.15)]">
-        <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-br from-amber-500/10 to-yellow-600/5 blur-xl" />
-        <Crown className="h-12 w-12 text-amber-400 filter drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
+      {/* Glowing Logo Icon */}
+      <div className="relative mb-2 flex items-center justify-center group">
+        <div className="absolute inset-0 -z-10 h-32 w-32 rounded-full bg-amber-500/10 blur-3xl group-hover:scale-125 transition-transform duration-1000 animate-pulse pointer-events-none" />
+        <img 
+          src="/logo_icon.png" 
+          alt="OnstageVN Logo Icon" 
+          className="h-24 w-24 object-contain relative z-10 transition-transform duration-700 hover:scale-105" 
+        />
       </div>
 
-      <h1 className="mb-3 font-display text-3xl font-extrabold tracking-tight text-white md:text-4xl">
-        VNP <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-600 bg-clip-text text-transparent">BEAUTYTALENT</span>
-      </h1>
+      <img 
+        src="/logo_text.png" 
+        alt="OnstageVN Logo Text" 
+        className="h-12 md:h-14 object-contain mb-4" 
+      />
       
       <p className="mx-auto mb-10 max-w-sm text-sm leading-relaxed text-slate-400">
         Trợ lý phát triển sự nghiệp cá nhân, giúp kiến tạo hồ sơ số chuyên nghiệp và kết nối nhãn hàng tự động.

@@ -74,19 +74,26 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 hidden h-16 shrink-0 items-center justify-between border-b border-white/5 bg-[#070913]/80 px-8 backdrop-blur-md md:flex">
-      <div className="flex w-64 shrink-0 items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-500/30 bg-gradient-to-b from-[#141830] to-[#0a0c1a] shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-          <Crown className="h-5 w-5 text-amber-300" />
-        </div>
-        <div>
-          <h1 className="font-display text-xl font-black leading-none tracking-widest text-white">
-            <span className="text-gradient-gold">Onstage</span>VN
-          </h1>
-        </div>
+    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b border-white/5 bg-[#070913]/80 px-4 md:px-8 backdrop-blur-md">
+      <div className="flex w-auto md:w-72 shrink-0 items-center">
+        <button
+          onClick={() => router.push("/")}
+          className="flex items-center hover:opacity-95 transition-opacity focus:outline-none cursor-pointer"
+        >
+          <img
+            src="/logo_icon.png"
+            alt="OnstageVN Logo Icon"
+            className="h-11 w-11 object-contain shrink-0"
+          />
+          <img
+            src="/logo_text.png"
+            alt="OnstageVN Logo Text"
+            className="h-9 object-contain shrink-0"
+          />
+        </button>
       </div>
 
-      <div className="ml-4 flex max-w-md flex-1 items-center gap-4">
+      <div className="ml-4 hidden md:flex max-w-md flex-1 items-center gap-4">
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           <input
@@ -97,13 +104,13 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-2 md:gap-6">
         <button className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/5 bg-slate-900/30 text-slate-400 transition-colors hover:text-white">
           <Bell className="h-4.5 w-4.5" />
           <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
         </button>
 
-        <div className="relative border-l border-white/5 pl-6">
+        <div className="relative border-l border-white/5 pl-3.5 md:pl-6">
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
@@ -114,7 +121,7 @@ export default function Header() {
               alt="Profile avatar"
               className="h-9 w-9 rounded-full border border-amber-400/30 object-cover"
             />
-            <div>
+            <div className="hidden sm:block">
               <span className="block text-xs font-bold text-white">{label.name}</span>
               <span className="block text-[10px] text-slate-500">{label.subtitle}</span>
             </div>

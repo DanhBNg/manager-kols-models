@@ -13,7 +13,7 @@ const talentMenuItems = [
   { label: "Khám phá bản thân", icon: Sparkles, href: "/talent/survey" },
   { label: "Hồ sơ cá nhân", icon: User, href: "/talent/portfolio" },
   { label: "Danh sách cuộc thi", icon: Trophy, href: "/talent/contests" },
-  { label: "Việc phù hợp", icon: Briefcase, href: "/talent/jobs" },
+  { label: "Chợ việc làm", icon: Briefcase, href: "/talent/jobs" },
   { label: "Quỹ vương miện", icon: Crown, href: "/talent/crown" },
   { label: "Lịch trình", icon: Calendar, href: "/talent/calendar" },
   { label: "Tin nhắn", icon: MessageSquare, href: "/talent/messages" },
@@ -35,6 +35,29 @@ export default function Sidebar() {
   const isTalent = pathname.startsWith("/talent");
   const isBrand = pathname.startsWith("/brand");
   const isGateway = pathname === "/";
+
+  async function handleLogout() {
+    const token = localStorage.getItem("onstagevn_auth_token");
+
+    if (token) {
+      try {
+        const baseUrl = (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/$/, "");
+        await fetch(`${baseUrl}/auth/logout`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch {
+        // Local logout still clears browser session
+      }
+    }
+
+    localStorage.removeItem("onstagevn_auth_token");
+    localStorage.removeItem("onstagevn_auth_user");
+    router.push("/auth/login");
+  }
 
   const currentMenuItems = isTalent ? talentMenuItems : isBrand ? brandMenuItems : [];
 
@@ -71,16 +94,16 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Footer Switch Portal */}
+      {/* Footer Logout */}
       <div className="border-t border-white/5 pt-4 mt-auto">
         <button
-          onClick={() => router.push("/")}
-          className="flex w-full items-center justify-between rounded-xl border border-white/5 bg-slate-950/40 px-4 py-3 text-[11px] font-bold text-slate-400 hover:border-amber-400/40 hover:text-white hover:bg-slate-900/20 transition-all cursor-pointer"
+          onClick={handleLogout}
+          className="flex w-full items-center justify-between rounded-xl border border-red-500/10 bg-red-500/5 px-4 py-3 text-[11px] font-bold text-red-400 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-300 transition-all cursor-pointer"
         >
           <span className="flex items-center gap-2">
-            <LogOut className="h-4 w-4" /> Đổi cổng truy cập
+            <LogOut className="h-4 w-4 text-red-500" /> Đăng xuất
           </span>
-          <ChevronRight className="h-3 w-3" />
+          <ChevronRight className="h-3 w-3 text-red-450" />
         </button>
       </div>
     </aside>

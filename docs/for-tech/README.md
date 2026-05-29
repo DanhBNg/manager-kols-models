@@ -1,143 +1,377 @@
 # Tài liệu Kỹ thuật - Nền tảng Quản lý KOLs/Models
 
-> 📌 **Cập nhật quan trọng (28/05/2026):** Cấu trúc triển khai hiện tại của dự án là **Next.js Frontend + Laravel API Backend (Tách biệt hai đầu)**.
-> *   **Backend chính:** Nằm trong thư mục [backend/](file:///c:/CONG_VIEC/VNP_BeutyTalent/backend), sử dụng Laravel 12, Laravel Sanctum (Token-based API Authentication) và SQLite cho môi trường local (file cơ sở dữ liệu lưu tại `backend/database/database.sqlite`, không cần cài đặt XAMPP).
-> *   **Frontend:** Sử dụng Next.js, giao tiếp thông qua REST API tại `http://127.0.0.1:8000/api`. Token xác thực được lưu tại `localStorage` với key `onstagevn_auth_token`.
-> *   *Lưu ý:* Các tài liệu mô tả về Laravel + Inertia.js (Breeze/Inertia SSR) hoặc các cấu phần Vue/Inertia cũ chỉ mang tính chất tham khảo lịch sử, không phải kiến trúc đang áp dụng thực tế.
+> **Note:** This directory contains technical specifications, database schemas, API documentation, and implementation details for developers.
+
+## 📚 Tổng quan
+
+Tài liệu kỹ thuật được tổ chức theo từng module chức năng. Mỗi file chứa:
+- Database schema (SQL)
+- API endpoints (REST)
+- Business logic implementation (code examples)
+- Security & performance considerations
 
 ---
 
-## 1. Tổng quan thư mục tài liệu
+## 🏗️ Kiến trúc Hệ thống Khuyến nghị
 
-Thư mục này chứa toàn bộ tài liệu kỹ thuật, đặc tả cơ sở dữ liệu, thiết kế API endpoints và hướng dẫn triển khai hệ thống dành cho đội ngũ lập trình viên.
+### Mô hình Laravel + Inertia.js + React/Vue
 
-Các tài liệu kỹ thuật chi tiết theo Module bao gồm:
-*   Database schema chi tiết (SQL)
-*   Đặc tả API endpoints (RESTful)
-*   Mã giả hoặc ví dụ triển khai Business Logic
-*   Các giải pháp tối ưu bảo mật và hiệu năng hệ thống
+| Thành phần | Công nghệ khuyến nghị | Vai trò |
+|------------|----------------------|---------|
+| **Backend** | PHP 8.3+ & Laravel | Xử lý Logic, Cơ sở dữ liệu, Bảo mật |
+| **Cầu nối** | Inertia.js | Truyền dữ liệu trực tiếp, không cần viết REST API cồng kềnh |
+| **Frontend** | React / Vue + TypeScript | Xây dựng giao diện ứng dụng Single Page App (SPA) mượt mà |
+| **Bundler** | Vite | Biên dịch mã TypeScript cực nhanh |
 
----
-
-## 2. Cấu trúc Tài liệu kỹ thuật chi tiết
-
-### 📂 [Core Features Technical Specs](./plans/Core-Features-Technical-Specs.md)
-Tập trung đặc tả các tính năng cốt lõi của Giai đoạn 1 (Lịch trình, Profile, Tìm kiếm):
-*   **Hạ tầng & Dữ liệu:** Database Schema cho 10 bảng cốt lõi (`users`, `profiles`, `photos`, `videos`, `social_accounts`, `calendar_events`, `jobs`, `applications`, `bookings`).
-*   **Quy trình xử lý ảnh:** Tải ảnh lên -> AI Moderation (NSFW check) -> Nén ảnh WebP -> Đưa lên CDN.
-*   **Tìm kiếm & Thuật toán:** Cấu trúc truy vấn Elasticsearch, cách tính điểm độ phù hợp (Ranking Score) và thuật toán phát hiện gian lận follower (Anti-Fraud).
-*   **Tích hợp lịch:** Logic đồng bộ lịch rảnh 2 chiều với Google Calendar (CalDAV/Google Calendar API).
-
-### 📂 [Agency Module Technical Specs](./plans/Agency-Module-Technical-Specs.md)
-Đặc tả chi tiết cho phân hệ quản lý của Công ty Quản lý (Agency/Manager):
-*   **Database Schema:** Đặc tả 5 bảng dữ liệu chuyên biệt (`agencies`, `agency_members`, `agency_talents`, `agency_wallets`, `agency_transactions`).
-*   **Phân quyền (RBAC):** Định nghĩa các vai trò Owner, Admin, Coordinator, Viewer và middleware kiểm tra quyền hạn.
-*   **Nghiệp vụ đặc thù:** Cơ chế tạo Ghost Profile (Hồ sơ ảo chưa kích hoạt login), luồng chấp thuận chuyển quyền kiểm soát khi KOL gia nhập/rời khỏi Agency, quản lý tài chính và ví tổng.
+**Lợi ích của stack này:**
+- ✅ **Tốc độ phát triển nhanh:** Inertia.js giảm 50% code boilerplate
+- ✅ **Type-safe:** TypeScript + Laravel typed properties
+- ✅ **SEO-friendly:** Server-side rendering với Inertia SSR
+- ✅ **Developer experience:** Hot reload, auto-completion, debugging tools
+- ✅ **Ecosystem:** Laravel packages + React/Vue components
 
 ---
 
-## 3. Danh sách Technology Stack áp dụng
+## 📁 Cấu trúc Tài liệu
 
-### 3.1. Frontend Web (Đối tác, KOL & Admin)
-*   **Framework:** Next.js (React 18+, TypeScript 5.x)
-*   **Styling:** Tailwind CSS + shadcn/ui component library
-*   **State Management:** Zustand / Redux Toolkit
-*   **Data Fetching:** TanStack Query (React Query)
-*   **Routing:** Next.js App Router (Client-side routing)
-*   **Xác thực:** Lưu trữ và quản lý Token JWT qua `localStorage`
+### [Core Features Technical Specs](./plans/Core-Features-Technical-Specs.md)
+Chi tiết kỹ thuật cho các tính năng cốt lõi (Luồng 1):
 
-### 3.2. Backend API
-*   **Framework:** Laravel 12.x
-*   **Ngôn ngữ:** PHP 8.3+
-*   **Database ORM:** Eloquent ORM (đầy đủ model relationships và migrations)
-*   **Xác thực API:** Laravel Sanctum (Token-based Authentication)
-*   **Validation:** Form Requests validation (Kiểm tra dữ liệu đầu vào chặt chẽ)
-*   **Social Auth:** Laravel Socialite (Google, Facebook OAuth 2.0)
+**Nội dung:**
+- Technology Stack (React, Node.js, PostgreSQL, Redis, S3, Elasticsearch)
+- Database Schema (10 tables: users, profiles, photos, videos, social_accounts, calendar_events, jobs, applications, bookings)
+- API Endpoints (Authentication, Profile Management, Social Media Integration, Search, Job Posting, Calendar)
+- Image Processing Pipeline (Upload → AI checks → Variants generation → CDN)
+- Search Algorithm (Elasticsearch query + Ranking score calculation)
+- Anti-Fraud Detection (Fake follower detection algorithm)
+- Calendar Sync Logic (Google Calendar 2-way sync)
+- Performance Optimization (Redis caching, Database indexes, Materialized views)
+- Security Implementation (JWT authentication, Data encryption)
 
-### 3.3. Cơ sở dữ liệu & Lưu trữ
-*   **Database Local:** SQLite (phát triển nhanh gọn, không phụ thuộc vào dịch vụ bên ngoài)
-*   **Database Production:** PostgreSQL 16.x
-*   **Caching & Queue:** Redis 7.x (lưu cache session, rate limit và quản lý hàng đợi)
-*   **Tìm kiếm nâng cao:** Elasticsearch 8.x
-*   **Lưu trữ tệp tin:** AWS S3 (hoặc các dịch vụ Object Storage tương đương)
-*   **CDN:** AWS CloudFront (tăng tốc độ tải tài nguyên hình ảnh/video)
-
-### 3.4. Dịch vụ bên thứ ba (Third-party)
-*   **Thanh toán:** Cổng thanh toán nội địa VNPay / Momo / Stripe
-*   **OTP & SMS:** Twilio / AWS SNS
-*   **Email:** SendGrid / AWS SES
-*   **Kiểm duyệt ảnh:** AWS Rekognition / Clarifai (AI Moderation)
+**Khi nào cần đọc:**
+- Khi implement user registration & profile management
+- Khi xây dựng search & filtering features
+- Khi tích hợp social media APIs
+- Khi implement calendar sync
 
 ---
 
-## 4. Tổng quan Hệ cơ sở dữ liệu (Database Schema)
+### [Agency Module Technical Specs](./plans/Agency-Module-Technical-Specs.md)
+Chi tiết kỹ thuật cho module Agency Management (Phần 4.2):
 
-### 4.1. Bảng Cốt lõi (Core Tables - 10 bảng)
-*   `users`: Lưu trữ thông tin tài khoản người dùng gốc.
-*   `profiles`: Thông tin chi tiết của KOL/Model (số đo, chiều cao, cân nặng, rating).
-*   `photos` & `videos`: Lưu trữ đường dẫn tệp tin media đã tải lên S3.
-*   `social_accounts` & `social_metrics_history`: Lưu trữ liên kết và lịch sử chỉ số MXH.
-*   `calendar_events`: Quản lý thời gian bận/rảnh của KOL.
-*   `jobs`, `applications`, `bookings`: Quản lý chiến dịch tuyển dụng, hồ sơ ứng tuyển và đặt lịch thành công.
+**Nội dung:**
+- Database Schema (5 tables: agencies, agency_members, agency_talents, agency_wallets, agency_transactions)
+- API Endpoints (Agency Management, Talent Management, Booking Management, Financial Management)
+- Permission System (Role definitions: Owner/Admin/Coordinator/Viewer, Permission check middleware)
+- Business Logic Implementation:
+  - Ghost Profile Creation (Agency tạo profile không có login)
+  - Talent Joining Agency (KOL join agency, transfer permissions)
+  - Agency-Talent Separation (Xử lý khi kết thúc hợp đồng)
 
-### 4.2. Bảng Phân hệ Agency (Agency Tables - 5 bảng)
-*   `agencies`: Thông tin công ty quản lý tài năng.
-*   `agency_members`: Danh sách nhân sự quản trị của Agency.
-*   `agency_talents`: Danh sách các KOLs trực thuộc quản lý của Agency.
-*   `agency_wallets` & `agency_transactions`: Quản lý số dư ví tổng và lịch sử giao dịch tài chính của Agency.
-
----
-
-## 5. Danh sách API Endpoints chính
-
-### 🔐 Authentication (Xác thực)
-*   `POST /api/auth/register` - Đăng ký tài khoản
-*   `POST /api/auth/login` - Đăng nhập nhận Sanctum Token
-*   `GET /api/auth/me` - Lấy thông tin user hiện tại (Yêu cầu Token)
-*   `POST /api/auth/logout` - Đăng xuất hủy Token
-*   `GET /api/auth/social/:provider/redirect` - Redirect sang trang OAuth (Google/Facebook)
-*   `GET /api/auth/social/:provider/callback` - Nhận callback xử lý đăng nhập Social
-
-### 👤 Profile Management
-*   `GET /api/profiles/:id` - Xem profile chi tiết
-*   `PUT /api/profiles/:id` - Cập nhật thông tin profile
-*   `POST /api/profiles/:id/photos` - Upload ảnh portfolio
-*   `DELETE /api/profiles/:id/photos/:photo_id` - Xóa ảnh portfolio
-*   `GET /api/profiles/:id/completion` - Lấy điểm % hoàn thiện hồ sơ
-
-### 🔍 Search & Recommendation
-*   `GET /api/search/profiles` - Tìm kiếm & lọc KOL cơ bản
-*   `POST /api/search/profiles/advanced` - Tìm kiếm nâng cao kết hợp chỉ số MXH
-*   `POST /api/wishlists` - Quản lý danh sách lưu trữ của đối tác
-
-### 📅 Calendar (Lịch rảnh)
-*   `GET /api/calendar/events` - Lấy danh sách lịch rảnh/bận
-*   `POST /api/calendar/events` - Thêm sự kiện lịch mới
-*   `DELETE /api/calendar/events/:id` - Xóa sự kiện lịch
-*   `POST /api/calendar/sync/google` - Yêu cầu sync Google Calendar
+**Khi nào cần đọc:**
+- Khi implement agency registration & management
+- Khi xây dựng talent roster management
+- Khi implement centralized booking for agencies
+- Khi xây dựng agency wallet & financial reports
 
 ---
 
-## 6. Các Tiêu chuẩn Bảo mật áp dụng
+## 🛠️ Technology Stack Chi tiết
 
-1.  **Xác thực phân quyền:** Sử dụng Sanctum Token với thuật toán mã hóa an toàn. Áp dụng Middleware phân quyền nghiêm ngặt để tránh lỗi IDOR (truy cập trái phép dữ liệu của user khác).
-2.  **Mã hóa thông tin nhạy cảm (PII):** Các trường thông tin cá nhân như số điện thoại, email, số tài khoản ngân hàng và tài liệu KYC phải được mã hóa bằng thuật toán `AES-256` trước khi lưu vào cơ sở dữ liệu.
-3.  **An toàn dữ liệu đầu vào:** Sử dụng parameterized queries (thông qua Eloquent/PDO) để loại bỏ 100% rủi ro SQL Injection. Áp dụng Content Security Policy (CSP) và các filter chống tấn công XSS.
-4.  **Giới hạn truy cập (Rate Limiting):** Cấu hình giới hạn tối đa 100 requests/phút đối với mỗi địa chỉ IP để tránh các cuộc tấn công Brute-force và DDoS.
+### Backend
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Runtime** | Node.js | 20.x LTS | JavaScript runtime |
+| **Framework** | Express.js | 4.x | Web framework |
+| **Language** | TypeScript | 5.x | Type-safe JavaScript |
+| **ORM** | Prisma / TypeORM | Latest | Database ORM |
+| **Validation** | Zod / Joi | Latest | Request validation |
+| **Authentication** | Passport.js + JWT | Latest | Auth middleware |
+
+**Alternative (Recommended):**
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Framework** | Laravel | 11.x | Full-stack PHP framework |
+| **Language** | PHP | 8.3+ | Server-side language |
+| **ORM** | Eloquent | Built-in | Laravel's ORM |
+| **Validation** | Form Requests | Built-in | Laravel validation |
+| **Authentication** | Laravel Sanctum | Built-in | API authentication |
+
+### Frontend
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Framework** | React | 18.x | UI library |
+| **Language** | TypeScript | 5.x | Type-safe JavaScript |
+| **State Management** | Zustand / Redux Toolkit | Latest | Global state |
+| **Routing** | React Router | 6.x | Client-side routing |
+| **Forms** | React Hook Form | Latest | Form handling |
+| **UI Components** | shadcn/ui + Tailwind CSS | Latest | Component library |
+| **Data Fetching** | TanStack Query | Latest | Server state management |
+
+**Alternative (with Laravel):**
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Bridge** | Inertia.js | 1.x | Laravel ↔ React/Vue bridge |
+| **Framework** | React / Vue | 18.x / 3.x | UI library |
+| **Bundler** | Vite | 5.x | Fast build tool |
+| **Styling** | Tailwind CSS | 3.x | Utility-first CSS |
+
+### Database & Storage
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Primary DB** | PostgreSQL | 16.x | Relational database |
+| **Cache** | Redis | 7.x | In-memory cache |
+| **Search** | Elasticsearch | 8.x | Full-text search |
+| **File Storage** | AWS S3 | - | Object storage |
+| **CDN** | CloudFront | - | Content delivery |
+| **Queue** | RabbitMQ / Redis Queue | Latest | Job queue |
+
+### DevOps & Infrastructure
+
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| **Hosting** | AWS EC2 / DigitalOcean | Virtual servers |
+| **Container** | Docker | Containerization |
+| **Orchestration** | Docker Compose / Kubernetes | Container orchestration |
+| **CI/CD** | GitHub Actions | Automated deployment |
+| **Monitoring** | Sentry + DataDog | Error tracking & APM |
+| **Logging** | Winston / Pino | Application logging |
+
+### Third-party Services
+
+| Service | Provider | Purpose |
+|---------|----------|---------|
+| **Payment** | VNPay, Momo, Stripe | Payment processing |
+| **SMS** | Twilio / AWS SNS | OTP & notifications |
+| **Email** | SendGrid / AWS SES | Transactional emails |
+| **Social Auth** | OAuth 2.0 | Google, Facebook login |
+| **Social APIs** | Instagram, TikTok, Facebook | Follower sync |
+| **AI/ML** | AWS Rekognition, Clarifai | Image moderation |
+| **Maps** | Google Maps API | Location services |
 
 ---
 
-## 7. Tài liệu Liên quan
+## 🗄️ Database Schema Overview
 
-**Tài liệu Kinh doanh (Business Docs):**
-*   [Luồng 1: Vận hành & Tính năng chính](../for-bussinees/overview/Lu%E1%BB%93ng%201_%20V%E1%BB%81%20lu%E1%BB%93ng%20v%E1%BA%ADn%20h%C3%A0nh%20&%20T%C3%ADnh%20n%C4%83ng%20ch%C3%ADnh.md)
-*   [Luồng 2: Mô hình Kinh doanh](../for-bussinees/overview/Lu%E1%BB%93ng%202_%20M%C3%B4%20h%C3%ACnh%20kinh%20doanh%20(Monetization%20Model)%20.md)
-*   [Phần 4.2: Phân hệ Agency](../for-bussinees/overview/Ph%E1%BA%A7n%204.2_%20T%C3%A0i%20kho%E1%BA%A3n%20c%E1%BA%A5p%20C%C3%B4ng%20ty%20qu%E1%BA%A3n%20l%C3%BD%20(Agency_Manager).md)
+### Core Tables (10 tables)
 
-**Tài liệu Kỹ thuật Chi tiết (Technical Specs):**
-*   [Core Features Specs](./plans/Core-Features-Technical-Specs.md)
-*   [Agency Module Specs](./plans/Agency-Module-Technical-Specs.md)
+| Table | Records (Est.) | Purpose | Key Indexes |
+|-------|----------------|---------|-------------|
+| `users` | 10,000 | User accounts | email, phone, type |
+| `profiles` | 10,000 | KOL/Model profiles | user_id, city, completion_score |
+| `photos` | 100,000 | Profile photos | profile_id, category |
+| `videos` | 10,000 | Profile videos | profile_id |
+| `social_accounts` | 20,000 | Social media links | user_id, platform |
+| `social_metrics_history` | 500,000 | Follower history | account_id, recorded_at |
+| `calendar_events` | 50,000 | Availability calendar | user_id, start_time, end_time |
+| `jobs` | 5,000 | Job postings | partner_id, status, deadline |
+| `applications` | 50,000 | Job applications | job_id, kol_id, status |
+| `bookings` | 10,000 | Confirmed bookings | partner_id, kol_id, status |
+
+### Agency Tables (5 tables)
+
+| Table | Records (Est.) | Purpose | Key Indexes |
+|-------|----------------|---------|-------------|
+| `agencies` | 500 | Agency accounts | slug, status, tier |
+| `agency_members` | 2,000 | Agency staff | agency_id, user_id |
+| `agency_talents` | 5,000 | Talents under agencies | agency_id, user_id, status |
+| `agency_wallets` | 500 | Agency wallets | agency_id |
+| `agency_transactions` | 50,000 | Transaction history | agency_id, created_at, type |
+
+**Total:** 15 tables, ~800,000 records (Year 1 estimate)
 
 ---
-*Cập nhật lần cuối: 28/05/2026*  
-*Duy trì bởi: Đội ngũ Phát triển Phần mềm (Development Team)*
+
+## 🔌 API Endpoints Overview
+
+### Authentication (6 endpoints)
+```
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/auth/otp/send
+POST   /api/auth/otp/verify
+POST   /api/auth/social
+POST   /api/auth/logout
+```
+
+### Profile Management (6 endpoints)
+```
+GET    /api/profiles/:id
+PUT    /api/profiles/:id
+POST   /api/profiles/:id/photos
+DELETE /api/profiles/:id/photos/:photo_id
+POST   /api/profiles/:id/videos
+GET    /api/profiles/:id/completion
+```
+
+### Social Media (4 endpoints)
+```
+POST   /api/social/connect
+POST   /api/social/:id/sync
+DELETE /api/social/:id
+GET    /api/social/:id/metrics/history
+```
+
+### Search & Discovery (4 endpoints)
+```
+GET    /api/search/profiles
+POST   /api/search/profiles/advanced
+GET    /api/profiles/:id/similar
+POST   /api/wishlists
+```
+
+### Job Posting (6 endpoints)
+```
+POST   /api/jobs
+GET    /api/jobs/:id
+PUT    /api/jobs/:id
+DELETE /api/jobs/:id
+GET    /api/jobs/:id/applications
+PUT    /api/jobs/:id/applications/:app_id
+```
+
+### Calendar (6 endpoints)
+```
+GET    /api/calendar/events
+POST   /api/calendar/events
+PUT    /api/calendar/events/:id
+DELETE /api/calendar/events/:id
+POST   /api/calendar/sync/google
+```
+
+### Agency Management (12 endpoints)
+```
+POST   /api/agencies
+GET    /api/agencies/:id
+PUT    /api/agencies/:id
+DELETE /api/agencies/:id
+GET    /api/agencies/:id/talents
+POST   /api/agencies/:id/talents
+PUT    /api/agencies/:id/talents/:talent_id
+DELETE /api/agencies/:id/talents/:talent_id
+GET    /api/agencies/:id/bookings
+GET    /api/agencies/:id/wallet
+GET    /api/agencies/:id/transactions
+POST   /api/agencies/:id/withdrawals
+```
+
+**Total:** 50+ API endpoints
+
+---
+
+## 🔐 Security Best Practices
+
+### Authentication & Authorization
+- ✅ JWT tokens with RS256 algorithm
+- ✅ Refresh token rotation
+- ✅ Rate limiting: 100 requests/minute per IP
+- ✅ CORS configuration for allowed origins
+- ✅ CSRF protection for state-changing operations
+
+### Data Protection
+- ✅ Encryption at rest (AES-256)
+- ✅ Encryption in transit (TLS 1.3)
+- ✅ PII tokenization (phone, email, ID cards)
+- ✅ Database access control (IAM roles)
+- ✅ Audit logging for sensitive operations
+
+### Input Validation
+- ✅ Request validation with Zod/Joi
+- ✅ SQL injection prevention (parameterized queries)
+- ✅ XSS prevention (Content Security Policy)
+- ✅ File upload validation (type, size, content)
+- ✅ NSFW image filtering (AI-powered)
+
+---
+
+## 🚀 Performance Optimization
+
+### Caching Strategy
+- **Profile data:** 1 hour TTL
+- **Search results:** 5 minutes TTL
+- **Social metrics:** 24 hours TTL
+- **Static content:** 7 days TTL
+
+### Database Optimization
+- Indexes on frequently queried columns
+- Materialized views for analytics
+- Connection pooling (max 20 connections)
+- Query optimization (EXPLAIN ANALYZE)
+
+### CDN & Asset Optimization
+- Image compression (WebP format, 80% quality)
+- Lazy loading for images
+- Code splitting for JavaScript
+- Gzip compression for text assets
+
+---
+
+## 📊 Monitoring & Observability
+
+### Metrics to Track
+- **Performance:** API response time (p50, p95, p99)
+- **Availability:** Uptime (target: 99.9%)
+- **Errors:** Error rate (target: <1%)
+- **Business:** Active users, bookings, revenue
+
+### Tools
+- **APM:** DataDog / New Relic
+- **Error Tracking:** Sentry
+- **Logging:** CloudWatch / ELK Stack
+- **Uptime Monitoring:** StatusPage / Pingdom
+
+---
+
+## 🧪 Testing Strategy
+
+### Unit Tests
+- Business logic functions
+- Utility functions
+- Validation schemas
+- **Target coverage:** 80%+
+
+### Integration Tests
+- API endpoints
+- Database operations
+- Third-party integrations
+- **Target coverage:** 60%+
+
+### E2E Tests
+- Critical user flows
+- Payment flows
+- Booking flows
+- **Target coverage:** Key scenarios only
+
+---
+
+## 📖 Tài liệu Liên quan
+
+**Business Documentation:**
+- [Luồng 1: Vận hành & Tính năng](../for-bussinees/overview/Luồng%201_%20Về%20luồng%20vận%20hành%20&%20Tính%20năng%20chính.md)
+- [Luồng 2: Mô hình Kinh doanh](../for-bussinees/overview/Luồng%202_%20Mô%20hình%20kinh%20doanh%20(Monetization%20Model)%20.md)
+- [Phần 4.2: Agency Module](../for-bussinees/overview/Phần%204.2_%20Tài%20khoản%20cấp%20Công%20ty%20quản%20lý%20(Agency_Manager).md)
+
+**Technical Specifications:**
+- [Core Features Technical Specs](./plans/Core-Features-Technical-Specs.md)
+- [Agency Module Technical Specs](./plans/Agency-Module-Technical-Specs.md)
+
+### Mô hình kiến trúc khuyến nghị khi dùng Laravel với TS
+
+| Thành phần | Công nghệ khuyến nghị | Vai trò |
+|---|---|---|
+| Backend | PHP 8.3+ & Laravel | Xử lý Logic, Cơ sở dữ liệu, Bảo mật |
+| Cầu nối | Inertia.js | Truyền dữ liệu trực tiếp, không cần viết REST API cồng kềnh |
+| Frontend | React / Vue + TypeScript | Xây dựng giao diện ứng dụng Single Page App (SPA) mượt mà |
+| Bundler | Vite | Biên dịch mã TypeScript cực nhanh |
+
+**Admin Panel:** Filament
+
+---
+
+**Cập nhật lần cuối:** 25/05/2026  
+**Maintainer:** Development Team
