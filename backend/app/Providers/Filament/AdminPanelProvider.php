@@ -19,6 +19,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Stephenjude\FilamentTwoFactorAuthentication\TwoFactorAuthenticationPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -47,6 +48,11 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+            ])
+            ->plugins([
+                TwoFactorAuthenticationPlugin::make()
+                    ->enableTwoFactorAuthentication()
+                    ->addTwoFactorMenuItem(label: 'Xác minh 2 bước', icon: 'heroicon-o-shield-check'),
             ])
             ->middleware([
                 EncryptCookies::class,

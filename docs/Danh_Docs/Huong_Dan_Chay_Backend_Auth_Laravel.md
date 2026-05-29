@@ -1,106 +1,130 @@
 # Hướng Dẫn Chạy Backend Auth Laravel
 
-1. Chạy backend Laravel:
+Tài liệu này dùng cho backend Laravel trong thư mục `backend/`.
+
+## 1. Yêu cầu môi trường local
+
+- PHP CLI 8.3 trở lên. Máy hiện đang dùng thư mục PHP: `C:\php`.
+- Composer.
+- Node.js và npm nếu cần build asset.
+- Không cần bật XAMPP khi chạy local, vì local đang dùng SQLite.
+
+Kiểm tra nhanh:
+
+```bash
+php -v
+composer -V
+```
+
+## 2. Database local
+
+Backend local đang dùng SQLite:
+
+```text
+backend/database/database.sqlite
+```
+
+Không cần tạo database trong phpMyAdmin.
+
+Chạy migration:
+
+```bash
+cd backend
+php artisan migrate
+```
+
+Reset database local nếu cần:
+
+```bash
+cd backend
+php artisan migrate:fresh --seed
+```
+
+## 3. Chạy backend
 
 ```bash
 cd backend
 php artisan serve --host=127.0.0.1 --port=8000
 ```
-Trang admin sau khi chạy: http://127.0.0.1:8000/admin
 
-2. Chạy frontend Next.js:
+Admin panel:
+
+```text
+http://127.0.0.1:8000/admin
+```
+
+Health check:
+
+```text
+http://127.0.0.1:8000/api/health
+http://127.0.0.1:8000/api/health/db
+```
+
+## 4. Chạy frontend
+
+Tại thư mục gốc project:
 
 ```bash
-Tại thư mục gốc
 npm run dev -- --port 3000
 ```
 
-3. Mở giao diện:
+Các màn hình auth frontend:
 
-- Đăng nhập: `http://localhost:3000/auth/login`
-- Đăng ký: `http://localhost:3000/auth/register`
-
-## Cấu trúc hiện tại
-
-- Frontend Next.js: `C:\Users\AMLT\Downloads\manager-kols-models`
-- Backend Laravel API: `C:\Users\AMLT\Downloads\manager-kols-models\backend`
-
-Thư mục `backend/` hiện là backend chính của project. Backend Laravel cũ dùng Inertia/Filament/Breeze đã được xóa theo quyết định ngày 28/05/2026 để tránh nhầm với hướng Next.js + Laravel API.
-
-## Database local
-
-Backend đang dùng SQLite cho local development:
-
-- File database: `backend\database\database.sqlite`
-- Không cần bật XAMPP.
-- Không cần tạo database trong phpMyAdmin.
-- Không cần cấu hình username/password database.
-
-Khi cần tạo hoặc cập nhật bảng:
-
-```bash
-cd C:\Users\AMLT\Downloads\manager-kols-models\backend
-php artisan migrate
+```text
+http://localhost:3000/auth/login
+http://localhost:3000/auth/register
 ```
 
-Nếu muốn reset sạch database local:
+Lưu ý: nhiều màn frontend hiện vẫn còn dữ liệu demo/mock. Khi chưa nối API Laravel thì thao tác trên frontend chưa chắc tạo dữ liệu trong admin.
 
-```bash
-cd C:\Users\AMLT\Downloads\manager-kols-models\backend
-php artisan migrate:fresh
-```
+## 5. API auth hiện có
 
-
-## API auth hiện có
-
-Base URL mặc định frontend đang gọi:
+Base URL local:
 
 ```text
 http://127.0.0.1:8000/api
 ```
 
-Các endpoint:
+Endpoint chính:
 
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `GET /api/auth/me`
-- `POST /api/auth/logout`
-- `GET /api/auth/social/google/redirect`
-- `GET /api/auth/social/google/callback`
-- `GET /api/auth/social/facebook/redirect`
-- `GET /api/auth/social/facebook/callback`
+```text
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+POST /api/auth/logout
+GET  /api/auth/social/google/redirect
+GET  /api/auth/social/google/callback
+GET  /api/auth/social/facebook/redirect
+GET  /api/auth/social/facebook/callback
+```
 
-Frontend lưu token tạm trong `localStorage` với key `onstagevn_auth_token`. Đây là cách đủ dùng cho MVP local; khi làm production nên đổi sang cookie HTTP-only hoặc cơ chế bảo mật chặt hơn.
+Actor auth hiện tại:
 
-## Bảng hiện có
+```text
+talent
+brand
+admin
+```
 
-Hiện tại chỉ tạo các bảng cần cho auth và hạ tầng Laravel. Các bảng nghiệp vụ trong `docs/for-tech/plans` sẽ được tạo khi bắt đầu làm module tương ứng.
+Không có actor auth riêng tên `agency`. Nếu cần phân biệt agency thì dùng `partner_profiles.organization_type = agency`.
 
-Bảng `users` hiện có các trường nền:
+## 6. Admin và bảo mật
 
-- `id`
-- `name`
-- `email`
-- `phone`
-- `password`
-- `type`
-- `status`
-- `is_verified`
-- `is_ghost`
-- `last_login_at`
-- `social_provider`
-- `social_id`
-- `avatar`
-- `email_verified_at`
-- `remember_token`
-- `created_at`
-- `updated_at`
+Chỉ user có `type = admin` mới vào được `/admin`.
 
-Các bảng như `profiles`, `photos`, `videos`, `social_accounts`, `bookings` chưa tạo ở bước auth này.
+Trong avatar góc trên bên phải của Filament admin hiện có:
 
-## Đăng nhập Google/Facebook
+- `Đổi mật khẩu`.
+- `Xác minh 2 bước`.
+- `Sign out`.
 
-Backend đã scaffold Laravel Socialite. Để chạy thật cần tạo OAuth App ở Google/Facebook rồi điền vào `backend\.env`:
+Tính năng `Xác minh 2 bước` dùng mã QR/TOTP. Admin mở mục này, quét QR bằng Google Authenticator, Microsoft Authenticator hoặc app tương tự, rồi nhập mã xác nhận để bật 2FA.
+
+Sau khi bật 2FA, lần đăng nhập admin tiếp theo sẽ cần nhập mã xác minh hoặc recovery code.
+
+## 7. Đăng nhập Google/Facebook
+
+Backend đã scaffold Laravel Socialite. Muốn dùng thật cần tạo OAuth App ở Google/Facebook rồi điền vào `backend/.env`:
 
 ```env
 GOOGLE_CLIENT_ID=
@@ -112,50 +136,41 @@ FACEBOOK_CLIENT_SECRET=
 FACEBOOK_REDIRECT_URI=http://127.0.0.1:8000/api/auth/social/facebook/callback
 ```
 
-Nếu chưa có credentials, nút Google/Facebook sẽ chưa đăng nhập thật được.
+Nếu chưa có credentials, nút Google/Facebook chưa đăng nhập thật được.
 
-## Cho người khác chạy project
+## 8. Cho người khác chạy project
 
-Người khác chạy được nếu có:
-
-- PHP
-- Composer
-- Node.js
-
-Các bước cơ bản:
+Người khác clone project về cần chạy:
 
 ```bash
-cd C:\Users\AMLT\Downloads\manager-kols-models
-npm install
-
 cd backend
 composer install
 copy .env.example .env
 php artisan key:generate
-php artisan migrate
+php artisan migrate --seed
+php artisan serve
 ```
 
-Với SQLite, người khác không cần bật XAMPP khi chạy local. Sau này nếu deploy production thì nên dùng PostgreSQL hoặc MySQL, và có thể chuẩn hóa môi trường bằng Docker hoặc Laravel Sail.
+Với SQLite local, người khác cũng không cần bật XAMPP.
 
-## Kiểm tra
+## 9. Kiểm tra
 
 Backend:
 
 ```bash
-cd C:\Users\AMLT\Downloads\manager-kols-models\backend
+cd backend
 php artisan test
 ```
 
 Frontend:
 
 ```bash
-cd C:\Users\AMLT\Downloads\manager-kols-models
 npm run build
 ```
 
-## Deploy backend
+## 10. Deploy backend
 
-Hướng dẫn deploy backend Laravel lên Railway:
+Hướng dẫn deploy Railway nằm ở:
 
 ```text
 docs/Danh_Docs/Huong_Dan_Deploy_Backend_Railway.md

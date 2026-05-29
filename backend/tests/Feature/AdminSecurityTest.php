@@ -7,6 +7,8 @@ use App\Services\AdminPasswordService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
+use Stephenjude\FilamentTwoFactorAuthentication\TwoFactorAuthenticatable;
 use Tests\TestCase;
 
 class AdminSecurityTest extends TestCase
@@ -29,6 +31,33 @@ class AdminSecurityTest extends TestCase
         $this->assertArrayHasKey('change-password', $items);
         $this->assertSame('Đổi mật khẩu', $items['change-password']->getLabel());
         $this->assertStringEndsWith('/admin/change-password', $items['change-password']->getUrl());
+    }
+
+    public function test_admin_user_model_supports_two_factor_authentication(): void
+    {
+        $this->assertContains(TwoFactorAuthenticatable::class, class_uses_recursive(User::class));
+        $this->assertContains(HasPasskeys::class, class_implements(User::class));
+    }
+
+    public function test_two_factor_authentication_link_is_in_admin_user_menu(): void
+    {
+        $items = app('filament')->getPanel('admin')->getUserMenuItems();
+        $labels = array_map(fn ($item): string => $item->getLabel(), $items);
+
+        $this->assertContains('Xác minh 2 bước', $labels);
+    }
+
+    public function test_two_factor_authentication_copy_is_vietnamese(): void
+    {
+        $this->assertSame(
+            'Xác minh 2 bước',
+            __('filament-two-factor-authentication::section.header')
+        );
+
+        $this->assertSame(
+            'Mã xác minh 2 bước không hợp lệ.',
+            __('filament-two-factor-authentication::pages.challenge.error')
+        );
     }
 
     public function test_admin_can_change_own_password_with_current_password(): void
