@@ -124,6 +124,7 @@ https://domain-railway-cua-ban/admin
 - Không bật `APP_DEBUG=true` trên production.
 - Không commit file `.env`.
 - Không ghi tài khoản admin demo vào tài liệu.
+- Không paste token, mật khẩu database hoặc biến môi trường chứa secret vào chat/tài liệu. Nếu đã lộ, nên rotate/regenerate lại secret trên Railway/GitHub.
 - Nếu dùng đăng nhập Google/Facebook, cần cập nhật redirect URI theo domain production.
 
 Ví dụ:
@@ -159,6 +160,19 @@ CACHE_STORE=database
 QUEUE_CONNECTION=database
 ```
 
-4. Nếu log báo thiếu bảng như `sessions`, `cache`, `users`, `migrations`, nghĩa là migration chưa chạy. File `backend/nixpacks.toml` hiện đã có lệnh `php artisan migrate --force` ở start command.
+4. Nếu log báo thiếu bảng như `sessions`, `cache`, `users`, `migrations`, nghĩa là migration chưa chạy. Hãy kiểm tra `Pre-deploy step` trên Railway đã có `php artisan migrate --force`.
 5. Nếu log báo `No application encryption key has been specified`, nghĩa là thiếu `APP_KEY`.
 6. Nếu log báo không kết nối được database, kiểm tra PostgreSQL service đã được thêm vào cùng Railway project và biến `DB_URL` đã trỏ đúng `${{Postgres.DATABASE_URL}}`.
+
+Có thể test health check:
+
+```text
+https://domain-railway-cua-ban/api/health
+https://domain-railway-cua-ban/api/health/db
+```
+
+Ý nghĩa:
+
+- `/api/health` chạy được: Laravel app đã start được.
+- `/api/health/db` chạy được: Laravel kết nối được PostgreSQL.
+- `/api/health` chạy được nhưng `/` hoặc `/admin` lỗi 500: thường là lỗi session/database migration/admin.

@@ -14,7 +14,22 @@ use App\Http\Controllers\Api\SurveyController;
 use App\Http\Controllers\Api\TalentController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\WishlistItemController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/health', fn () => response()->json([
+    'status' => 'ok',
+    'app' => config('app.name'),
+]));
+
+Route::get('/health/db', function () {
+    DB::select('select 1');
+
+    return response()->json([
+        'status' => 'ok',
+        'database' => config('database.default'),
+    ]);
+});
 
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
