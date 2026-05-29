@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\TalentController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\WishlistItemController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health', fn () => response()->json([
@@ -23,12 +24,24 @@ Route::get('/health', fn () => response()->json([
 ]));
 
 Route::get('/health/db', function () {
-    DB::select('select 1');
+    try {
+        DB::select('select 1');
 
-    return response()->json([
-        'status' => 'ok',
-        'database' => config('database.default'),
-    ]);
+        return response()->json([
+            'status' => 'ok',
+            'database' => config('database.default'),
+            'has_sessions_table' => Schema::hasTable('sessions'),
+            'has_users_table' => Schema::hasTable('users'),
+        ]);
+    } catch (Throwable $exception) {
+        report($exception);
+
+        return response()->json([
+            'status' => 'error',
+            'database' => config('database.default'),
+            'message' => $exception->getMessage(),
+        ], 500);
+    }
 });
 
 Route::post('/auth/register', [AuthController::class, 'register']);
