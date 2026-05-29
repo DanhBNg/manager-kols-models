@@ -34,6 +34,14 @@ Job này chỉ chạy khi branch GitLab là:
 danh
 ```
 
+Job mirror cần clone đủ lịch sử Git, nên đã cấu hình:
+
+```text
+GIT_DEPTH=0
+```
+
+Nếu không có cấu hình này, pipeline có thể lỗi thiếu object khi push sang GitHub.
+
 ## 2. Việc cần làm trên GitHub
 
 Tạo một repo mới trên GitHub, ví dụ:
