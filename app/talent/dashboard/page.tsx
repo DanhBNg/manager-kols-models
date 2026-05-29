@@ -660,7 +660,7 @@ export default function DashboardPage() {
           <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent"></div>
 
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">Định Hướng Sự Nghiệp & Cảnh Báo AI</h2>
+            <h2 className="text-sm font-black uppercase tracking-[0.18em] text-white">CẬP NHẬT HỒ SƠ</h2>
             <span className="inline-flex items-center rounded-md border px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-amber-500/25 bg-amber-500/10 text-amber-300">
               Thông Tin Hệ Thống
             </span>
