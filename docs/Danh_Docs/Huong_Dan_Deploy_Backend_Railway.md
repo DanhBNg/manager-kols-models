@@ -79,7 +79,9 @@ Project đã có file:
 backend/nixpacks.toml
 ```
 
-File này cấu hình Railway build Laravel và chạy migration trước khi start server:
+File này cấu hình Railway build Laravel.
+
+Trên Railway UI, nên cấu hình migration bằng `Pre-deploy step`:
 
 ```bash
 php artisan migrate --force
@@ -91,7 +93,21 @@ Nếu Railway yêu cầu cấu hình Root Directory, chọn:
 backend
 ```
 
-Nếu Railway đọc được `backend/nixpacks.toml` thì không cần nhập thủ công Build command hoặc Pre-deploy command.
+Nếu Railway yêu cầu cấu hình Root Directory, chọn:
+
+```text
+backend
+```
+
+Không cần dùng `Procfile`.
+
+Cấu hình deploy khuyến nghị trên Railway:
+
+```text
+Custom Build Command: để trống
+Custom Start Command: để trống hoặc php artisan serve --host=0.0.0.0 --port=$PORT
+Pre-deploy step: php artisan migrate --force
+```
 
 ### Bước 5: Generate domain
 
@@ -121,7 +137,7 @@ https://domain-railway-cua-ban/api/auth/social/facebook/callback
 
 Railway có thể tự deploy lại khi bạn push code mới lên GitHub.
 
-Mỗi lần deploy, migration sẽ chạy tự động qua start command trong `backend/nixpacks.toml`.
+Mỗi lần deploy, migration nên chạy tự động qua `Pre-deploy step` của Railway.
 
 ## 6. Debug lỗi 500
 
