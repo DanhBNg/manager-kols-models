@@ -109,6 +109,15 @@ Custom Start Command: để trống hoặc php artisan serve --host=0.0.0.0 --po
 Pre-deploy step: php artisan migrate --force
 ```
 
+Nếu trang admin chỉ hiện HTML thô, kiểm tra asset Filament:
+
+```text
+https://domain-railway-cua-ban/css/filament/filament/app.css
+https://domain-railway-cua-ban/js/filament/filament/app.js
+```
+
+Nếu các URL này 404, cần redeploy lại để chạy lệnh publish asset trong `backend/nixpacks.toml`.
+
 ### Bước 5: Generate domain
 
 Sau khi deploy xong, vào tab Networking của service backend và chọn `Generate Domain`.

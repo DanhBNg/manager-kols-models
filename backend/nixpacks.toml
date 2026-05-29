@@ -11,6 +11,7 @@ cmds = [
 cmds = [
   "composer install --no-dev --optimize-autoloader",
   "npm run build",
+  "php artisan filament:assets",
   "php artisan filament:upgrade",
   "php artisan storage:link || true",
   "php artisan config:clear",
