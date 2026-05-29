@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Crown, Loader2, Lock, Mail, User, Users } from "lucide-react";
+import { getApiBaseUrl } from "@/lib/api-client";
 
 type AuthMode = "login" | "register";
 type AccountType = "talent" | "brand";
@@ -23,10 +24,6 @@ const accountTypes: Array<{ value: AccountType; label: string }> = [
   { value: "talent", label: "Talent" },
   { value: "brand", label: "Brand" },
 ];
-
-function getApiBaseUrl() {
-  return (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/$/, "");
-}
 
 function getRedirectPath(type: AccountType) {
   return type === "talent" ? "/talent" : "/brand";

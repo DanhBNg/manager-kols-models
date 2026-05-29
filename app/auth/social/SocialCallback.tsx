@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { getApiBaseUrl } from "@/lib/api-client";
 
 type AccountType = "talent" | "brand";
 
@@ -15,10 +16,6 @@ type MeResponse = {
     status: string;
   };
 };
-
-function getApiBaseUrl() {
-  return (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/$/, "");
-}
 
 function getRedirectPath(type: AccountType | null) {
   return type === "talent" ? "/talent" : "/brand";

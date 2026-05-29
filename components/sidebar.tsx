@@ -7,6 +7,7 @@ import {
   Sparkles, BookmarkCheck, LogOut, LayoutDashboard, ChevronRight, Trophy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getApiBaseUrl } from "@/lib/api-client";
 
 const talentMenuItems = [
   { label: "Tổng quan", icon: Home, href: "/talent/dashboard" },
@@ -41,8 +42,7 @@ export default function Sidebar() {
 
     if (token) {
       try {
-        const baseUrl = (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/$/, "");
-        await fetch(`${baseUrl}/auth/logout`, {
+        await fetch(`${getApiBaseUrl()}/auth/logout`, {
           method: "POST",
           headers: {
             Accept: "application/json",

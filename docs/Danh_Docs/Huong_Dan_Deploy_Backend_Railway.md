@@ -64,6 +64,20 @@ FILESYSTEM_DISK=local
 
 Không nên để `DB_URL` trên backend nếu Railway đang resolve sai host hoặc sai database.
 
+Với frontend Vercel hiện tại, nên đặt:
+
+```text
+FRONTEND_URL=https://vnp-2026-beuty-talent.vercel.app
+```
+
+Ở phía Vercel frontend, cần đặt Environment Variable:
+
+```text
+NEXT_PUBLIC_API_URL=https://manager-kols-models-production.up.railway.app/api
+```
+
+Nếu thiếu `NEXT_PUBLIC_API_URL`, frontend deploy sẽ fallback về `http://127.0.0.1:8000/api`, chỉ đúng khi chạy local và sẽ sai trên Vercel.
+
 ## 4. APP_KEY
 
 Tạo `APP_KEY` ở local:

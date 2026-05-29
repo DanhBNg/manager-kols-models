@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, ChevronDown, Crown, LogOut, Search, UserCircle } from "lucide-react";
+import { Bell, ChevronDown, LogOut, Search, UserCircle } from "lucide-react";
+import { getApiBaseUrl } from "@/lib/api-client";
 
 type AuthUser = {
   name: string;
@@ -11,15 +12,11 @@ type AuthUser = {
   status: string;
 };
 
-function getApiBaseUrl() {
-  return (process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/$/, "");
-}
-
 function getUserLabel(user: AuthUser | null) {
   if (!user) {
     return {
-      name: "Nguyễn Mai Anh",
-      subtitle: "Tier A",
+      name: "Tài khoản",
+      subtitle: "Đang tải",
     };
   }
 
@@ -32,24 +29,21 @@ function getUserLabel(user: AuthUser | null) {
 export default function Header() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [user] = useState<AuthUser | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const label = getUserLabel(user);
 
+  useEffect(() => {
     const stored = window.localStorage.getItem("onstagevn_auth_user");
     if (!stored) {
-      return null;
+      return;
     }
 
     try {
-      return JSON.parse(stored) as AuthUser;
+      setUser(JSON.parse(stored) as AuthUser);
     } catch {
       window.localStorage.removeItem("onstagevn_auth_user");
-      return null;
     }
-  });
-  const label = getUserLabel(user);
+  }, []);
 
   async function handleLogout() {
     const token = localStorage.getItem("onstagevn_auth_token");

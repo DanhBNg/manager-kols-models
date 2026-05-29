@@ -87,7 +87,32 @@ Bảng này đến từ dependency của package. Hiện tại backend chưa b�
 9. Nếu mã đúng, hệ thống lưu thời điểm xác nhận vào `two_factor_confirmed_at`.
 10. Từ lần đăng nhập sau, admin phải nhập mã 2FA sau khi nhập đúng email/mật khẩu.
 
-## 6. QR code hoạt động như thế nào
+## 6. Luồng tắt xác thực 2 bước
+
+Tính năng tắt 2FA đã có sẵn trong package.
+
+Khi tài khoản admin đã bật 2FA, trang `Xác minh 2 bước` sẽ hiện nút `Tắt`.
+
+Luồng tắt:
+
+1. Admin đăng nhập vào `/admin`.
+2. Bấm avatar góc trên bên phải.
+3. Chọn `Xác minh 2 bước`.
+4. Bấm `Tắt`.
+5. Xác nhận thao tác.
+6. Hệ thống xóa các trường 2FA khỏi tài khoản admin.
+
+Các trường bị xóa về `null`:
+
+```text
+two_factor_secret
+two_factor_recovery_codes
+two_factor_confirmed_at
+```
+
+Sau khi tắt, lần đăng nhập tiếp theo chỉ cần email/mật khẩu như bình thường.
+
+## 7. QR code hoạt động như thế nào
 
 QR code không phải là mật khẩu dùng một lần.
 
@@ -103,7 +128,7 @@ Mã 6 số thường đổi sau khoảng 30 giây.
 
 Khi admin nhập mã, server tự tính mã hợp lệ ở thời điểm đó rồi so sánh. Nếu trùng thì cho qua.
 
-## 7. Luồng đăng nhập sau khi bật 2FA
+## 8. Luồng đăng nhập sau khi bật 2FA
 
 1. Admin mở `/admin`.
 2. Nhập email và mật khẩu.
@@ -112,7 +137,7 @@ Khi admin nhập mã, server tự tính mã hợp lệ ở thời điểm đó r
 5. Nếu mã đúng, hệ thống cho vào admin panel.
 6. Nếu mã sai, hệ thống từ chối đăng nhập.
 
-## 8. Recovery code dùng để làm gì
+## 9. Recovery code dùng để làm gì
 
 Recovery code là mã dự phòng.
 
@@ -127,7 +152,7 @@ Dùng recovery code khi:
 
 Mỗi recovery code chỉ nên dùng một lần.
 
-## 9. Việt hóa giao diện
+## 10. Việt hóa giao diện
 
 Các nội dung tiếng Việt của package được override tại:
 
@@ -143,7 +168,7 @@ Lý do dùng thư mục `en`:
 
 Không sửa trực tiếp trong `vendor`, vì thư mục `vendor` có thể bị ghi đè khi chạy `composer install` hoặc update package.
 
-## 10. Kiểm thử
+## 11. Kiểm thử
 
 Test liên quan nằm trong:
 
@@ -158,6 +183,7 @@ Các test kiểm tra:
 - Model `User` hỗ trợ 2FA.
 - Menu `Xác minh 2 bước` tồn tại.
 - Nội dung 2FA đã được Việt hóa.
+- Admin có thể tắt 2FA và các trường 2FA được xóa về `null`.
 - Admin đổi mật khẩu đúng/sai theo mật khẩu hiện tại.
 
 Chạy test:
@@ -173,7 +199,7 @@ Kết quả gần nhất:
 29 passed, 122 assertions
 ```
 
-## 11. Lưu ý khi deploy
+## 12. Lưu ý khi deploy
 
 Railway đang dùng PHP 8.3 trong `backend/nixpacks.toml`, nên việc nâng `composer.json` lên `php: ^8.3` là phù hợp với deploy hiện tại.
 
@@ -199,7 +225,7 @@ php artisan optimize:clear
 
 Hoặc redeploy để build mới tự clear cache theo cấu hình hiện tại.
 
-## 12. Lưu ý vận hành
+## 13. Lưu ý vận hành
 
 - Không bật 2FA nếu admin chưa lưu recovery code.
 - Không lưu recovery code trong repo.

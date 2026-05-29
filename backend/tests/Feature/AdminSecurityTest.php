@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Spatie\LaravelPasskeys\Models\Concerns\HasPasskeys;
+use Stephenjude\FilamentTwoFactorAuthentication\Actions\DisableTwoFactorAuthentication;
 use Stephenjude\FilamentTwoFactorAuthentication\TwoFactorAuthenticatable;
 use Tests\TestCase;
 
@@ -58,6 +59,29 @@ class AdminSecurityTest extends TestCase
             'Mã xác minh 2 bước không hợp lệ.',
             __('filament-two-factor-authentication::pages.challenge.error')
         );
+
+        $this->assertSame('Tắt', __('filament-two-factor-authentication::components.2fa.disable'));
+    }
+
+    public function test_admin_two_factor_authentication_can_be_disabled(): void
+    {
+        $admin = User::factory()->create([
+            'type' => 'admin',
+            'two_factor_secret' => encrypt('secret-key'),
+            'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code'])),
+            'two_factor_confirmed_at' => now(),
+        ]);
+
+        $this->assertTrue($admin->hasEnabledTwoFactorAuthentication());
+
+        app(DisableTwoFactorAuthentication::class)($admin);
+
+        $admin->refresh();
+
+        $this->assertFalse($admin->hasEnabledTwoFactorAuthentication());
+        $this->assertNull($admin->two_factor_secret);
+        $this->assertNull($admin->two_factor_recovery_codes);
+        $this->assertNull($admin->two_factor_confirmed_at);
     }
 
     public function test_admin_can_change_own_password_with_current_password(): void
