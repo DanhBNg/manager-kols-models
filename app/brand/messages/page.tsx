@@ -14,7 +14,7 @@ export default function BrandMessagesPlaceholderPage() {
         </div>
         <h1 className="text-xl font-black text-white">Tin nhắn realtime để sau Phase 1</h1>
         <p className="mt-3 text-sm leading-relaxed text-slate-400">
-          Phase 1 chỉ cần campaign, shortlist và yêu cầu liên hệ để đo demand. Chat realtime sẽ mở ở giai đoạn sau.
+          Phase 1 chỉ cần campaign, talent đã lưu và yêu cầu liên hệ để đo demand. Chat realtime sẽ mở ở giai đoạn sau.
         </p>
         <button
           onClick={() => router.push("/brand/campaigns")}
@@ -28,4 +28,3 @@ export default function BrandMessagesPlaceholderPage() {
     </div>
   );
 }
-

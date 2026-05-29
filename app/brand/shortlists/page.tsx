@@ -32,7 +32,7 @@ export default function BrandShortlistsPage() {
         <div>
           <div className="mb-2 flex items-center gap-2">
             <span className="rounded-md border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-amber-300">
-              Wishlist / Shortlist
+              Talent đã lưu
             </span>
             <span className="text-[10px] font-semibold text-slate-500">Phase 1 MVP</span>
           </div>
@@ -45,7 +45,7 @@ export default function BrandShortlistsPage() {
         </div>
 
         <div className="rounded-xl border border-white/5 bg-slate-950/30 px-4 py-3">
-          <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">Shortlist mặc định</span>
+          <span className="block text-[9px] font-bold uppercase tracking-wider text-slate-500">Danh sách đã lưu</span>
           <span className="text-lg font-black text-white">{savedTalents.length} talent</span>
         </div>
       </section>
@@ -89,7 +89,7 @@ export default function BrandShortlistsPage() {
                 </div>
                 <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3">
                   <span className="block text-[9px] font-bold uppercase text-slate-500">Đã có</span>
-                  <span className="font-black text-amber-300">{selectedCampaign.shortlistedTalentIds.length} shortlist</span>
+                  <span className="font-black text-amber-300">{selectedCampaign.shortlistedTalentIds.length} đã lưu</span>
                 </div>
               </div>
             </div>
@@ -100,7 +100,7 @@ export default function BrandShortlistsPage() {
           {savedTalents.length === 0 ? (
             <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-10 text-center">
               <BookmarkCheck className="mx-auto mb-3 h-8 w-8 text-slate-600" />
-              <h3 className="text-sm font-black text-white">Chưa có talent nào trong shortlist</h3>
+              <h3 className="text-sm font-black text-white">Chưa có talent nào trong danh sách đã lưu</h3>
               <p className="mt-2 text-xs text-slate-500">Hãy vào màn Tìm tài năng để lưu talent phù hợp.</p>
             </div>
           ) : (
@@ -155,7 +155,7 @@ export default function BrandShortlistsPage() {
                       <button
                         onClick={() => removeTalent(talent.id)}
                         className="flex h-10 w-10 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-300 hover:bg-rose-500/10"
-                        title="Xóa khỏi shortlist"
+                        title="Xóa khỏi danh sách đã lưu"
                       >
                         <HeartOff className="h-4 w-4" />
                       </button>
@@ -184,4 +184,3 @@ export default function BrandShortlistsPage() {
     </div>
   );
 }
-

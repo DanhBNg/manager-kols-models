@@ -26,7 +26,7 @@ const stats = [
   {
     label: "Talent đã lưu",
     value: savedTalentIds.length.toString(),
-    hint: "Trong shortlist mặc định",
+    hint: "Trong danh sách đã lưu",
     icon: BookmarkCheck,
     color: "text-cyan-300 border-cyan-500/25 bg-cyan-500/10",
   },
@@ -61,7 +61,7 @@ const nextActions = [
   },
   {
     title: "Tạo campaign mới",
-    description: "Ghi nhận brief tuyển dụng để quản lý shortlist theo từng nhu cầu.",
+    description: "Ghi nhận brief tuyển dụng để quản lý talent đã lưu theo từng nhu cầu.",
     href: "/brand/campaigns",
     icon: Briefcase,
   },
@@ -91,7 +91,7 @@ export default function BrandDashboard() {
             Tổng quan <span className="bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 bg-clip-text text-transparent">đối tác</span>
           </h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
-            Theo dõi nhanh hồ sơ tổ chức, shortlist, campaign đang mở và các yêu cầu liên hệ đầu tiên.
+            Theo dõi nhanh hồ sơ tổ chức, talent đã lưu, campaign đang mở và các yêu cầu liên hệ đầu tiên.
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export default function BrandDashboard() {
                   </div>
                   <div className="flex gap-4 text-xs">
                     <div>
-                      <span className="block text-[9px] font-bold uppercase text-slate-500">Shortlist</span>
+                      <span className="block text-[9px] font-bold uppercase text-slate-500">Đã lưu</span>
                       <span className="font-black text-white">{campaign.shortlistedTalentIds.length}</span>
                     </div>
                     <div>
@@ -244,4 +244,3 @@ export default function BrandDashboard() {
     </div>
   );
 }
-

@@ -25,7 +25,7 @@ export default function BottomNavigation() {
       href: "/brand/discover",
     },
     {
-      label: "Shortlist",
+      label: "Đã lưu",
       icon: BookmarkCheck,
       href: "/brand/shortlists",
     },

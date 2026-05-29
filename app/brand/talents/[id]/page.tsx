@@ -100,7 +100,7 @@ export default function BrandTalentProfilePage() {
               )}
             >
               <Heart className={cn("mr-2 h-4 w-4", saved && "fill-current")} />
-              {saved ? "Đã lưu" : "Lưu shortlist"}
+              {saved ? "Đã lưu" : "Lưu talent"}
             </button>
           </div>
         </div>
