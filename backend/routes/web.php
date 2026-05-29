@@ -3,10 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return response()->json([
-        'status' => 'ok',
-        'service' => 'manager-kols-models-backend',
-    ]);
+    return view('welcome');
 });
 
 Route::get('/health', fn () => response()->json([
