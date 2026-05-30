@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -14,7 +14,8 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { campaigns as initialCampaigns, talents, type Campaign, type CampaignStage } from "@/lib/brand-mvp-data";
+import { talents, type Campaign, type CampaignStage } from "@/lib/brand-mvp-data";
+import { closeCampaign, createCampaign, fetchCampaigns, publishCampaign } from "@/lib/api/campaigns";
 import { cn } from "@/lib/utils";
 
 type CampaignStatusTab = "all" | Campaign["status"];
@@ -50,23 +51,69 @@ function statusLabel(status: Campaign["status"]) {
 
 export default function CampaignsPage() {
   const router = useRouter();
-  const [campaigns, setCampaigns] = useState<Campaign[]>(initialCampaigns);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [activeTab, setActiveTab] = useState<CampaignStatusTab>("all");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [sentRequests, setSentRequests] = useState<Record<string, boolean>>({});
+  const [loadingCampaigns, setLoadingCampaigns] = useState(true);
+  const [savingCampaign, setSavingCampaign] = useState(false);
+  const [apiError, setApiError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadCampaigns() {
+      setLoadingCampaigns(true);
+      setApiError("");
+
+      try {
+        const data = await fetchCampaigns();
+        if (mounted) {
+          setCampaigns(data);
+        }
+      } catch (error) {
+        if (mounted) {
+          setApiError(error instanceof Error ? error.message : "Không tải được campaign từ backend.");
+        }
+      } finally {
+        if (mounted) {
+          setLoadingCampaigns(false);
+        }
+      }
+    }
+
+    loadCampaigns();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const filteredCampaigns = useMemo(() => {
     if (activeTab === "all") return campaigns;
     return campaigns.filter((campaign) => campaign.status === activeTab);
   }, [activeTab, campaigns]);
 
-  function updateCampaignStatus(id: string, status: Campaign["status"]) {
-    const nextCampaigns = campaigns.map((campaign) => campaign.id === id ? { ...campaign, status } : campaign);
-    setCampaigns(nextCampaigns);
-    const updatedSelected = nextCampaigns.find((campaign) => campaign.id === id);
-    if (updatedSelected) setSelectedCampaign(updatedSelected);
+  async function updateCampaignStatus(id: string, status: Campaign["status"]) {
+    setApiError("");
+
+    try {
+      const updatedCampaign = status === "published"
+        ? await publishCampaign(id)
+        : status === "closed"
+          ? await closeCampaign(id)
+          : campaigns.find((campaign) => campaign.id === id);
+
+      if (!updatedCampaign) return;
+
+      const nextCampaigns = campaigns.map((campaign) => campaign.id === id ? updatedCampaign : campaign);
+      setCampaigns(nextCampaigns);
+      setSelectedCampaign(updatedCampaign);
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "Không cập nhật được trạng thái campaign.");
+    }
   }
 
   function moveApplicant(campaignId: string, talentId: string, stage: CampaignStage) {
@@ -83,35 +130,22 @@ export default function CampaignsPage() {
     if (updatedSelected) setSelectedCampaign(updatedSelected);
   }
 
-  function handleCreateCampaign(event: React.FormEvent) {
+  async function handleCreateCampaign(event: React.FormEvent) {
     event.preventDefault();
+    setSavingCampaign(true);
+    setApiError("");
 
-    const newCampaign: Campaign = {
-      id: `camp-${Date.now()}`,
-      title: form.title || "Campaign mới",
-      jobType: form.jobType,
-      city: form.city,
-      address: form.address || form.city,
-      startDate: form.startDate,
-      endDate: form.endDate,
-      deadline: form.deadline,
-      talentQuantity: Number(form.talentQuantity) || 1,
-      budget: form.budget,
-      budgetValue: 40000000,
-      benefits: form.benefits || "Thỏa thuận theo brief",
-      status: "draft",
-      shortlistedTalentIds: [],
-      applicants: [],
-      contactRequests: 0,
-      views: 0,
-      description: form.description || "Chưa có mô tả brief.",
-      requirements: form.requirements || "Chưa có yêu cầu chi tiết.",
-    };
-
-    setCampaigns((current) => [newCampaign, ...current]);
-    setSelectedCampaign(newCampaign);
-    setIsCreating(false);
-    setForm(emptyForm);
+    try {
+      const newCampaign = await createCampaign(form);
+      setCampaigns((current) => [newCampaign, ...current]);
+      setSelectedCampaign(newCampaign);
+      setIsCreating(false);
+      setForm(emptyForm);
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "Không tạo được campaign trên backend.");
+    } finally {
+      setSavingCampaign(false);
+    }
   }
 
   function sendContactRequest(campaignId: string, talentId: string) {
@@ -160,6 +194,12 @@ export default function CampaignsPage() {
             )}
           </div>
         </section>
+
+        {apiError && (
+          <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            {apiError}
+          </div>
+        )}
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-5">
           {[
@@ -287,6 +327,12 @@ export default function CampaignsPage() {
         </button>
       </section>
 
+      {apiError && (
+        <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {apiError}
+        </div>
+      )}
+
       <section className="flex flex-wrap gap-2 border-b border-white/5 pb-3">
         {[
           { id: "all", label: "Tất cả" },
@@ -300,6 +346,15 @@ export default function CampaignsPage() {
         ))}
       </section>
 
+      {loadingCampaigns ? (
+        <section className="rounded-2xl border border-white/5 bg-slate-950/25 p-6 text-sm text-slate-400">
+          Đang tải campaign từ backend deploy...
+        </section>
+      ) : filteredCampaigns.length === 0 ? (
+        <section className="rounded-2xl border border-white/5 bg-slate-950/25 p-6 text-sm text-slate-400">
+          Chưa có campaign nào trong backend cho tài khoản brand đang đăng nhập.
+        </section>
+      ) : (
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {filteredCampaigns.map((campaign) => (
           <article key={campaign.id} className="flex flex-col justify-between rounded-2xl border border-white/5 bg-slate-950/25 p-5 transition hover:border-white/10">
@@ -340,6 +395,7 @@ export default function CampaignsPage() {
           </article>
         ))}
       </section>
+      )}
 
       {isCreating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md">
@@ -383,11 +439,18 @@ export default function CampaignsPage() {
               </label>
             </div>
 
+            {apiError && (
+              <div className="mt-4 rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                {apiError}
+              </div>
+            )}
+
+
             <div className="mt-5 flex justify-end gap-3 border-t border-white/5 pt-5">
               <button type="button" onClick={() => setIsCreating(false)} className="h-10 rounded-xl border border-white/10 px-4 text-xs font-black text-white hover:bg-white/5">Hủy</button>
-              <button type="submit" className="flex h-10 items-center rounded-xl bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 px-5 text-xs font-black text-slate-950">
+              <button type="submit" disabled={savingCampaign} className="flex h-10 items-center rounded-xl bg-gradient-to-r from-amber-100 via-amber-300 to-yellow-500 px-5 text-xs font-black text-slate-950 disabled:cursor-not-allowed disabled:opacity-60">
                 <Briefcase className="mr-2 h-4 w-4" />
-                Lưu nháp
+                {savingCampaign ? "Đang lưu..." : "Lưu nháp"}
               </button>
             </div>
           </form>

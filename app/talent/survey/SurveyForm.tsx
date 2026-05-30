@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SURVEY_QUESTIONS } from "./SurveyQuestion";
+import { submitTalentSurvey } from "@/lib/api/survey";
 
 // Custom SVG Icons to avoid import errors from old lucide version
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -125,6 +126,8 @@ export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: S
   const [surveyAnswers, setSurveyAnswers] = useState<Record<number, number>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [registeredComp, setRegisteredComp] = useState<Record<string, boolean>>({});
+  const [isSavingSurvey, setIsSavingSurvey] = useState(false);
+  const [surveyApiError, setSurveyApiError] = useState("");
 
   const [results, setResults] = useState({
     pageant: 0,
@@ -271,9 +274,11 @@ export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: S
     setRegisteredComp(prev => ({ ...prev, [compName]: true }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isStepValid()) return;
+    setIsSavingSurvey(true);
+    setSurveyApiError("");
 
     // Hard Rules checks (Q1 - Q10)
     // Rule 1: Married or Major Surgery -> Excluded from strict national pageants
@@ -348,13 +353,29 @@ export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: S
       tier = "Potential";
     }
 
+    let backendTier: typeof tier | null = null;
+    let backendProfileScore: number | null = null;
+
+    try {
+      const backendResult = await submitTalentSurvey(formData, surveyAnswers);
+      backendTier = backendResult.tier;
+      backendProfileScore = backendResult.overall_score;
+    } catch (error) {
+      setSurveyApiError(error instanceof Error ? error.message : "Không lưu được khảo sát lên backend.");
+    } finally {
+      setIsSavingSurvey(false);
+    }
+
+    const finalTier = backendTier ?? tier;
+    const finalProfileScore = backendProfileScore ?? evaluationScore;
+
     const computedResults = {
       pageant: pageantPct,
       runway: runwayPct,
       kol: kolPct,
       mainCategory,
-      tier,
-      profileScore: evaluationScore,
+      tier: finalTier,
+      profileScore: finalProfileScore,
       date: new Date().toLocaleString("vi-VN"),
       hardRules: {
         strictPageantAllowed,
@@ -370,11 +391,11 @@ export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: S
       id: Date.now(),
       date: computedResults.date,
       mainCategory,
-      tier,
+      tier: finalTier,
       pageant: pageantPct,
       runway: runwayPct,
       kol: kolPct,
-      profileScore: evaluationScore
+      profileScore: finalProfileScore
     };
 
     let updatedHistory: any[] = [];
@@ -402,8 +423,8 @@ export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: S
         kol: kolPct
       },
       mainCategory,
-      profileScore: evaluationScore,
-      tier,
+      profileScore: finalProfileScore,
+      tier: finalTier,
       isOnboarded: true,
       avatar: mediaUploads.avatar ? `/uploads/${mediaUploads.avatar}` : "/avatar.png",
       skills: formData.skills.split(",").map(s => s.trim()),
@@ -1620,21 +1641,27 @@ export default function SurveyForm({ initialHistoryEntry, onBackToDashboard }: S
 
         {/* Final Submit action button container at Step 5 */}
         {step === 5 && (
-          <div className="flex justify-center pt-2">
+          <div className="space-y-3 pt-2">
+            {surveyApiError && (
+              <div className="mx-auto max-w-xl rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-center text-xs font-semibold text-red-200">
+                {surveyApiError}
+              </div>
+            )}
             <button
               type="submit"
-              disabled={!isStepValid()}
+              disabled={!isStepValid() || isSavingSurvey}
               className={cn(
-                "flex h-11 w-full max-w-xs items-center justify-center rounded-xl font-display text-[11px] font-black transition-all gap-1.5 shadow-lg cursor-pointer",
-                isStepValid()
+                "mx-auto flex h-11 w-full max-w-xs items-center justify-center rounded-xl font-display text-[11px] font-black transition-all gap-1.5 shadow-lg cursor-pointer",
+                isStepValid() && !isSavingSurvey
                   ? "bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-600 text-slate-950 hover:brightness-110 active:scale-98"
                   : "bg-[#131936] text-slate-450 border border-white/10 cursor-not-allowed"
               )}
             >
-              Hoàn Thành Khảo Sát & Xem Kết Quả <Sparkles className="h-3.5 w-3.5" />
+              {isSavingSurvey ? "Đang lưu lên backend..." : "Hoàn Thành Khảo Sát & Xem Kết Quả"} <Sparkles className="h-3.5 w-3.5" />
             </button>
           </div>
         )}
+
 
       </form>
     </div>
