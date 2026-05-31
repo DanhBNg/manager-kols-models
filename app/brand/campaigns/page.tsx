@@ -14,8 +14,10 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { talents, type Campaign, type CampaignStage } from "@/lib/brand-mvp-data";
+import type { Campaign, CampaignStage, TalentProfile } from "@/lib/brand-mvp-data";
+import { fetchTalents } from "@/lib/brand-api";
 import { closeCampaign, createCampaign, fetchCampaigns, publishCampaign } from "@/lib/api/campaigns";
+import { createContactRequest } from "@/lib/api/contact-requests";
 import { cn } from "@/lib/utils";
 
 type CampaignStatusTab = "all" | Campaign["status"];
@@ -52,6 +54,7 @@ function statusLabel(status: Campaign["status"]) {
 export default function CampaignsPage() {
   const router = useRouter();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [talents, setTalents] = useState<TalentProfile[]>([]);
   const [activeTab, setActiveTab] = useState<CampaignStatusTab>("all");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -69,9 +72,13 @@ export default function CampaignsPage() {
       setApiError("");
 
       try {
-        const data = await fetchCampaigns();
+        const [campaignData, talentData] = await Promise.all([
+          fetchCampaigns(),
+          fetchTalents(),
+        ]);
         if (mounted) {
-          setCampaigns(data);
+          setCampaigns(campaignData);
+          setTalents(talentData);
         }
       } catch (error) {
         if (mounted) {
@@ -148,13 +155,24 @@ export default function CampaignsPage() {
     }
   }
 
-  function sendContactRequest(campaignId: string, talentId: string) {
+  async function sendContactRequest(campaignId: string, talentId: string) {
     const key = `${campaignId}-${talentId}`;
-    setSentRequests((current) => ({ ...current, [key]: true }));
-    setCampaigns((current) => current.map((campaign) => (
-      campaign.id === campaignId ? { ...campaign, contactRequests: campaign.contactRequests + 1 } : campaign
-    )));
-    setSelectedCampaign((current) => current && current.id === campaignId ? { ...current, contactRequests: current.contactRequests + 1 } : current);
+    setApiError("");
+
+    try {
+      await createContactRequest({
+        profileId: talentId,
+        campaignId,
+        message: "Brand muốn liên hệ talent từ bảng ATS campaign.",
+      });
+      setSentRequests((current) => ({ ...current, [key]: true }));
+      setCampaigns((current) => current.map((campaign) => (
+        campaign.id === campaignId ? { ...campaign, contactRequests: campaign.contactRequests + 1 } : campaign
+      )));
+      setSelectedCampaign((current) => current && current.id === campaignId ? { ...current, contactRequests: current.contactRequests + 1 } : current);
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "Không gửi được yêu cầu liên hệ.");
+    }
   }
 
   if (selectedCampaign) {

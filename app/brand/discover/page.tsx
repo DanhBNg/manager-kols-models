@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CheckCircle2,
@@ -14,13 +14,20 @@ import {
   Star,
   Users,
 } from "lucide-react";
-import { savedTalentIds, talents } from "@/lib/brand-mvp-data";
+import type { TalentProfile } from "@/lib/brand-mvp-data";
+import { fetchTalents } from "@/lib/brand-api";
+import { createContactRequest } from "@/lib/api/contact-requests";
+import { addWishlistItem, deleteWishlistItem, ensureDefaultWishlist, fetchWishlists } from "@/lib/api/wishlists";
 import { cn } from "@/lib/utils";
 
 const allValue = "all";
 
 export default function DiscoverTalentsPage() {
   const router = useRouter();
+  const [talents, setTalents] = useState<TalentProfile[]>([]);
+  const [defaultWishlistId, setDefaultWishlistId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGender, setSelectedGender] = useState(allValue);
   const [selectedType, setSelectedType] = useState(allValue);
@@ -33,9 +40,55 @@ export default function DiscoverTalentsPage() {
   const [maxBudget, setMaxBudget] = useState(15000000);
   const [availableDate, setAvailableDate] = useState("");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [savedIds, setSavedIds] = useState<string[]>(savedTalentIds);
+  const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [savedItems, setSavedItems] = useState<Record<string, { wishlistId: string; itemId: string }>>({});
   const [contactedIds, setContactedIds] = useState<string[]>([]);
   const [compareIds, setCompareIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadData() {
+      setLoading(true);
+      setApiError("");
+
+      try {
+        const [talentData, wishlistData] = await Promise.all([
+          fetchTalents(),
+          fetchWishlists(),
+        ]);
+
+        if (!mounted) return;
+
+        const savedPairs = wishlistData.flatMap((wishlist) => (
+          wishlist.items?.map((item) => ({
+            profileId: String(item.profile_id),
+            wishlistId: String(wishlist.id),
+            itemId: String(item.id),
+          })) ?? []
+        ));
+
+        setTalents(talentData);
+        setSavedIds(savedPairs.map((item) => item.profileId));
+        setSavedItems(Object.fromEntries(savedPairs.map((item) => [item.profileId, { wishlistId: item.wishlistId, itemId: item.itemId }])));
+        setDefaultWishlistId(wishlistData[0] ? String(wishlistData[0].id) : "");
+      } catch (error) {
+        if (mounted) {
+          setApiError(error instanceof Error ? error.message : "Không tải được danh sách talent từ backend.");
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadData();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const filteredTalents = useMemo(() => {
     const keyword = searchQuery.trim().toLowerCase();
@@ -61,7 +114,7 @@ export default function DiscoverTalentsPage() {
         return matchesSearch && matchesGender && matchesType && matchesCity && matchesPlatform && matchesAge && matchesHeight && matchesFollowers && matchesBudget && matchesAvailable && matchesVerified;
       })
       .sort((a, b) => b.matchScore - a.matchScore);
-  }, [availableDate, maxAge, maxBudget, minAge, minFollowers, minHeight, searchQuery, selectedCity, selectedGender, selectedPlatform, selectedType, verifiedOnly]);
+  }, [availableDate, maxAge, maxBudget, minAge, minFollowers, minHeight, searchQuery, selectedCity, selectedGender, selectedPlatform, selectedType, talents, verifiedOnly]);
 
   const comparedTalents = talents.filter((talent) => compareIds.includes(talent.id));
 
@@ -80,8 +133,39 @@ export default function DiscoverTalentsPage() {
     setVerifiedOnly(false);
   }
 
-  function toggleSaved(id: string) {
-    setSavedIds((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  async function toggleSaved(id: string) {
+    setApiError("");
+
+    if (savedIds.includes(id)) {
+      const savedItem = savedItems[id];
+      if (!savedItem) {
+        setSavedIds((current) => current.filter((item) => item !== id));
+        return;
+      }
+
+      try {
+        await deleteWishlistItem({ wishlistId: savedItem.wishlistId, itemId: savedItem.itemId });
+        setSavedIds((current) => current.filter((item) => item !== id));
+        setSavedItems((current) => {
+          const next = { ...current };
+          delete next[id];
+          return next;
+        });
+      } catch (error) {
+        setApiError(error instanceof Error ? error.message : "Không bỏ lưu được talent khỏi backend.");
+      }
+      return;
+    }
+
+    try {
+      const wishlist = await ensureDefaultWishlist(defaultWishlistId ? [{ id: Number(defaultWishlistId), name: "Talent đã lưu" }] : undefined);
+      setDefaultWishlistId(String(wishlist.id));
+      const item = await addWishlistItem({ wishlistId: String(wishlist.id), profileId: id });
+      setSavedIds((current) => current.includes(id) ? current : [...current, id]);
+      setSavedItems((current) => ({ ...current, [id]: { wishlistId: String(wishlist.id), itemId: String(item.id) } }));
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "Không lưu được talent vào backend.");
+    }
   }
 
   function toggleCompare(id: string) {
@@ -95,9 +179,15 @@ export default function DiscoverTalentsPage() {
     });
   }
 
-  function sendContactRequest(id: string) {
-    setContactedIds((current) => current.includes(id) ? current : [...current, id]);
-    window.alert("Đã tạo yêu cầu liên hệ demo. Khi nối backend, thao tác này sẽ gọi POST /api/contact-requests.");
+  async function sendContactRequest(id: string) {
+    setApiError("");
+
+    try {
+      await createContactRequest({ profileId: id, message: "Brand muốn liên hệ talent từ màn tìm kiếm." });
+      setContactedIds((current) => current.includes(id) ? current : [...current, id]);
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "Không gửi được yêu cầu liên hệ.");
+    }
   }
 
   return (
@@ -116,6 +206,12 @@ export default function DiscoverTalentsPage() {
           Bộ lọc được thiết kế cho Brand Manager, Event Organizer, Agency và HR: nhân khẩu học, ngoại hình, chuyên môn, social, lịch rảnh, ngân sách và chất lượng hồ sơ.
         </p>
       </section>
+
+      {apiError && (
+        <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {apiError}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <aside className="h-fit space-y-5 rounded-2xl border border-white/5 bg-slate-950/30 p-5 lg:sticky lg:top-24 lg:col-span-3">
@@ -245,7 +341,11 @@ export default function DiscoverTalentsPage() {
             </div>
           </div>
 
-          {filteredTalents.length === 0 ? (
+          {loading ? (
+            <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-10 text-center text-sm text-slate-400">
+              Đang tải talent từ backend...
+            </div>
+          ) : filteredTalents.length === 0 ? (
             <div className="rounded-2xl border border-white/5 bg-slate-950/25 p-10 text-center">
               <Search className="mx-auto mb-3 h-8 w-8 text-slate-600" />
               <h3 className="text-sm font-black text-white">Không có talent phù hợp</h3>

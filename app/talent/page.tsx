@@ -3,13 +3,23 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Crown, Sparkles, Shield, ArrowRight } from "lucide-react";
+import { fetchMyTalentProfileForUi } from "@/lib/api/talent-profile";
 
 export default function LandingPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already onboarded
+    let mounted = true;
+
+    async function checkOnboarding() {
+      const backendProfile = await fetchMyTalentProfileForUi();
+      if (backendProfile && mounted) {
+        localStorage.setItem("vnp_talent_profile", JSON.stringify(backendProfile));
+        router.replace("/talent/dashboard");
+        return;
+      }
+
     const stored = localStorage.getItem("vnp_talent_profile");
     if (stored) {
       try {
@@ -22,7 +32,16 @@ export default function LandingPage() {
         console.error(e);
       }
     }
-    setLoading(false);
+    if (mounted) {
+      setLoading(false);
+    }
+    }
+
+    checkOnboarding();
+
+    return () => {
+      mounted = false;
+    };
   }, [router]);
 
   if (loading) {

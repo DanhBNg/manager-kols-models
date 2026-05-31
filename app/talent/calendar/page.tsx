@@ -4,20 +4,46 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Calendar as CalendarIcon, Clock, MapPin, ArrowLeft, Plus, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { fetchCalendarEventsForUi, fetchMyTalentProfileForUi } from "@/lib/api/talent-profile";
 
 export default function CalendarPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
+  const [apiSchedules, setApiSchedules] = useState<any[]>([]);
 
   useEffect(() => {
+    let mounted = true;
+
+    async function loadCalendar() {
+      const [backendProfile, backendSchedules] = await Promise.all([
+        fetchMyTalentProfileForUi(),
+        fetchCalendarEventsForUi(),
+      ]);
+
+      if (!mounted) return;
+
+      if (backendProfile) {
+        localStorage.setItem("vnp_talent_profile", JSON.stringify(backendProfile));
+        setProfile(backendProfile);
+      }
+
+      setApiSchedules(backendSchedules);
+
     const stored = localStorage.getItem("vnp_talent_profile");
-    if (stored) {
+    if (!backendProfile && stored) {
       try {
         setProfile(JSON.parse(stored));
       } catch (e) {
         console.error(e);
       }
     }
+    }
+
+    loadCalendar();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const schedules = [
@@ -55,6 +81,7 @@ export default function CalendarPage() {
       badgeColor: "bg-purple-500/10 border-purple-500/20 text-purple-300"
     }
   ];
+  const visibleSchedules = apiSchedules.length > 0 ? apiSchedules : schedules;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
@@ -99,7 +126,7 @@ export default function CalendarPage() {
             const day = idx + 20; // dates 20 to 34 (June has 30 days)
             if (day > 30) return null;
             
-            const isReserved = schedules.some(s => s.date.includes(String(day)));
+            const isReserved = visibleSchedules.some(s => s.date.includes(String(day)) || s.startsAt?.slice(8, 10) === String(day).padStart(2, "0"));
             const isAvailable = profile?.availabilityCalendar?.some((d: string) => d.endsWith(String(day)));
 
             return (
@@ -126,7 +153,7 @@ export default function CalendarPage() {
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {schedules.map((item) => (
+          {visibleSchedules.map((item) => (
             <div 
               key={item.id} 
               className={cn(

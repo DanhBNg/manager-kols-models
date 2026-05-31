@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/talents/{profile}', [TalentController::class, 'show']);
 
     Route::get('/profiles/{profile}', [ProfileController::class, 'show']);
+    Route::get('/my/profile', [ProfileController::class, 'showMine']);
     Route::put('/my/profile', [ProfileController::class, 'updateMine']);
     Route::get('/profiles/{profile}/completion', [ProfileController::class, 'completion']);
     Route::post('/profiles/{profile}/photos', [ProfileMediaController::class, 'storePhoto']);

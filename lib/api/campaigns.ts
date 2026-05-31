@@ -155,3 +155,19 @@ export async function closeCampaign(id: string) {
 
   return mapBackendCampaign(response.data);
 }
+
+export async function addCampaignTalent(input: {
+  campaignId: string;
+  profileId: string;
+  status?: CampaignStage;
+  notes?: string;
+}) {
+  await apiFetch(`/campaigns/${input.campaignId}/talents`, {
+    method: "POST",
+    body: JSON.stringify({
+      profile_id: Number(input.profileId),
+      status: input.status ?? "shortlisted",
+      notes: input.notes || null,
+    }),
+  });
+}

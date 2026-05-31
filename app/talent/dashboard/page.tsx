@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import RadarChart from "@/components/ui/RadarChart";
+import { fetchMyTalentProfileForUi } from "@/lib/api/talent-profile";
 
 const JOBS_LIST = [
   { id: 1, title: "Đại sứ thương hiệu", desc: "Gương mặt đại diện thương hiệu luxury", weights: { pageant: 0.4, runway: 0.2, kol: 0.4 } },
@@ -40,6 +41,16 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
+    let mounted = true;
+
+    async function loadProfile() {
+      const backendProfile = await fetchMyTalentProfileForUi();
+      if (backendProfile && mounted) {
+        localStorage.setItem("vnp_talent_profile", JSON.stringify(backendProfile));
+        setProfile(backendProfile);
+        return;
+      }
+
     const stored = localStorage.getItem("vnp_talent_profile");
     const defaultMock = {
       name: "Nguyễn Mai Anh",
@@ -102,6 +113,13 @@ export default function DashboardPage() {
       setProfile(defaultMock);
       localStorage.setItem("vnp_talent_profile", JSON.stringify(defaultMock));
     }
+    }
+
+    loadProfile();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
 

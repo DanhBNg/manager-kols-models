@@ -10,6 +10,18 @@ use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
+    public function showMine(Request $request): JsonResponse
+    {
+        abort_unless($request->user()?->type === 'talent', 403);
+
+        return response()->json([
+            'data' => $request->user()
+                ->profile()
+                ->with(['user:id,name,type,is_verified,avatar', 'photos', 'videos', 'socialAccounts', 'calendarEvents'])
+                ->first(),
+        ]);
+    }
+
     public function show(Profile $profile): JsonResponse
     {
         abort_unless($profile->is_public || request()->user()?->id === $profile->user_id, 404);

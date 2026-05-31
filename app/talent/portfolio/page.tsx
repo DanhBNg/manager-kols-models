@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import RadarChart from "@/components/ui/RadarChart";
+import { fetchMyTalentProfileForUi } from "@/lib/api/talent-profile";
 
 const JOBS_LIST = [
   { id: 1, title: "Đại sứ thương hiệu", desc: "Gương mặt đại diện thương hiệu luxury", weights: { pageant: 0.4, runway: 0.2, kol: 0.4 } },
@@ -38,6 +39,16 @@ export default function PortfolioPage() {
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
+    let mounted = true;
+
+    async function loadProfile() {
+      const backendProfile = await fetchMyTalentProfileForUi();
+      if (backendProfile && mounted) {
+        localStorage.setItem("vnp_talent_profile", JSON.stringify(backendProfile));
+        setProfile(backendProfile);
+        return;
+      }
+
     const stored = localStorage.getItem("vnp_talent_profile");
     if (stored) {
       try {
@@ -94,6 +105,13 @@ export default function PortfolioPage() {
         mainCategory: "KOL / Người mẫu ảnh / Giải trí thế hệ mới"
       });
     }
+    }
+
+    loadProfile();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (!profile) return null;
