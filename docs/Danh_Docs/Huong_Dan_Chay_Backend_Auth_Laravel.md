@@ -75,7 +75,7 @@ http://localhost:3000/auth/login
 http://localhost:3000/auth/register
 ```
 
-Lưu ý: nhiều màn frontend hiện vẫn còn dữ liệu demo/mock. Khi chưa nối API Laravel thì thao tác trên frontend chưa chắc tạo dữ liệu trong admin.
+Lưu ý: các luồng chính phía Brand đã được nối API Laravel để dữ liệu có thể xuất hiện trong admin. Một số màn phụ vẫn còn demo/mock để giữ giao diện, ví dụ job gợi ý, ví, tin nhắn, contest và một phần form hồ sơ talent.
 
 ## 5. API auth hiện có
 
@@ -107,6 +107,36 @@ admin
 ```
 
 Không có actor auth riêng tên `agency`. Nếu cần phân biệt agency thì dùng `partner_profiles.organization_type = agency`.
+
+## 5.1. API Phase 1 đã nối thử với frontend
+
+Các màn Brand chính đang gọi API thật:
+
+- Dashboard đối tác.
+- Hồ sơ đối tác.
+- Tìm talent.
+- Xem hồ sơ talent từ phía brand.
+- Talent đã lưu/wishlist.
+- Campaign.
+- Gắn talent vào campaign.
+- Yêu cầu liên hệ.
+- Booking sơ bộ.
+
+Các màn Talent đã đọc API khi có token:
+
+- `/talent`
+- `/talent/dashboard`
+- `/talent/portfolio`
+- `/talent/calendar`
+- `/talent/survey`
+
+Endpoint mới cho talent tự đọc hồ sơ của mình:
+
+```text
+GET /api/my/profile
+```
+
+Nếu chưa có token hoặc backend chưa có dữ liệu tương ứng, frontend vẫn fallback về localStorage/mock để không vỡ giao diện demo.
 
 ## 6. Admin và bảo mật
 

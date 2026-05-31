@@ -205,6 +205,7 @@ PUT /api/partner/profile
 ```txt
 GET /api/talents
 GET /api/talents/{profile}
+GET /api/my/profile
 GET /api/profiles/{profile}
 PUT /api/my/profile
 GET /api/profiles/{profile}/completion
@@ -350,3 +351,48 @@ Khi cần nối một màn mới, chỉ cần thêm helper hoặc dùng helper c
 
 Màn nào chưa nối API thì vẫn có thể giữ mock để demo giao diện, nhưng cần hiểu rằng dữ liệu đó sẽ không xuất hiện trong Filament Admin.
 
+## 10. Cập nhật trạng thái nối API hiện tại
+
+Trên nhánh này đã nối API cho các luồng chính sau:
+
+- Đăng ký, đăng nhập, đăng xuất.
+- Brand dashboard.
+- Brand profile.
+- Talent discovery.
+- Trang xem hồ sơ talent từ phía brand.
+- Wishlist/shortlist.
+- Campaign.
+- Gắn talent vào campaign.
+- Contact request.
+- Booking sơ bộ.
+- Survey tiering.
+- Talent dashboard, portfolio và calendar đọc dữ liệu từ API nếu tài khoản có token và backend có dữ liệu.
+
+Helper đang có:
+
+```txt
+lib/api-client.ts
+lib/brand-api.ts
+lib/api/campaigns.ts
+lib/api/bookings.ts
+lib/api/contact-requests.ts
+lib/api/wishlists.ts
+lib/api/survey.ts
+lib/api/talent-profile.ts
+```
+
+Các phần còn có thể tiếp tục nối sâu hơn:
+
+- Form cập nhật hồ sơ talent đầy đủ.
+- Upload ảnh/video.
+- Tạo/sửa/xóa lịch từ UI talent.
+- Social account và social metrics.
+- Job gợi ý, ví, tin nhắn, contest.
+
+Endpoint mới cần lưu ý:
+
+```txt
+GET /api/my/profile
+```
+
+Endpoint này dùng để talent lấy hồ sơ của chính mình theo token hiện tại. Trước đó chỉ có `PUT /api/my/profile` để cập nhật.

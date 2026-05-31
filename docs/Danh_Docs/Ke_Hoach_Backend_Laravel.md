@@ -16,7 +16,7 @@ Mục tiêu Phase 1 MVP:
 - Có admin panel nội bộ bằng Filament.
 - Bảo mật admin bằng đổi mật khẩu và xác minh 2 bước qua QR/TOTP.
 
-Frontend hiện vẫn còn nhiều dữ liệu demo/mock. Backend đã có API để nhận dữ liệu thật, nhưng frontend chưa nối hết vào API.
+Frontend đã nối thử phần lớn luồng Phase 1 quan trọng vào API Laravel, đặc biệt là phía Brand và một phần phía Talent. Một số màn phụ vẫn còn dữ liệu demo/mock để giữ giao diện demo, ví dụ job gợi ý, ví, tin nhắn, contest.
 
 ## 2. Kiến trúc đã chốt
 
@@ -71,6 +71,7 @@ calendar_events
 API nền:
 
 ```text
+GET  /api/my/profile
 PUT  /api/my/profile
 GET  /api/profiles/{profile}
 GET  /api/profiles/{profile}/completion
@@ -264,18 +265,53 @@ cd backend
 php artisan migrate:fresh --seed
 ```
 
-## 6. Việc cần làm tiếp
+## 6. Trạng thái nối frontend hiện tại
 
-Ưu tiên 1: nối frontend vào API thật.
+Đã nối hoặc đã tạo helper API cho các luồng chính:
 
-- Auth.
-- Talent profile form.
+- Auth đăng ký, đăng nhập, đăng xuất.
+- Brand dashboard.
 - Brand partner profile.
-- Brand campaign form.
-- Wishlist.
+- Talent discovery và brand view của hồ sơ talent.
+- Wishlist/shortlist.
+- Campaign và gắn talent vào campaign.
 - Contact request.
-- Booking request.
+- Booking sơ bộ.
 - Survey tiering.
+- Talent dashboard, portfolio và calendar đọc hồ sơ/lịch từ API nếu có token, fallback localStorage khi chưa có dữ liệu.
+
+Helper frontend đang dùng:
+
+```text
+lib/api-client.ts
+lib/brand-api.ts
+lib/api/campaigns.ts
+lib/api/bookings.ts
+lib/api/contact-requests.ts
+lib/api/wishlists.ts
+lib/api/survey.ts
+lib/api/talent-profile.ts
+```
+
+Những phần còn có thể tiếp tục nối sâu hơn:
+
+- Form chỉnh sửa hồ sơ talent đầy đủ.
+- Upload ảnh/video thật.
+- Tạo/sửa calendar event từ UI talent.
+- Social account và social metrics.
+- Job gợi ý, ví, tin nhắn, contest.
+- Dashboard thống kê admin.
+
+## 7. Việc cần làm tiếp
+
+Ưu tiên 1: hoàn thiện các màn còn đang demo.
+
+- Talent profile form.
+- Media upload.
+- Calendar CRUD phía talent.
+- Social metrics.
+- Job/apply flow.
+- Wallet/payment sau MVP.
 
 Ưu tiên 2: tách service cho logic phức tạp.
 
@@ -307,7 +343,7 @@ MediaUploadService
 - CDN.
 - Audit log.
 
-## 7. Kiểm thử
+## 8. Kiểm thử
 
 Chạy test:
 
@@ -331,7 +367,7 @@ Các nhóm test hiện có:
 - Booking.
 - Survey tiering.
 
-## 8. Deploy
+## 9. Deploy
 
 Tài liệu deploy Railway:
 
@@ -341,12 +377,12 @@ docs/Danh_Docs/Huong_Dan_Deploy_Backend_Railway.md
 
 Khi deploy phải chạy migration để tạo đủ bảng/cột, bao gồm cột 2FA trong `users`.
 
-## 9. Kết luận
+## 10. Kết luận
 
-Backend Laravel hiện đã đủ nền Phase 1 để nối frontend thật theo luồng:
+Backend Laravel hiện đã đủ nền Phase 1 và frontend đã nối thử được luồng:
 
 ```text
 Auth -> Profile -> Search -> Wishlist -> Campaign -> Contact Request -> Booking -> Admin
 ```
 
-Trọng tâm tiếp theo là nối giao diện Next.js vào API Laravel, không phải tạo thêm nhiều bảng mới.
+Trọng tâm tiếp theo là làm sạch các màn còn demo, hoàn thiện form cập nhật dữ liệu thật và tăng độ chắc cho production, không phải tạo thêm nhiều bảng mới.
